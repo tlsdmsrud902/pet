@@ -73,6 +73,23 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 #lw-home .pe-hero-track a.pe-button{min-height:54px!important;padding:7px 7px 7px 24px!important;border:1.5px solid #43372f!important;border-radius:999px!important;background:#43372f!important;color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important;box-shadow:none!important;font-size:15px!important;font-weight:600!important}
 #lw-home .pe-hero-track a.pe-button>span{width:40px!important;height:40px!important;flex-basis:40px!important;background:rgba(255,249,243,.16)!important;color:#fff9f3}
 #lw-home .pe-hero-track a.pe-button:hover{background:#2f2620!important;transform:translateY(-2px);box-shadow:var(--cz-shadow-sm)!important}
+/* 모바일 히어로 : 글은 위쪽 크림 바탕, 영상 · 사진은 아래쪽에 따로 — 가로 영상이 세로 화면을 덮으며 과하게 잘리고 글이 영상에 묻히던 문제 */
+@media (max-width:767px){
+  #lw-home .pe-hero-track .pe-hero{background:#fff9f3!important}
+  #lw-home .pe-hero-track .pe-hero__copy{top:0!important;bottom:auto!important;height:57%!important;justify-content:center!important;padding:18px 22px 8px!important}
+  #lw-home .pe-hero-track .pe-hero__copy .pe-display{font-size:clamp(40px,12.4vw,50px)!important;line-height:.98!important;margin-bottom:14px!important}
+  #lw-home .pe-hero-track .pe-hero__copy :is(h1,h2){font-size:21px!important;min-height:0!important;margin-bottom:10px!important}
+  #lw-home .pe-hero-track .pe-hero__copy .pe-description{font-size:13px!important;line-height:1.7!important;color:#6b5d52!important}
+  #lw-home .pe-hero-track .pe-hero__copy .pe-button{margin-top:18px!important}
+  #lw-home .pe-hero-track .pe-hero__visual{top:auto!important;bottom:0!important;height:43%!important;overflow:hidden}
+  #lw-home .pe-hero-track .pe-hero__visual::after{opacity:1!important;background:linear-gradient(180deg,#fff9f3 0%,rgba(255,249,243,0) 26%)!important}
+  #lw-home .pe-hero-track .pe-world-image{object-position:50% 50%!important}
+  #lw-home .pe-hero-track .pe-world-image[data-world-image='2']{object-position:72% 50%!important}
+  #lw-home .pe-hero-track .pe-world-image[data-world-image='3']{object-position:64% 50%!important}
+  #lw-home .pe-hero-track .pe-world-route{top:auto!important;bottom:14px!important;left:14px!important;right:auto!important;width:auto!important;gap:4px!important;padding:6px 10px!important;border-radius:999px;background:rgba(255,249,243,.9);z-index:4!important}
+  #lw-home .pe-hero-track .pe-world-route button{padding:4px 8px!important}
+  #lw-home .pe-hero-track .pe-hero-scroll{display:none!important}
+}
 
 /* 2. 이용 안내 */
 #lw-home .cz-perks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:clamp(28px,3vw,44px)}
@@ -112,7 +129,7 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 
 /* 5·7·10. 상품 목록 (카페24 모듈) */
 #lw-home .cz-products .ec-base-product{margin:0!important;padding:0!important;width:auto!important;max-width:none!important}
-#lw-home .cz-products .prdList,#lw-home .cz-placeholder{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:44px 22px!important;margin:0!important;padding:0!important;width:100%!important;transform:none!important}
+#lw-home .cz-products .prdList,#lw-home .cz-placeholder{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:44px 20px!important;margin:0!important;padding:0!important;width:100%!important;transform:none!important}
 #lw-home .cz-placeholder[hidden]{display:none!important}
 #lw-home .cz-products .prdList>li{width:auto!important;margin:0!important;padding:0!important;float:none!important;opacity:1!important;visibility:visible!important;transform:none!important;border:0!important}
 #lw-home .cz-products .prdList__item{margin:0!important;padding:0!important}
@@ -344,7 +361,7 @@ body:has(#lw-home.pet-cozy) :is(#footer,.footer_margin){margin-top:0!important}
   #lw-home .cz-pets,#lw-home .cz-duo,#lw-home .cz-help{grid-template-columns:1fr}
   #lw-home .cz-finder,#lw-home .cz-size,#lw-home .cz-starter,#lw-home .cz-reviews{grid-template-columns:1fr}
   #lw-home .cz-starter__photo{min-height:0;aspect-ratio:4/3}
-  #lw-home .cz-products .prdList,#lw-home .cz-placeholder{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  #lw-home .cz-products .prdList,#lw-home .cz-placeholder{gap:36px 14px!important}
   #lw-home .cz-story__card{position:relative;right:auto;bottom:auto;width:auto;margin:-60px 16px 0}
   #lw-home .cz-finder__paw{display:none}
 }

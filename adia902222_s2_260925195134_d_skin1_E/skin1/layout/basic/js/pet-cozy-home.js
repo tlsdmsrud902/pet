@@ -10,7 +10,7 @@
       if (!fallback) return;
       if (list && list.querySelector('li')) { fallback.remove(); return; }
       if (list) list.closest('.ec-base-product').hidden = true;
-      var count = section.classList.contains('cz-products--rail') ? 10 : 8;
+      var count = 10;
       var offset = section.classList.contains('cz-products--best') ? 3 : 0;
       fallback.hidden = false;
       fallback.innerHTML = Array.from({ length: count }, function (_, i) {

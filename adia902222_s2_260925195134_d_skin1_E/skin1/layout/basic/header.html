@@ -72,13 +72,13 @@
 			<!-- BUYER EDITABLE : 메뉴 = 카페24 관리자 > 상품 > 상품분류 관리의 최상위 분류(최대 6개)가 자동으로 나온다. 코드 수정 불필요 -->
 			<nav class="top_category st-category-menu st-category-menu--left" aria-label="상품 분류">
 				<!-- 메뉴가 처음부터 보이도록 현재 분류를 미리 넣어 둔다. 분류가 바뀌면 아래 스크립트가 새 목록으로 바꿔 끼운다 -->
-				<ul><li><a href="/product/search.html">전체 상품</a></li><li><a href="/product/search.html?keyword=강아지">강아지</a></li><li><a href="/product/search.html?keyword=고양이">고양이</a></li><li><a href="/product/search.html?keyword=산책">산책·외출</a></li><li class="pet-sale-menu"><span class="pet-sale-bubble" aria-hidden="true">50%</span><a href="/product/list.html?cate_no=27">SALE</a></li><li><a href="/board/product/list.html?board_no=4">리뷰</a></li></ul>
+				<ul><li><a href="/product/search.html">전체 상품</a></li><li><a href="/product/list.html?cate_no=24">강아지</a></li><li><a href="/product/list.html?cate_no=25">고양이</a></li><li><a href="/product/list.html?cate_no=26">산책/외출</a></li><li class="pet-sale-menu"><span class="pet-sale-bubble" aria-hidden="true">20%</span><a href="/product/list.html?cate_no=27">SALE</a></li><li><a href="/board/product/list.html?board_no=4">리뷰</a></li></ul>
 			</nav>
 			<script>
 				(function () {
 					function makeLink(category) {
 						var link = document.createElement('a');
-						link.href = '/product/search.html' + (category.param || '?cate_no=' + category.cate_no);
+						link.href = category.param ? '/product/search.html' + category.param : '/product/list.html?cate_no=' + category.cate_no;
 						link.textContent = category.name;
 						return link;
 					}
@@ -120,6 +120,15 @@
 								return Number(subCategory.parent_cate_no) === Number(category.cate_no);
 							});
 
+							// SALE 분류는 기존 디자인처럼 할인율 말풍선을 붙인다
+							if (/^sale$/i.test(String(category.name).trim())) {
+								item.className = 'pet-sale-menu';
+								var bubble = document.createElement('span');
+								bubble.className = 'pet-sale-bubble';
+								bubble.setAttribute('aria-hidden', 'true');
+								bubble.textContent = '20%';
+								item.appendChild(bubble);
+							}
 							item.appendChild(makeLink(category));
 							if (subItems.length) {
 								var submenu = document.createElement('ul');
@@ -144,17 +153,27 @@
 						if (config.menu && config.menu.editorial) return;
 
 						// 새 목록을 따로 만든 뒤, 미리 넣어 둔 메뉴와 다를 때만 바꿔 끼운다(깜빡임 방지)
+						// 순서 : 전체 상품 → 관리자 대분류(최대 6개) → 리뷰
 						var fresh = document.createElement('ul');
+						function addPlain(label, href) {
+							var li = document.createElement('li');
+							var a = document.createElement('a');
+							a.href = href;
+							a.textContent = label;
+							li.appendChild(a);
+							fresh.appendChild(li);
+						}
 						fetch('/exec/front/Product/SubCategory')
 							.then(function (response) { return response.json(); })
 							.then(function (categories) {
 								if (!Array.isArray(categories)) return;
+								addPlain('전체 상품', '/product/search.html');
 								buildMenu(categories, parentNo, fresh, 0, 6);
+								addPlain('리뷰', '/board/product/list.html?board_no=4');
 							})
 							.catch(function () {})
 							.then(function () {
-								appendCommunity(fresh, config);
-								if (config.community && fresh.children.length && fresh.innerHTML !== leftTarget.innerHTML) { leftTarget.innerHTML = fresh.innerHTML; }
+								if (fresh.children.length > 2 && fresh.innerHTML !== leftTarget.innerHTML) { leftTarget.innerHTML = fresh.innerHTML; }
 							});
 					}
 

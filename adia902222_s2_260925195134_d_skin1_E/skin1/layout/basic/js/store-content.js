@@ -36,7 +36,7 @@ window.STORE_CONTENT = {
 	   기본값 1 = 최상위 분류(최대 6개). 특정 분류의 하위만 보이려면 그 분류 번호를 넣으세요. */
 	menu: {
 		parentCateNo: 1,
-		editorial: true
+		editorial: false   // true 면 코드에 적어 둔 고정 메뉴, false 면 관리자 대분류로 메뉴를 만든다
 	},
 
 	/* 상단 메뉴 맨 끝의 COMMUNITY — 마우스를 올리면 게시판 4개가 드롭다운으로 나옵니다.  BUYER EDITABLE
