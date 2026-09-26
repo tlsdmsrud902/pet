@@ -315,15 +315,14 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 #lw-home .cz-help__faq details p{padding:0 44px 22px 0;font-size:14px;line-height:1.75;color:var(--cz-muted)}
 #lw-home .cz-help__faq details a{font-weight:600;color:var(--cz-ink);border-bottom:1px solid rgba(67,55,47,.3)}
 
-#lw-home .cz-disclaimer{width:min(1440px,calc(100% - var(--cz-gutter)*2));margin:72px auto 0;font-size:12px;color:var(--cz-muted);text-align:center}
 
 /* 16. 브랜드 각인 : 크림 바탕 위 PETPIA 이미지(글자 위 푸들 · 고양이). 글자 아랫단이 푸터 윗선에 닿는다. */
 #lw-home.pet-cozy{padding-bottom:0}
 body:has(#lw-home.pet-cozy) :is(#footer,.footer_margin){margin-top:0!important}
-#lw-home .cz-disclaimer{margin-bottom:clamp(40px,4vw,64px)}
-#lw-home .cz-brand{position:relative;overflow:hidden;padding-top:clamp(40px,4vw,64px);border-top:1px solid var(--cz-line)}
+#lw-home .cz-brand{position:relative;overflow:hidden;margin-top:clamp(80px,9vw,128px)}
 #lw-home .cz-brand__top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;width:min(1440px,calc(100% - var(--cz-gutter)*2));margin:0 auto}
-#lw-home .cz-brand__top p{font-size:clamp(17px,1.5vw,22px);font-weight:650;line-height:1.5;letter-spacing:-.04em;color:var(--cz-ink)}
+#lw-home .cz-brand__title{font-size:clamp(20px,1.9vw,28px);font-weight:700;line-height:1.45;letter-spacing:-.045em;color:var(--cz-ink)}
+#lw-home .cz-brand__sub{margin-top:10px;font-size:15px;line-height:1.7;color:var(--cz-muted)}
 #lw-home .cz-brand__stage{width:min(1440px,calc(100% - var(--cz-gutter)*2));margin:clamp(28px,3vw,48px) auto 0}
 #lw-home .cz-brand__stage img{display:block;width:100%;height:auto;user-select:none}
 @media (max-width:767px){
