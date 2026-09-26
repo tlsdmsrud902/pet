@@ -437,7 +437,8 @@ html.s9-fx #contents .s9-film.s9-film { clip-path:inset(0 round var(--s9-r)) !im
    ========================================================================== */
 @media (min-width:1025px) {
   body:not(:has(#lw-home)) { --st-gutter:max(48px, calc((100% - 1440px) / 2)); }
-  body:not(:has(#lw-home)) #header .inner { padding-left:max(48px, calc((100% - 1440px) / 2)) !important; padding-right:max(48px, calc((100% - 1440px) / 2)) !important; }
+  /* 헤더 좌우 여백은 메인과 같은 값(seraphin.css 의 --st-gutter 기본값)으로 — 서브에서만 안쪽으로 들어가 삐뚤어져 보이던 것을 메인과 통일 */
+  body:not(:has(#lw-home)) #header .inner { padding-left:clamp(24px, 3.5vw, 66px) !important; padding-right:clamp(24px, 3.5vw, 66px) !important; }
   body:not(:has(#lw-home)) #header .inner .top_nav_box { padding-left:0 !important; padding-right:0 !important; }
   body:not(:has(#lw-home)) #header .inner .top_nav_box .top_logo { height:64px !important; display:flex !important; align-items:center; margin:0 !important; }
   #header .top_category > ul { gap:44px !important; }

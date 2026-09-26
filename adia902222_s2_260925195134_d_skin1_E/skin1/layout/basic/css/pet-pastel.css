@@ -23,16 +23,11 @@ body,body:not(:has(#lw-home)){background:var(--pet-paper)!important;color:var(--
 #lw-home .pe-ticker{background:#dcf5e9!important;border-color:#ccebdc!important;color:#287568!important}
 #lw-home .pe-ticker i{color:#b97154!important}
 #lw-home .pe-story__copy{background:#e8f7ff!important}
-#lw-home .pe-finder{background:#fff0e7!important;border-color:#f5dcd0!important}
 #lw-home .pe-finder h2 em{color:#a45e49!important}
 #lw-home .pe-sale-banner{background:#fff1c9!important;border-color:#f2dfab!important;color:#745b34!important}
 #lw-home .pe-community{background:#e0f6eb!important}
 #lw-home .pe-event__copy{background:#fff0f3!important}
-#lw-home .pe-needs-grid>a:nth-child(3n+1){background:#f0fbf5}
-#lw-home .pe-needs-grid>a:nth-child(3n+2){background:#fff4ed}
-#lw-home .pe-needs-grid>a:nth-child(3n){background:#f1f5ff}
-#lw-home .pe-needs-grid>a:hover{background:#ddf2e9!important}
-#lw-home .pe-button,#lw-home .pe-choice button[aria-pressed=true],#lw-home .pe-finder input:checked+span{background:#d2efe1!important;border-color:#a9d8c4!important;color:#245c50!important}
+#lw-home .pe-button,#lw-home .pe-choice button[aria-pressed=true]{background:#d2efe1!important;border-color:#a9d8c4!important;color:#245c50!important}
 #lw-home .pe-button:hover{background:#bce6d2!important}
 #lw-home .pe-button--outline{background:#fff5ec!important;border-color:#e4bfae!important;color:#795545!important}
 #lw-home .pe-hero-discover{background:#fff9eced!important}
@@ -90,3 +85,14 @@ html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn):hover::after{transform:transl
 html.st-sale-on #contents .sl-cp__btn--ghost{background:rgba(255,255,255,.72)!important;color:#315b60!important;-webkit-text-fill-color:#315b60!important;box-shadow:0 4px 12px rgba(49,91,96,.07)!important}
 html.st-sale-on #contents .sl-cp__btn--ghost::after{background:var(--pet-btn-soft)}
 @media(max-width:767px){#lw-home .pe-hero__visual::after{background:linear-gradient(180deg,#fffdf8 0%,rgba(255,253,248,.98) 30%,rgba(255,253,248,.76) 48%,rgba(255,253,248,.28) 65%,rgba(255,253,248,0) 80%)!important}#lw-home .pe-button{min-width:200px!important;min-height:48px!important;padding-left:18px!important}#lw-home .pe-button>span{width:34px;height:34px;flex-basis:34px}}
+
+/* 01 영상 장면은 글자가 읽힐 만큼만 옅게(.55), 02~04 장면으로 넘어가면서 100%까지 (--hero-progress 0~1 = 장면 0~3) */
+#lw-home .pe-hero__visual::after{opacity:min(1,calc(.55 + var(--hero-progress,0)*1.35))}
+
+/* 서브 페이지 공통 가로폭 : 제목 · 본문 · 상품 목록 · 페이징을 상단 배너(.pet-page-hero, 최대 1440px)와 같은 폭·같은 좌우 선에 맞춘다.
+   폭 기준은 --st-gutter (1025px 이상 = 화면 좌우 여백, 배너 양끝과 일치). 되돌리려면 이 블록만 지운다. */
+body:not(:has(#lw-home)) #contents>:is(.section,.titleArea,.boardMain,.ec-base-paginate,.myshopArea,.pet-guide){width:calc(100% - var(--st-gutter)*2)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important;box-sizing:border-box!important}
+body:not(:has(#lw-home)) #contents>.myshopArea{padding-left:220px!important}
+body:not(:has(#lw-home)) #contents>:is(.section,.myshopArea) :is(.xans-board-function,.xans-board-search,.ec-base-tab.typeMenu){width:100%!important;max-width:none!important}
+@media(min-width:768px){body:not(:has(#lw-home)) #contents>.pet-page-hero{width:calc(100% - var(--st-gutter)*2);max-width:none}}
+body:not(:has(#lw-home)) #contents>.myshopArea>.xans-myshop-main{left:0!important}

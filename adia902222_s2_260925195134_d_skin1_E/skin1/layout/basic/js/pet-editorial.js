@@ -94,6 +94,7 @@
     var active = -1, scheduled = false;
     function drawScene(position) {
       var index = Math.min(images.length-1,Math.floor(position + .5));
+      hero.style.setProperty('--hero-progress',position/Math.max(1,images.length-1));
       images.forEach(function (img,i) {
         var alpha = 1 - smooth((Math.abs(position-i)-.28)/.44);
         img.style.opacity = String(alpha);
