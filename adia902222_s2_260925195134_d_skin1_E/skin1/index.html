@@ -41,6 +41,75 @@
   </div>
 
   <!-- 2. 이용 안내 -->
+  <!-- 2. SCROLL WORLD (이미지 전용) : 스크롤하면 카메라가 장면 속으로 날아 들어가고, 마우스를 따라 레이어가 깊이별로 움직인다.
+       영상 없이 누끼 이미지 레이어만 쓴다. 엔진 아이디어는 scroll-world(MIT, cyw)의 scrub 방식에서 가져왔다. -->
+  <section class="cz-world" id="cz-world" aria-label="산책 · 놀이 · 휴식 · 선물, 반려생활 장면">
+    <div class="cz-world__stage">
+      <div class="cz-world__scene" data-scene="0" style="--bg:#dcefe3;--ink:#3d6b52">
+        <span class="cz-world__blob cz-world__blob--a" data-depth=".35" aria-hidden="true"></span>
+        <span class="cz-world__blob cz-world__blob--b" data-depth=".6" aria-hidden="true"></span>
+        <span class="cz-world__word" data-depth=".22" aria-hidden="true">Walk</span>
+        <img class="cz-world__pet" src="/SkinImg/pet/world-dog-walk.webp" alt="하네스를 하고 산책하는 코커 스패니얼" loading="lazy" data-depth="1" style="--x:61%;--y:58%;--w:var(--pet-w,21vw);--r:0deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-harness.webp" alt="" loading="lazy" data-depth="1.7" style="--x:82%;--y:28%;--w:11vw;--r:12deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-pouch.webp" alt="" loading="lazy" data-depth="1.3" style="--x:42%;--y:26%;--w:6.5vw;--r:-10deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-rope.webp" alt="" loading="lazy" data-depth="2.2" style="--x:84%;--y:80%;--w:14vw;--r:-8deg">
+      </div>
+      <div class="cz-world__scene" data-scene="1" style="--bg:#fff1c7;--ink:#8a6a1f" aria-hidden="true">
+        <span class="cz-world__blob cz-world__blob--a" data-depth=".35" aria-hidden="true"></span>
+        <span class="cz-world__blob cz-world__blob--b" data-depth=".6" aria-hidden="true"></span>
+        <span class="cz-world__word" data-depth=".22" aria-hidden="true">Play</span>
+        <img class="cz-world__pet" src="/SkinImg/pet/world-dog-play.webp" alt="노즈워크 매트에서 간식을 찾는 닥스훈트" loading="lazy" data-depth="1" style="--x:60%;--y:60%;--w:var(--pet-w,27vw);--r:0deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-ball.webp" alt="" loading="lazy" data-depth="1.9" style="--x:38%;--y:74%;--w:9vw;--r:-6deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-treats.webp" alt="" loading="lazy" data-depth="1.4" style="--x:84%;--y:26%;--w:8vw;--r:10deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-rope.webp" alt="" loading="lazy" data-depth="2.2" style="--x:86%;--y:80%;--w:13vw;--r:14deg">
+      </div>
+      <div class="cz-world__scene" data-scene="2" style="--bg:#ece4f6;--ink:#6b5a8c" aria-hidden="true">
+        <span class="cz-world__blob cz-world__blob--a" data-depth=".35" aria-hidden="true"></span>
+        <span class="cz-world__blob cz-world__blob--b" data-depth=".6" aria-hidden="true"></span>
+        <span class="cz-world__word" data-depth=".22" aria-hidden="true">Rest</span>
+        <img class="cz-world__pet" src="/SkinImg/pet/world-cat-rest.webp" alt="동그란 쿠션에서 잠든 고양이" loading="lazy" data-depth="1" style="--x:60%;--y:64%;--w:var(--pet-w,42vw);--r:0deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-cushion.webp" alt="" loading="lazy" data-depth="1.6" style="--x:84%;--y:25%;--w:12vw;--r:8deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-catbox.webp" alt="" loading="lazy" data-depth="1.3" style="--x:40%;--y:26%;--w:7.5vw;--r:-8deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-bowl.webp" alt="" loading="lazy" data-depth="2.1" style="--x:88%;--y:82%;--w:9vw;--r:0deg">
+      </div>
+      <div class="cz-world__scene" data-scene="3" style="--bg:#fde2d4;--ink:#a5553a" aria-hidden="true">
+        <span class="cz-world__blob cz-world__blob--a" data-depth=".35" aria-hidden="true"></span>
+        <span class="cz-world__blob cz-world__blob--b" data-depth=".6" aria-hidden="true"></span>
+        <span class="cz-world__word" data-depth=".22" aria-hidden="true">Gift</span>
+        <img class="cz-world__pet" src="/SkinImg/pet/world-corgi.webp" alt="웃으며 앉아 있는 웰시코기" loading="lazy" data-depth="1" style="--x:60%;--y:58%;--w:var(--pet-w,20vw);--r:0deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-gifts.webp" alt="" loading="lazy" data-depth="1.8" style="--x:83%;--y:72%;--w:14vw;--r:-6deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-bowl.webp" alt="" loading="lazy" data-depth="1.4" style="--x:22%;--y:74%;--w:8.5vw;--r:6deg">
+        <img class="cz-world__item" src="/SkinImg/pet/world-treats.webp" alt="" loading="lazy" data-depth="1.2" style="--x:82%;--y:24%;--w:7vw;--r:-12deg">
+      </div>
+      <div class="cz-world__copy" data-copy="0">
+        <p class="cz-kicker">Let's go outside</p>
+        <h2>오늘도 산책 가자!</h2>
+        <p>가벼운 하네스와 리드줄, 배변봉투까지.<br> 문 앞을 나서는 순간이 즐거워져요.</p>
+        <a class="cz-btn" href="/product/list.html?cate_no=26">산책 · 외출 보러 가기<span><svg><use href="#cz-arrow"/></svg></span></a>
+      </div>
+      <div class="cz-world__copy" data-copy="1" aria-hidden="true" inert>
+        <p class="cz-kicker">Sniff, find, play</p>
+        <h2>킁킁, 찾았다!</h2>
+        <p>노즈워크 매트와 트릿볼, 터그 로프.<br> 하루 한 번의 놀이가 우리 아이를 웃게 해요.</p>
+        <a class="cz-btn" href="/product/search.html?keyword=장난감">놀이 용품 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+      </div>
+      <div class="cz-world__copy" data-copy="2" aria-hidden="true" inert>
+        <p class="cz-kicker">Soft days, sweet dreams</p>
+        <h2>하루의 끝은 포근하게</h2>
+        <p>몸을 동그랗게 말고 쉬는 시간.<br> 푹신한 쿠션과 베드로 가장 편한 자리를 만들어 주세요.</p>
+        <a class="cz-btn" href="/product/search.html?keyword=침대">쿠션 · 베드 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+      </div>
+      <div class="cz-world__copy" data-copy="3" aria-hidden="true" inert>
+        <p class="cz-kicker">A day to celebrate</p>
+        <h2>특별한 날엔 선물처럼</h2>
+        <p>생일에도, 처음 만난 날에도.<br> 간식과 장난감을 담은 선물로 마음을 전해요.</p>
+        <a class="cz-btn" href="/product/list.html?cate_no=27">SALE · 선물 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+      </div>
+      <nav class="cz-world__route" aria-label="장면 이동"><button type="button" data-world-go="0" aria-pressed="true"><b>01</b>산책</button><button type="button" data-world-go="1" aria-pressed="false"><b>02</b>놀이</button><button type="button" data-world-go="2" aria-pressed="false"><b>03</b>휴식</button><button type="button" data-world-go="3" aria-pressed="false"><b>04</b>선물</button></nav>
+      <div class="cz-world__bar" aria-hidden="true"><i></i></div>
+    </div>
+  </section>
+
   <section class="cz-perks cz-wrap" aria-label="PETPIA 이용 안내">
     <a href="/shopinfo/guide.html" class="cz-perk cz-perk--butter"><i><svg><use href="#cz-truck"/></svg></i><span><strong>배송 안내</strong><small><b data-free-over hidden></b>배송비와 도착 일정을 확인하세요</small></span></a>
     <a href="/shopinfo/guide.html" class="cz-perk cz-perk--peach"><i><svg><use href="#cz-return"/></svg></i><span><strong>교환 · 반품</strong><small>접수 방법과 기간을 미리 살펴보세요</small></span></a>

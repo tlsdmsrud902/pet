@@ -184,6 +184,112 @@
     drawScene(0); requestFrame();
   }
 
+  /* Scroll World (이미지 전용) : 섹션을 스크롤하는 동안 장면마다 카메라가 날아 들어갔다가(가까워짐) 지나간다.
+     레이어의 data-depth 가 클수록 더 빠르게 커지고 바깥으로 밀려나며, 마우스를 따라 더 크게 움직인다. */
+  function initWorld(root) {
+    var sec = root.querySelector('.cz-world');
+    if (!sec) return;
+    var stage = sec.querySelector('.cz-world__stage');
+    var scenes = Array.from(sec.querySelectorAll('.cz-world__scene'));
+    var copies = Array.from(sec.querySelectorAll('.cz-world__copy'));
+    var route = Array.from(sec.querySelectorAll('[data-world-go]'));
+    var N = scenes.length, SPAN = N - 0.35;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    sec.style.setProperty('--cz-world-n', N);
+    var layers = scenes.map(function (scene) {
+      return Array.from(scene.children).map(function (el, k) {
+        return { el: el, d: parseFloat(el.dataset.depth || '1'), r: parseFloat(getComputedStyle(el).getPropertyValue('--r')) || 0, seed: k * 1.7, ox: 0, oy: 0 };
+      });
+    });
+    var mx = 0, my = 0, tx = 0, ty = 0, visible = false, active = -1, raf = 0;
+    var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+
+    function measure() {
+      var head = document.getElementById('header');
+      var h = head ? Math.max(0, Math.round(head.getBoundingClientRect().bottom)) : 0;
+      root.style.setProperty('--cz-head', h + 'px');
+      var w = stage.clientWidth, hh = stage.clientHeight;
+      layers.forEach(function (list) {
+        list.forEach(function (L) {
+          var cs = getComputedStyle(L.el);
+          L.ox = (parseFloat(cs.left) || w / 2) - w / 2;
+          L.oy = (parseFloat(cs.top) || hh / 2) - hh / 2;
+        });
+      });
+    }
+    function scaleFor(z, d) {
+      if (z < 0) return Math.max(0.3, 1 + z * 0.95 * Math.min(d, 1.4));
+      if (z < 0.62) return 1 + z * 0.18 * d;
+      return 1 + 0.1116 * d + (z - 0.62) * 2.6 * d;
+    }
+    function draw(time) {
+      raf = 0;
+      var rect = sec.getBoundingClientRect();
+      var travel = Math.max(1, sec.offsetHeight - stage.offsetHeight);
+      var head = parseFloat(getComputedStyle(root).getPropertyValue('--cz-head')) || 0;
+      var P = clamp((head - rect.top) / travel, 0, 1);
+      sec.style.setProperty('--cz-world-p', P.toFixed(4));
+      tx += (mx - tx) * 0.08; ty += (my - ty) * 0.08;
+      var pos = P * SPAN, now = time || 0;
+      scenes.forEach(function (scene, i) {
+        var z = pos - i, last = i === N - 1;
+        scene.style.opacity = clamp((z + 0.3) / 0.3, 0, 1).toFixed(3);
+        var on = z > -0.3 && (last || z < 1);
+        scene.classList.toggle('is-on', on);
+        scene.setAttribute('aria-hidden', String(!(z > -0.2 && (last || z < 0.8))));
+        if (!on) return;
+        layers[i].forEach(function (L) {
+          var zz = last ? Math.min(z, 0.62) : z;
+          var s = scaleFor(zz, L.d);
+          var o = zz < -0.45 ? 0 : zz < 0 ? (zz + 0.45) / 0.45 : zz < 0.72 ? 1 : Math.max(0, 1 - (zz - 0.72) / 0.28);
+          var push = (s - 1) * 0.55;
+          var bob = L.d > 1 ? Math.sin(now * 0.0012 + L.seed) * 5 * L.d : 0;
+          var dx = L.ox * push + tx * L.d * 16, dy = L.oy * push + ty * L.d * 10 + bob;
+          L.el.style.opacity = o.toFixed(3);
+          L.el.style.transform = 'translate(-50%,-50%) translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(' + s.toFixed(4) + ') rotate(' + L.r + 'deg)';
+        });
+      });
+      copies.forEach(function (copy, i) {
+        var z = pos - i, last = i === N - 1;
+        var o = clamp((z + 0.12) / 0.2, 0, 1) * (last ? 1 : clamp((0.72 - z) / 0.16, 0, 1));
+        copy.style.opacity = o.toFixed(3);
+        copy.style.setProperty('--cz-copy-y', ((1 - o) * 24).toFixed(1) + 'px');
+        copy.classList.toggle('is-on', o > 0.5);
+        copy.inert = o < 0.5;
+        copy.setAttribute('aria-hidden', String(o < 0.5));
+      });
+      var idx = clamp(Math.round(pos - 0.2), 0, N - 1);
+      if (idx !== active) { active = idx; route.forEach(function (b, k) { b.setAttribute('aria-pressed', String(k === idx)); }); }
+      if (visible && (fine || Math.abs(mx - tx) > 0.001)) raf = requestAnimationFrame(draw);
+    }
+    function request() { if (!raf) raf = requestAnimationFrame(draw); }
+
+    if (reduce.matches) return;
+    measure();
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', function () { measure(); request(); }, { passive: true });
+    if (fine) {
+      stage.addEventListener('pointermove', function (e) {
+        var r = stage.getBoundingClientRect();
+        mx = ((e.clientX - r.left) / r.width - 0.5) * 2; my = ((e.clientY - r.top) / r.height - 0.5) * 2; request();
+      });
+      stage.addEventListener('pointerleave', function () { mx = 0; my = 0; request(); });
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (en) { visible = en[0].isIntersecting; if (visible) { measure(); request(); } }).observe(sec);
+    } else { visible = true; }
+    route.forEach(function (btn, i) {
+      btn.addEventListener('click', function () {
+        var head = parseFloat(getComputedStyle(root).getPropertyValue('--cz-head')) || 0;
+        var top = sec.getBoundingClientRect().top + window.scrollY - head;
+        var travel = sec.offsetHeight - stage.offsetHeight;
+        window.scrollTo({ top: top + travel * Math.min(1, (i + 0.2) / SPAN), behavior: 'smooth' });
+      });
+    });
+    request();
+  }
+
   function initMisc(root) {
     var free = root.querySelector('[data-free-over]'), ship = (window.STORE_CONTENT || {}).shipping;
     if (free && ship && ship.freeBar !== false && ship.freeOver > 0) {
@@ -212,6 +318,7 @@
     var root = document.querySelector('.pet-cozy');
     if (!root) return;
     initWorldHero(root);
+    initWorld(root);
     fillPlaceholders(root);
     initFinder(root);
     initHotspots(root);
