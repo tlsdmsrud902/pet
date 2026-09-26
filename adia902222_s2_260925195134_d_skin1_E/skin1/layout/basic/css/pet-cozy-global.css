@@ -1,0 +1,91 @@
+/* ==========================================================================
+   PETPIA cozy — 전 페이지 공통 (상단 띠 · 헤더 · 푸터 · 서브 페이지 · 버튼 · 표)
+   pet-pastel.css 뒤에 불러와 민트·청록 톤을 크림 · 코코아 · 파스텔로 바꾼다.
+   되돌리려면 layout.html 의 이 파일 링크 한 줄만 지운다.
+   ========================================================================== */
+:root{
+  --cz-bg:#fff9f3;--cz-oat:#f6ede2;--cz-line:#efe3d6;--cz-ink:#43372f;--cz-muted:#766a60;--cz-accent:#a5553a;--cz-coral:#e8866a;
+  --cz-peach:#fde4d7;--cz-butter:#fff1c9;--cz-mint:#dff0e2;--cz-sky:#dfeef8;--cz-lilac:#ece3f6;
+  --pet-btn:#43372f;--pet-btn-hover:#2f2620;--pet-btn-soft:#f6ede2;--pet-btn-line:#e3d5c8;--pet-btn-shadow:0 10px 22px -12px rgba(96,66,44,.4)
+}
+body,body:not(:has(#lw-home)){background:var(--cz-bg)!important;color:var(--cz-ink)}
+body #wrap,body #container{background:transparent}
+
+/* 상단 띠 */
+.main_top_banner{background:var(--cz-peach)!important;color:var(--cz-ink)!important}
+.main_top_banner a,.main_top_banner p,.main_top_banner span{color:var(--cz-ink)!important}
+.main_top_banner .top_banner_box_inner .top_banner_text a{color:var(--cz-ink)!important;-webkit-text-fill-color:var(--cz-ink)!important;font-weight:600!important}
+.main_top_banner .top_banner_box_inner .top_banner_close .icon::before,.main_top_banner .top_banner_box_inner .top_banner_close .icon::after,.main_top_banner .top_banner_close .icon::before,.main_top_banner .top_banner_close .icon::after{background:var(--cz-ink)!important}
+.main_top_banner .btnClose{filter:none}
+
+/* 헤더 */
+#header{background:rgba(255,249,243,.94)!important;-webkit-backdrop-filter:saturate(1.4) blur(10px);backdrop-filter:saturate(1.4) blur(10px);box-shadow:0 1px 0 var(--cz-line)!important;border:0!important}
+#header .inner .top_nav_box .top_logo a::before,#footer .bt_logo a::before{color:var(--cz-ink)!important}
+#header .inner .top_nav_box .top_category>ul>li>a,#header .top_category>ul>li>a{color:var(--cz-ink)!important;-webkit-text-fill-color:var(--cz-ink)!important;border-radius:0;transition:background .25s,color .25s}
+@media (min-width:1025px){
+  #header .top_category>ul{gap:10px!important}
+  #header .top_category>ul>li>a{padding:9px 16px!important;font-weight:600!important;font-size:15px!important}
+  #header .top_category>ul>li>a:hover,#header .top_category>ul>li>a:focus-visible{background:var(--cz-oat)!important}
+}
+#header .top_member_links,#header .top_member_links a,#header .top_member_links span{color:var(--cz-muted)!important}
+#header :is(.top_mypage,.top_nav) svg{color:var(--cz-ink)}
+#header .pet-sale-menu .pet-sale-bubble{background:var(--cz-coral)!important}
+#header .pet-sale-menu .pet-sale-bubble::after{border-top-color:var(--cz-coral)!important}
+
+/* 푸터 */
+#footer{background:var(--cz-oat)!important;border:0!important;border-radius:0;color:var(--cz-ink)}
+#footer :is(h2,h3,h4,strong){color:var(--cz-ink)!important}
+#footer :is(a,p,li,span,dd,dt){color:var(--cz-muted)}
+#footer a:hover{color:var(--cz-ink)}
+#aside{background:var(--cz-bg)!important}
+
+/* 맨 위로 버튼 */
+.st-totop{background:var(--cz-ink)!important;box-shadow:0 10px 22px -10px rgba(67,55,47,.6)!important}
+.st-totop:hover,.st-totop:focus-visible{background:var(--cz-coral)!important}
+
+/* 서브 페이지 배너 */
+.pet-page-hero,.pet-menu-hero.pet-page-hero{border-radius:0!important;overflow:hidden}
+.pet-menu-hero.pet-page-hero{--menu-paper:#fde9dd!important}
+.pet-menu-hero.pet-page-hero[data-collection=dog]{--menu-paper:#fbe4d5!important}
+.pet-menu-hero.pet-page-hero[data-collection=cat]{--menu-paper:#e6eedf!important}
+.pet-menu-hero.pet-page-hero[data-collection=walk]{--menu-paper:#eef3e2!important}
+.pet-menu-hero.pet-page-hero[data-collection=review]{--menu-paper:#fbe8ec!important}
+.pet-menu-hero.pet-page-hero[data-collection=all]{--menu-paper:#e9f0e4!important}
+.pet-page-hero h1{color:var(--cz-ink)!important;font-family:'Fraunces',Georgia,serif!important;font-weight:500!important;letter-spacing:-.02em!important}
+.pet-page-hero p{color:#5f5249!important}
+.pet-page-hero small{color:var(--cz-accent)!important;font-family:'Fraunces',Georgia,serif!important;font-style:italic;font-size:15px!important;letter-spacing:0!important;text-transform:none}
+.pet-page-hero nav a{background:rgba(255,255,255,.72)!important;border-color:transparent!important;color:var(--cz-ink)!important;-webkit-text-fill-color:var(--cz-ink)!important;font-weight:600}
+.pet-page-hero nav a:hover{background:#fff!important}
+.pet-menu-hero nav a[aria-current=page]{background:var(--cz-ink)!important;border-color:var(--cz-ink)!important;color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important}
+
+/* 서브 페이지 제목 · 표 · 탭 · 상자 */
+body:not(:has(#lw-home)) .titleArea h2,#contents>.titleArea h2,.pet-guide h1,.pet-guide h2{color:var(--cz-ink)!important}
+body:not(:has(#lw-home)) .titleArea h2{font-weight:700!important;letter-spacing:-.04em!important}
+body:not(:has(#lw-home)) .ec-base-table th{background:var(--cz-oat)!important;color:var(--cz-ink)!important;border-color:var(--cz-line)!important}
+body:not(:has(#lw-home)) .ec-base-table td{border-color:var(--cz-line)!important}
+body:not(:has(#lw-home)) .ec-base-tab li.selected a{background:var(--cz-ink)!important;color:#fff9f3!important;border-radius:0}
+body:not(:has(#lw-home)) :is(.xans-myshop-main,.xans-order-empty){background:#fff!important;border-color:var(--cz-line)!important;border-radius:0}
+body:not(:has(#lw-home)) :is(input[type=text],input[type=password],input[type=search],input[type=email],input[type=tel],select,textarea){border-color:#e3d5c8!important;border-radius:0!important;background-color:#fff}
+body:not(:has(#lw-home)) :is(input[type=text],input[type=password],input[type=search],input[type=email],input[type=tel],select,textarea):focus{border-color:var(--cz-ink)!important;outline:0;box-shadow:0 0 0 3px rgba(232,134,106,.22)}
+
+/* 서브 페이지 상품 썸네일 */
+body:not(:has(#lw-home)) .ec-base-product .prdList .thumbnail,body:not(:has(#lw-home)) .ec-base-product .prdList .thumbnail>a{border-radius:10px!important;overflow:hidden;background:var(--cz-oat)}
+body:not(:has(#lw-home)) .ec-base-product .prdList .name a{color:var(--cz-ink)!important}
+
+/* 세일 페이지 */
+html.st-sale-on #contents :is(.sl-hero,.sl-strip,.sl-end){background-color:var(--cz-peach)!important;color:var(--cz-ink)!important}
+html.st-sale-on #contents .sl-hero__title{color:var(--cz-ink)!important}
+html.st-sale-on #contents .sl-coupon{background:var(--cz-butter)!important;color:var(--cz-ink)!important}
+html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn,.sl-cp__back){background:var(--cz-ink)!important;color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important}
+html.st-sale-on #contents .sl-cp__back :is(b,em,.sl-cp__pct,.sl-cp__nm){color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important}
+html.st-sale-on #contents .sl-cp__btn--ghost{background:#fff!important;color:var(--cz-ink)!important;-webkit-text-fill-color:var(--cz-ink)!important}
+html.st-sale-on #contents .sl-cp__msg{color:var(--cz-ink)!important}
+
+
+/* 모서리 : 상품 이미지만 살짝(10px). 버튼은 모두 같은 알약 모양, 그 밖의 배너 · 칩 · 상자는 네모 */
+body:not(:has(#lw-home)) :is(a,button).btnSubmit,body:not(:has(#lw-home)) :is(a,button).btnSubmitFix,body:not(:has(#lw-home)) :is(a,button).btnStrong,
+body:not(:has(#lw-home)) :is(a,button).btnNormal,body:not(:has(#lw-home)) :is(a,button).btnNormalFix,body:not(:has(#lw-home)) :is(a,button).btnBasic,
+body:not(:has(#lw-home)) :is(.btnSubmit,.btnSubmitFix,.btnStrong,.btnNormal,.btnNormalFix,.btnBasic).gFull,
+body:not(:has(#lw-home)) .xans-member-login .login__util div:nth-child(3)>a,body:not(:has(#lw-home)) .xans-member-login .login__sns .wrap_sns_log a,
+html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn){border-radius:999px!important}
+.pet-page-hero nav a,html.st-sale-on #contents :is(.sl-coupon,.sl-cp__back){border-radius:0!important}
