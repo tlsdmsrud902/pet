@@ -1,0 +1,905 @@
+<!--@layout(/layout/basic/layout.html)-->
+<!--@css(/layout/basic/css/main.css)-->
+<!--@css(/layout/basic/css/st-main.css)-->
+<!-- 2026-09-24: original preserved as /index_before_cleanup_20260924.html -->
+<!-- LEGGINGS WORLD 메인 (2026-09-24)
+     기존 5블록(히어로 · 바로가기 · 추천 상품 · 컬렉션 · 고객 안내)에 7블록을 더했다.
+     혜택 띠 · 핏 파인더(탭) · 소재 이야기(스크롤 고정) · 숫자로 보는 약속(카운트업)
+     · 룩북(가로 스크롤) · 사이즈 가이드(계산기) · 관리법/FAQ(아코디언)
+     스타일과 스크립트는 이 파일 안에만 있다(#lw-home 범위). 움직임 줄이기 설정이면 효과가 꺼진다. -->
+<style>
+body:has(#lw-home) #container{padding-top:calc(var(--st-topbar-h,34px) + var(--st-header-h,64px))!important}
+body:has(#lw-home) #contents{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+body:has(#lw-home) #stIntro,body:has(#lw-home) .st-rail{display:none!important}
+#lw-home{color:#262735;background:#fff;font-family:'Pretendard Variable','Pretendard',sans-serif;--lw-muted:#6f7086;--lw-line:#e6e8f0;--lw-ink:#262735;--lw-sage:#2f3042;--lw-sage2:#6b6d86;--lw-mint:#a6a9ba;--lw-ivory:#f7f7fa;--lw-sand:#eceef4;--lw-accent:#968c8d;--lw-ease:cubic-bezier(.16,1,.3,1)}
+#lw-home *{box-sizing:border-box}
+#lw-home a{color:inherit;text-decoration:none}
+#lw-home a:focus-visible,#lw-home button:focus-visible,#lw-home input:focus-visible{outline:2px solid #6b6d86;outline-offset:5px}
+#lw-home h1,#lw-home h2,#lw-home h3,#lw-home p{margin:0;font-family:inherit}
+#lw-home button{font-family:inherit;cursor:pointer}
+#lw-home .lw-wrap{width:calc(100% - 96px);max-width:1440px;margin:0 auto}
+
+/* --- HERO ---------------------------------------------------------------- */
+#lw-home .lw-hero{position:relative;width:100%;height:clamp(480px,45vw,700px);overflow:hidden;background:#e6e8f0;--lw-hero-y:0px}
+#lw-home .lw-hero__slides,#lw-home .lw-hero__slide{position:absolute;inset:0}
+#lw-home .lw-hero__slide{opacity:0;visibility:hidden;pointer-events:none;transition:opacity 1s ease,visibility 1s;isolation:isolate}
+#lw-home .lw-hero__slide.is-active{opacity:1;visibility:visible;pointer-events:auto;z-index:1}
+#lw-home .lw-hero__slide>img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0%;transform:translate3d(0,var(--lw-hero-y),0) scale(1.045);transform-origin:60% 30%;transition:transform 7s var(--lw-ease)}
+#lw-home .lw-hero__slide.is-active>img{transform:translate3d(0,var(--lw-hero-y),0) scale(1)}
+#lw-home .lw-hero-copy{position:absolute;top:50%;left:max(6%,calc((100% - 1440px)/2));transform:translateY(-50%);width:43%;color:#2b2c3a}
+#lw-home .lw-eyebrow{font-size:11px;letter-spacing:.19em;font-weight:600;margin:0 0 22px}
+#lw-home .lw-hero h1,#lw-home .lw-hero h2{margin:0;font-family:inherit;font-size:clamp(34px,3.7vw,60px);font-weight:500;line-height:1.3;letter-spacing:-.065em;word-break:keep-all}
+#lw-home .lw-hero-desc{margin-top:22px;font-size:15px;line-height:1.8;color:#666779;word-break:keep-all}
+#lw-home .lw-button{display:inline-flex;align-items:center;justify-content:center;gap:26px;min-height:46px;padding:0 23px;border:1px solid #3a3b4d;background:transparent;color:inherit;font-size:13px;font-weight:500;transition:background .2s,color .2s,border-color .2s}
+#lw-home .lw-button span{transition:transform .3s var(--lw-ease)}
+#lw-home .lw-button:hover span{transform:translateX(4px)}
+#lw-home .lw-hero .lw-button{margin-top:30px;background:#2f3042;color:#fff;border-color:#2f3042}
+#lw-home .lw-button:hover{background:#6b6d86;color:#fff;border-color:#6b6d86}
+#lw-home .lw-scrollcue{position:absolute;left:50%;bottom:22px;width:1px;height:46px;background:rgba(43,44,58,.18);overflow:hidden}
+#lw-home .lw-scrollcue::after{content:'';position:absolute;left:0;top:-46px;width:1px;height:46px;background:#2f3042;animation:lwCue 2.2s var(--lw-ease) infinite}
+#lw-home .lw-hero__nav{position:absolute;right:max(3%,calc((100% - 1440px)/2));bottom:26px;z-index:3;display:flex;align-items:center;gap:10px}
+#lw-home .lw-hero__arrow{display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid rgba(38,39,53,.35);border-radius:50%;background:rgba(255,255,255,.52);color:#2f3042;font-size:17px;line-height:1;backdrop-filter:blur(8px);transition:background .2s,border-color .2s}
+#lw-home .lw-hero__arrow:hover{background:#fff;border-color:#2f3042}
+#lw-home .lw-hero__dots{display:flex;align-items:center;gap:7px;padding:0 7px}
+#lw-home .lw-hero__dot{width:6px;height:6px;padding:0;border:0;border-radius:50%;background:rgba(38,39,53,.35);transition:width .3s var(--lw-ease),border-radius .3s,background .3s}
+#lw-home .lw-hero__dot[aria-selected="true"]{width:22px;border-radius:6px;background:#2f3042}
+@keyframes lwCue{to{top:46px}}
+
+/* --- 혜택 띠 (흐르는 글자) ----------------------------------------------- */
+#lw-home .lw-ticker{overflow:hidden;background:#2f3042;color:#eceef4;font-size:12px;letter-spacing:.06em;white-space:nowrap}
+#lw-home .lw-ticker__track{display:inline-flex;gap:0;padding:13px 0;animation:lwTicker 38s linear infinite}
+#lw-home .lw-ticker:hover .lw-ticker__track{animation-play-state:paused}
+#lw-home .lw-ticker__track span{padding:0 28px;position:relative}
+#lw-home .lw-ticker__track span::after{content:'';position:absolute;right:-2px;top:50%;width:4px;height:4px;border-radius:50%;background:#a6a9ba;transform:translateY(-50%)}
+@keyframes lwTicker{to{transform:translateX(-50%)}}
+
+/* --- 바로가기 ------------------------------------------------------------ */
+#lw-home .lw-quick{display:flex;justify-content:center;gap:36px;padding:26px 20px;border-bottom:1px solid var(--lw-line);font-size:13px;line-height:1.5}
+#lw-home .lw-quick a{white-space:nowrap;color:#666779;position:relative}
+#lw-home .lw-quick a::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:1px;background:#222;transform:scaleX(0);transform-origin:0 50%;transition:transform .35s var(--lw-ease)}
+#lw-home .lw-quick a:hover{color:#222}
+#lw-home .lw-quick a:hover::after{transform:scaleX(1)}
+
+/* --- 공통 블록 · 제목 ---------------------------------------------------- */
+#lw-home .lw-block{padding:96px 0;scroll-margin-top:120px}
+#lw-home .lw-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:34px}
+#lw-home .lw-heading h2{font-size:28px;letter-spacing:-.035em;line-height:1.3;font-weight:600;word-break:keep-all}
+#lw-home .lw-heading p{font-size:13px;color:var(--lw-muted);margin-top:9px;line-height:1.6;word-break:keep-all}
+#lw-home .lw-heading .lw-kicker,#lw-home .lw-kicker{font-size:11px;letter-spacing:.14em;color:#7f8098;margin:0 0 12px;font-weight:500}
+#lw-home .lw-link{font-size:12px;white-space:nowrap;padding-bottom:3px;border-bottom:1px solid #9495ab;transition:color .2s,border-color .2s}
+#lw-home .lw-link:hover{color:#6b6d86;border-color:#6b6d86}
+
+/* --- 추천 상품 ----------------------------------------------------------- */
+#lw-home .lw-products .ec-base-product{margin:0!important;padding:0!important}
+#lw-home .lw-products .ec-base-product ul.prdList{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:36px 18px!important;width:100%!important;margin:0!important;padding:0!important;transform:none!important}
+#lw-home .lw-products .ec-base-product ul.prdList>li{float:none!important;width:auto!important;margin:0!important;padding:0!important;opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;transition:none!important}
+#lw-home .lw-products .prdList__item{margin:0!important;padding:0!important}
+#lw-home .lw-products .thumbnail{margin:0!important;padding:0!important;border:0!important;position:relative}
+#lw-home .lw-products .thumbnail>a{display:block!important;aspect-ratio:3/4!important;border-radius:12px!important;background:#f4f4f8;overflow:hidden}
+#lw-home .lw-products .thumbnail>a>img{display:block!important;position:static!important;width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important;opacity:1!important;transition:transform 1.1s var(--lw-ease)!important}
+#lw-home .lw-products .thumbnail:hover>a>img{transform:scale(1.045)!important}
+#lw-home .lw-products .thumbnail .prdList__hover{display:none!important}
+#lw-home .lw-products .sale_box{display:none!important}
+#lw-home .lw-products .description{margin:0!important;padding:15px 0 0!important;min-height:88px;text-align:left!important}
+#lw-home .lw-products .description .name{margin:0 0 8px!important;line-height:1.55!important}
+#lw-home .lw-products .description .name a,#lw-home .lw-products .description .name a>span:not(.title){font-family:inherit!important;font-size:13px!important;font-weight:500!important;color:#2f3042!important;letter-spacing:-.02em!important}
+#lw-home .lw-products .description .spec{margin:0!important;padding:0!important;line-height:1.55!important}
+#lw-home .lw-products .description .spec>li{margin:0!important;padding:0!important;line-height:1.65!important}
+#lw-home .lw-products .description .st-rate{font-size:12px!important;color:#968c8d!important;margin-left:7px}
+#lw-home .lw-products .icon__box{border-radius:0!important}
+#lw-home .lw-products .icon:empty{display:none}
+#lw-home .lw-product-bottom{text-align:center;margin-top:36px}
+
+/* --- 관리자 진열 그룹에 상품이 없으면 그 섹션은 통째로 숨긴다 (상품을 진열하면 자동으로 나타난다) --- */
+#lw-home .lw-auto:not(:has(ul.prdList>li)){display:none!important}
+@media(min-width:1025px){#lw-home .lw-products.lw-newin .ec-base-product ul.prdList{grid-template-columns:repeat(5,minmax(0,1fr))!important}}
+
+/* --- 핏 파인더 (탭) ------------------------------------------------------ */
+#lw-home .lw-finder{background:var(--lw-ivory);border-top:1px solid var(--lw-line);border-bottom:1px solid var(--lw-line)}
+#lw-home .lw-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 30px;padding:0;list-style:none}
+#lw-home .lw-tab{height:42px;padding:0 20px;border:1px solid #d7dbe7;background:#fff;color:#666779;font-size:13px;font-weight:500;transition:background .25s,color .25s,border-color .25s}
+#lw-home .lw-tab:hover{border-color:#2f3042;color:#262735}
+#lw-home .lw-tab[aria-selected="true"]{background:#2f3042;border-color:#2f3042;color:#fff}
+#lw-home .lw-panels{position:relative}
+#lw-home .lw-panel{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+#lw-home .lw-panel[hidden]{display:none}
+#lw-home .lw-panel__media{position:relative;aspect-ratio:5/4;overflow:hidden;background:#eaebf1}
+#lw-home .lw-panel__media img{width:100%;height:100%;object-fit:cover;display:block}
+#lw-home .lw-panel.is-anim .lw-panel__media img{animation:lwPanelImg 1.1s var(--lw-ease) both}
+#lw-home .lw-panel.is-anim .lw-panel__copy>*{animation:lwPanelTxt .8s var(--lw-ease) both}
+#lw-home .lw-panel.is-anim .lw-panel__copy>*:nth-child(2){animation-delay:.06s}
+#lw-home .lw-panel.is-anim .lw-panel__copy>*:nth-child(3){animation-delay:.12s}
+#lw-home .lw-panel.is-anim .lw-panel__copy>*:nth-child(4){animation-delay:.18s}
+#lw-home .lw-panel.is-anim .lw-panel__copy>*:nth-child(5){animation-delay:.24s}
+@keyframes lwPanelImg{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+@keyframes lwPanelTxt{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+#lw-home .lw-panel__copy h3{font-size:clamp(24px,2.2vw,34px);font-weight:600;letter-spacing:-.045em;line-height:1.35;word-break:keep-all}
+#lw-home .lw-panel__copy>p{font-size:14px;line-height:1.85;color:#666779;margin-top:16px;word-break:keep-all}
+#lw-home .lw-points{list-style:none;margin:26px 0 30px;padding:0;border-top:1px solid #dfe1ea}
+#lw-home .lw-points li{display:grid;grid-template-columns:96px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid #dfe1ea;font-size:13px;line-height:1.6}
+#lw-home .lw-points b{font-weight:600;color:#6b6d86}
+#lw-home .lw-points span{color:#45465c}
+
+/* --- 컬렉션 -------------------------------------------------------------- */
+#lw-home .lw-category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px;list-style:none;margin:0;padding:0}
+#lw-home .lw-category-grid a{display:block}
+#lw-home .lw-category-grid figure{margin:0;overflow:hidden;background:#eff0f5}
+#lw-home .lw-category-grid img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;transition:transform 1.2s var(--lw-ease)}
+#lw-home .lw-category-grid a:hover img{transform:scale(1.05)}
+#lw-home .lw-category-grid h3{font-size:16px;line-height:1.5;font-weight:600;margin-top:18px;letter-spacing:-.02em}
+#lw-home .lw-category-grid h3 span{display:inline-block;transition:transform .35s var(--lw-ease)}
+#lw-home .lw-category-grid a:hover h3 span{transform:translate(3px,-3px)}
+#lw-home .lw-category-grid p{font-size:12px;line-height:1.6;color:var(--lw-muted);margin-top:5px}
+
+/* --- 소재 이야기 (스크롤 고정) ------------------------------------------ */
+#lw-home .lw-story{background:#2f3042;color:#eff0f5}
+#lw-home .lw-story .lw-kicker{color:#a6a9ba}
+#lw-home .lw-story__grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+#lw-home .lw-story__sticky{position:sticky;top:calc(var(--st-topbar-h,34px) + var(--st-header-h,64px) + 32px)}
+#lw-home .lw-story__frame{position:relative;aspect-ratio:4/5;overflow:hidden;background:#262735}
+#lw-home .lw-story__frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity .9s ease,transform 1.6s var(--lw-ease)}
+#lw-home .lw-story__frame img.is-on{opacity:1;transform:none}
+#lw-home .lw-story__bar{display:flex;gap:6px;margin-top:16px}
+#lw-home .lw-story__bar i{flex:1;height:2px;background:rgba(239,240,245,.18);position:relative;overflow:hidden}
+#lw-home .lw-story__bar i::after{content:'';position:absolute;inset:0;background:#d7dbe7;transform:scaleX(0);transform-origin:0 50%;transition:transform .6s var(--lw-ease)}
+#lw-home .lw-story__bar i.is-on::after{transform:scaleX(1)}
+#lw-home .lw-story__intro h2{font-size:clamp(28px,2.6vw,40px);font-weight:500;letter-spacing:-.055em;line-height:1.35;word-break:keep-all}
+#lw-home .lw-story__intro p{font-size:14px;line-height:1.85;color:#c4c8d4;margin-top:18px;word-break:keep-all}
+#lw-home .lw-step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;padding:40px 0;border-top:1px solid rgba(239,240,245,.14);opacity:.32;transition:opacity .6s ease}
+#lw-home .lw-step:first-of-type{border-top:0}
+#lw-home .lw-step.is-on{opacity:1}
+#lw-home .lw-step__no{font-size:11px;letter-spacing:.2em;color:#a6a9ba;margin-bottom:14px}
+#lw-home .lw-step h3{font-size:clamp(22px,1.9vw,28px);font-weight:600;letter-spacing:-.04em;line-height:1.4}
+#lw-home .lw-step p{font-size:14px;line-height:1.85;color:#c4c8d4;margin-top:12px;max-width:440px;word-break:keep-all}
+#lw-home .lw-step__img{display:none}
+
+/* --- IN MOTION (영상 장면 전환) ----------------------------------------- */
+#lw-home .lw-motion{background:#21222d;color:#eff0f5}
+#lw-home .lw-motion .lw-kicker{color:#a6a9ba}
+#lw-home .lw-motion .lw-heading p{color:#c4c8d4}
+#lw-home .lw-motion__grid{display:grid;grid-template-columns:1.65fr 1fr;gap:40px;align-items:stretch}
+#lw-home .lw-motion__stage{position:relative;aspect-ratio:16/9;overflow:hidden;background:#191a24}
+#lw-home .lw-motion__stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity .8s ease,transform 1.4s var(--lw-ease)}
+#lw-home .lw-motion__stage img.is-on{opacity:1;transform:none}
+#lw-home .lw-motion__cap{position:absolute;left:24px;bottom:22px;z-index:2;display:flex;align-items:baseline;gap:12px;font-size:13px;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+#lw-home .lw-motion__cap b{font:600 12px/1 'Jost',sans-serif;letter-spacing:.14em;color:#d7dbe7}
+#lw-home .lw-motion__stage::after{content:'';position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(0deg,rgba(0,0,0,.45),rgba(0,0,0,0));pointer-events:none}
+#lw-home .lw-motion__list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;border-top:1px solid rgba(239,240,245,.16)}
+#lw-home .lw-motion__list li{flex:1}
+#lw-home .lw-motion__btn{position:relative;display:grid;grid-template-columns:40px 1fr 72px;gap:14px;align-items:center;width:100%;height:100%;min-height:74px;padding:14px 0;border:0;border-bottom:1px solid rgba(239,240,245,.16);background:none;color:inherit;text-align:left;opacity:.5;transition:opacity .35s ease}
+#lw-home .lw-motion__btn:hover,#lw-home .lw-motion__btn[aria-selected="true"]{opacity:1}
+#lw-home .lw-motion__no{font:600 12px/1 'Jost',sans-serif;letter-spacing:.12em;color:#a6a9ba}
+#lw-home .lw-motion__txt strong{display:block;font-size:15px;font-weight:600;letter-spacing:-.02em;line-height:1.4}
+#lw-home .lw-motion__txt span{display:block;font-size:12px;line-height:1.6;color:#c4c8d4;margin-top:3px;word-break:keep-all}
+#lw-home .lw-motion__thumb{width:72px;aspect-ratio:16/9;overflow:hidden;background:#2b2c3a}
+#lw-home .lw-motion__thumb img{width:100%;height:100%;object-fit:cover;display:block}
+#lw-home .lw-motion__bar{position:absolute;left:0;right:0;bottom:-1px;height:1px;background:#d7dbe7;transform:scaleX(0);transform-origin:0 50%}
+#lw-home .lw-motion__btn[aria-selected="true"] .lw-motion__bar{animation:lwMotionBar var(--dur,6s) linear forwards}
+#lw-home .lw-motion.is-paused .lw-motion__btn[aria-selected="true"] .lw-motion__bar{animation-play-state:paused}
+@keyframes lwMotionBar{to{transform:scaleX(1)}}
+@media(max-width:1024px){
+#lw-home .lw-hero__slide:nth-child(1)>img{object-position:72% 0%}
+#lw-home .lw-hero__slide:nth-child(2)>img{object-position:68% 0%}
+#lw-home .lw-hero__slide:nth-child(3)>img{object-position:72% 0%}
+#lw-home .lw-hero__slide:nth-child(4)>img{object-position:77% 0%}
+#lw-home .lw-motion__grid{grid-template-columns:1fr;gap:20px}
+#lw-home .lw-motion__list{flex-direction:row;overflow-x:auto;scrollbar-width:none;border-top:0;gap:10px}
+#lw-home .lw-motion__list li{flex:0 0 200px}
+#lw-home .lw-motion__btn{grid-template-columns:1fr;gap:8px;padding:0 0 12px;min-height:0}
+#lw-home .lw-motion__thumb{width:100%;order:-1}
+#lw-home .lw-motion__no{display:none}
+}
+@media(max-width:600px){
+#lw-home .lw-motion__list li{flex-basis:150px}
+#lw-home .lw-motion__txt span{display:none}
+#lw-home .lw-motion__cap{left:16px;bottom:14px;font-size:12px}
+}
+
+/* --- 숫자로 보는 약속 (카운트업) ---------------------------------------- */
+#lw-home .lw-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--lw-line);border-bottom:1px solid var(--lw-line)}
+#lw-home .lw-stat{padding:44px 28px 40px;border-left:1px solid var(--lw-line)}
+#lw-home .lw-stat:first-child{border-left:0}
+#lw-home .lw-stat__num{font-size:clamp(34px,3.4vw,52px)!important;font-weight:500;letter-spacing:-.05em;line-height:1;color:#2f3042;font-variant-numeric:tabular-nums}
+#lw-home .lw-stat__num small{font-size:.42em!important;letter-spacing:-.02em;margin-left:3px;color:#6b6d86;font-weight:600}
+#lw-home .lw-stat h3{font-size:14px;font-weight:600;margin-top:18px;letter-spacing:-.02em}
+#lw-home .lw-stat p{font-size:12px;line-height:1.7;color:var(--lw-muted);margin-top:6px;word-break:keep-all}
+
+/* --- 룩북 (가로 스크롤) -------------------------------------------------- */
+#lw-home .lw-look{position:relative;background:var(--lw-sand)}
+#lw-home .lw-look__pin{position:relative}
+#lw-home .lw-look__head{padding:96px 0 34px}
+#lw-home .lw-look__track{display:flex;gap:18px;padding:0 48px 96px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#lw-home .lw-look__track::-webkit-scrollbar{display:none}
+#lw-home .lw-look__card{flex:0 0 clamp(240px,26vw,380px);scroll-snap-align:start;margin:0}
+#lw-home .lw-look__card:nth-child(even){margin-top:56px}
+#lw-home .lw-look__card a{display:block}
+#lw-home .lw-look__img{overflow:hidden;background:#e2e3ea;aspect-ratio:3/4}
+#lw-home .lw-look__img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.2s var(--lw-ease)}
+#lw-home .lw-look__card a:hover img{transform:scale(1.05)}
+#lw-home .lw-look__card figcaption{display:flex;justify-content:space-between;gap:12px;margin-top:14px;font-size:13px;line-height:1.5}
+#lw-home .lw-look__card figcaption b{font-weight:600;letter-spacing:-.02em}
+#lw-home .lw-look__card figcaption span{color:var(--lw-muted);font-size:12px;white-space:nowrap}
+#lw-home .lw-look__progress{position:absolute;left:48px;right:48px;bottom:48px;height:1px;background:rgba(38,39,53,.14)}
+#lw-home .lw-look__progress i{position:absolute;left:0;top:0;bottom:0;width:100%;background:#2f3042;transform:scaleX(0);transform-origin:0 50%}
+/* 데스크톱 : 세로 스크롤로 가로 이동(JS 가 .is-pinned 를 붙일 때만) */
+#lw-home .lw-look.is-pinned .lw-look__pin{position:sticky;top:calc(var(--st-topbar-h,34px) + var(--st-header-h,64px));height:calc(100vh - var(--st-topbar-h,34px) - var(--st-header-h,64px));overflow:hidden;display:flex;flex-direction:column}
+#lw-home .lw-look.is-pinned .lw-look__head{padding:clamp(28px,5vh,64px) 0 clamp(20px,3vh,34px)}
+#lw-home .lw-look.is-pinned .lw-look__track{overflow:visible;scroll-snap-type:none;padding-bottom:0;will-change:transform;flex:1;align-items:flex-start}
+#lw-home .lw-look.is-pinned .lw-look__card{flex:0 0 auto;width:calc(min(52vh,520px) * .75)}
+#lw-home .lw-look.is-pinned .lw-look__img{width:100%;aspect-ratio:3/4}
+#lw-home .lw-look.is-pinned .lw-look__card:nth-child(even){margin-top:clamp(20px,5vh,56px)}
+#lw-home .lw-look.is-pinned .lw-look__progress{bottom:clamp(20px,4vh,40px)}
+
+/* --- 사이즈 가이드 (계산기) --------------------------------------------- */
+#lw-home .lw-size__grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:64px;align-items:start}
+#lw-home .lw-size__form{padding:34px;border:1px solid var(--lw-line);background:var(--lw-ivory)}
+#lw-home .lw-range{margin:0 0 28px}
+#lw-home .lw-range label{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:600;margin-bottom:14px}
+#lw-home .lw-range output{font-size:22px;font-weight:500;letter-spacing:-.04em;color:#2f3042;font-variant-numeric:tabular-nums}
+#lw-home .lw-range output small{font-size:12px;margin-left:2px;color:var(--lw-muted)}
+#lw-home .lw-range input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:linear-gradient(90deg,#2f3042 var(--p,50%),#d7dbe7 var(--p,50%));outline:none;margin:0}
+#lw-home .lw-range input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #2f3042;cursor:grab;transition:transform .2s}
+#lw-home .lw-range input[type=range]::-webkit-slider-thumb:active{transform:scale(1.15);cursor:grabbing}
+#lw-home .lw-range input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid #2f3042;cursor:grab}
+#lw-home .lw-result{display:flex;align-items:center;gap:22px;padding-top:26px;border-top:1px solid var(--lw-line)}
+#lw-home .lw-result__size{width:84px;height:84px;display:flex;align-items:center;justify-content:center;background:#2f3042;color:#fff;font-size:30px;font-weight:600;letter-spacing:-.03em;flex:none}
+#lw-home .lw-result__size.is-pop{animation:lwPop .45s var(--lw-ease)}
+@keyframes lwPop{0%{transform:scale(.86)}100%{transform:none}}
+#lw-home .lw-result p{font-size:13px;line-height:1.75;color:#666779;word-break:keep-all}
+#lw-home .lw-result p b{color:#262735}
+#lw-home .lw-size__table{width:100%;border-collapse:collapse;font-size:13px;text-align:center}
+#lw-home .lw-size__table th,#lw-home .lw-size__table td{padding:15px 8px;border-bottom:1px solid var(--lw-line)}
+#lw-home .lw-size__table thead th{font-size:12px;font-weight:600;color:var(--lw-muted);border-bottom:1px solid #262735}
+#lw-home .lw-size__table tbody th{font-weight:600}
+#lw-home .lw-size__table tr{transition:background .3s,color .3s}
+#lw-home .lw-size__table tbody tr.is-on{background:#2f3042;color:#fff}
+#lw-home .lw-size__note{font-size:12px;line-height:1.7;color:var(--lw-muted);margin-top:16px;word-break:keep-all}
+
+/* --- 관리법 · FAQ (아코디언) -------------------------------------------- */
+#lw-home .lw-faq{background:var(--lw-ivory);border-top:1px solid var(--lw-line)}
+#lw-home .lw-faq__grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px}
+#lw-home .lw-care{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#lw-home .lw-care li{padding:18px;background:#fff;border:1px solid var(--lw-line);font-size:12px;line-height:1.6;color:#666779}
+#lw-home .lw-care li b{display:block;font-size:13px;color:#262735;margin-bottom:4px}
+#lw-home .lw-acc{border-top:1px solid #262735}
+#lw-home .lw-acc details{border-bottom:1px solid var(--lw-line)}
+#lw-home .lw-acc summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-size:15px;font-weight:500;letter-spacing:-.02em;cursor:pointer}
+#lw-home .lw-acc summary::-webkit-details-marker{display:none}
+#lw-home .lw-acc summary i{position:relative;width:14px;height:14px;flex:none}
+#lw-home .lw-acc summary i::before,#lw-home .lw-acc summary i::after{content:'';position:absolute;left:0;top:50%;width:14px;height:1px;background:#262735;transition:transform .35s var(--lw-ease)}
+#lw-home .lw-acc summary i::after{transform:rotate(90deg)}
+#lw-home .lw-acc details[open] summary i::after{transform:rotate(0)}
+#lw-home .lw-acc__body{overflow:hidden}
+#lw-home .lw-acc__body p{padding:0 40px 24px 0;font-size:13px;line-height:1.85;color:#666779;word-break:keep-all}
+
+/* --- 고객 안내 ----------------------------------------------------------- */
+#lw-home .lw-support{display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:40px;padding:50px 0;border-bottom:1px solid var(--lw-line)}
+#lw-home .lw-support h2{font-size:23px;font-weight:500;line-height:1.4;letter-spacing:-.04em}
+#lw-home .lw-support p{font-size:13px;line-height:1.8;color:var(--lw-muted);margin-top:10px}
+#lw-home .lw-support-links{display:flex;justify-content:flex-end;gap:28px;flex-wrap:wrap}
+#lw-home .lw-support-links a{font-size:13px;border-bottom:1px solid #a6a9ba;padding:7px 0}
+#lw-home .lw-note{font-size:11px;line-height:1.7;color:#8a8ba1;padding:21px 0 26px}
+
+/* --- 스크롤 등장 효과 (JS 가 #lw-home.lw-js 를 붙일 때만) ---------------- */
+#lw-home.lw-js [data-lw]{opacity:0;transform:translate3d(0,28px,0);transition:opacity .9s ease,transform 1.1s var(--lw-ease);transition-delay:var(--d,0s)}
+#lw-home.lw-js [data-lw="fade"]{transform:none}
+#lw-home.lw-js [data-lw].is-in{opacity:1;transform:none}
+#lw-home.lw-js .lw-hero__slide.is-active .lw-hero-copy>*{opacity:0;transform:translate3d(0,22px,0);animation:lwHeroIn .85s var(--lw-ease) forwards}
+#lw-home.lw-js .lw-hero__slide.is-active .lw-hero-copy>*:nth-child(2){animation-delay:.08s}
+#lw-home.lw-js .lw-hero__slide.is-active .lw-hero-copy>*:nth-child(3){animation-delay:.16s}
+#lw-home.lw-js .lw-hero__slide.is-active .lw-hero-copy>*:nth-child(4){animation-delay:.24s}
+@keyframes lwHeroIn{to{opacity:1;transform:none}}
+
+body:has(#lw-home) #footer{margin-top:0!important;border-top:0!important}
+@media(min-width:1025px){body:has(#lw-home) #header .top_category>ul>li>a{font-weight:500!important;font-size:14px!important}}
+
+@media(max-width:1024px){
+#lw-home .lw-wrap{width:calc(100% - 48px)}
+#lw-home .lw-hero{height:520px}
+#lw-home .lw-hero-copy{left:5%;width:43%}
+#lw-home .lw-hero h1,#lw-home .lw-hero h2{font-size:36px}
+#lw-home .lw-hero-desc{font-size:13px}
+#lw-home .lw-products .ec-base-product ul.prdList{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:30px 16px!important}
+#lw-home .lw-block{padding:64px 0}
+#lw-home .lw-category-grid{gap:14px}
+#lw-home .lw-quick{gap:26px}
+#lw-home .lw-panel{gap:32px}
+#lw-home .lw-story__grid{gap:40px}
+#lw-home .lw-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+#lw-home .lw-stat:nth-child(3){border-left:0}
+#lw-home .lw-stat:nth-child(n+3){border-top:1px solid var(--lw-line)}
+#lw-home .lw-look__track{padding:0 24px 80px}
+#lw-home .lw-look__head{padding-top:64px}
+#lw-home .lw-look__progress{left:24px;right:24px;bottom:40px}
+#lw-home .lw-size__grid,#lw-home .lw-faq__grid{gap:40px}
+}
+@media(max-width:760px){
+#lw-home .lw-panel,#lw-home .lw-size__grid,#lw-home .lw-faq__grid{grid-template-columns:1fr}
+#lw-home .lw-story__grid{grid-template-columns:1fr}
+#lw-home .lw-story__sticky{display:none}
+#lw-home .lw-step{min-height:0;opacity:1;padding:32px 0}
+#lw-home .lw-step__img{display:block;aspect-ratio:4/3;overflow:hidden;margin-bottom:22px}
+#lw-home .lw-step__img img{width:100%;height:100%;object-fit:cover;display:block}
+}
+@media(max-width:600px){
+#lw-home .lw-wrap{width:calc(100% - 36px)}
+/* 모바일 히어로 : 글자를 사진 아래 별도 영역이 아니라 사진 안(아래쪽)에 겹쳐 놓는다. 읽히도록 아래쪽에 어두운 그라데이션 */
+#lw-home .lw-hero{height:600px;padding-top:0;background:#262735}
+#lw-home .lw-hero__slide>img{height:100%;object-fit:cover;transform:none!important}
+#lw-home .lw-hero__slide::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(to top,rgba(24,25,36,.8) 0%,rgba(24,25,36,.52) 34%,rgba(24,25,36,0) 64%);pointer-events:none}
+#lw-home .lw-hero-copy{top:auto;left:0;right:0;bottom:0;z-index:2;transform:none;width:auto;padding:0 24px 76px;background:none;color:#fff}
+#lw-home .lw-hero-copy .lw-eyebrow{color:rgba(255,255,255,.85)}
+#lw-home .lw-hero h1,#lw-home .lw-hero h2{color:#fff}
+#lw-home .lw-hero-desc{color:rgba(255,255,255,.88)}
+#lw-home .lw-hero .lw-button{background:#fff;color:#2f3042;border-color:#fff}
+#lw-home .lw-hero__dot{background:rgba(255,255,255,.5)}
+#lw-home .lw-hero__dot[aria-selected="true"]{background:#fff}
+#lw-home .lw-hero__nav{right:18px;bottom:18px}
+#lw-home .lw-hero__arrow{width:34px;height:34px;background:rgba(255,255,255,.8)}
+#lw-home .lw-scrollcue{display:none}
+#lw-home .lw-eyebrow{font-size:10px;margin-bottom:13px}
+#lw-home .lw-hero h1,#lw-home .lw-hero h2{font-size:31px;line-height:1.3}
+#lw-home .lw-hero-desc{font-size:13px;margin-top:12px}
+#lw-home .lw-hero .lw-button{margin-top:20px;min-height:42px;font-size:12px}
+#lw-home .lw-ticker{font-size:11px}
+#lw-home .lw-quick{gap:24px;padding:20px 18px;justify-content:flex-start;overflow-x:auto;font-size:12px;scrollbar-width:none}
+#lw-home .lw-block{padding:48px 0}
+#lw-home .lw-heading{gap:14px;margin-bottom:23px}
+#lw-home .lw-heading h2{font-size:23px}
+#lw-home .lw-heading p{font-size:12px;max-width:230px}
+#lw-home .lw-link{font-size:11px}
+#lw-home .lw-products .ec-base-product ul.prdList{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:26px 12px!important}
+#lw-home .lw-products .description{padding-top:12px!important;min-height:80px}
+#lw-home .lw-products .description .name a,#lw-home .lw-products .description .name a>span:not(.title){font-size:12px!important}
+#lw-home .lw-tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-bottom:22px}
+#lw-home .lw-tab{flex:none;height:38px;padding:0 16px;font-size:12px}
+#lw-home .lw-points li{grid-template-columns:78px 1fr;font-size:12px}
+#lw-home .lw-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:27px 12px}
+#lw-home .lw-category-grid h3{font-size:14px;margin-top:12px}
+#lw-home .lw-category-grid p{font-size:11px}
+#lw-home .lw-stat{padding:28px 18px}
+#lw-home .lw-stat h3{font-size:13px;margin-top:12px}
+#lw-home .lw-look__track{padding:0 18px 64px;gap:12px}
+#lw-home .lw-look__card{flex-basis:70vw}
+#lw-home .lw-look__card:nth-child(even){margin-top:0}
+#lw-home .lw-look__progress{left:18px;right:18px;bottom:32px}
+#lw-home .lw-size__form{padding:24px 20px}
+#lw-home .lw-care{grid-template-columns:1fr}
+#lw-home .lw-acc summary{font-size:14px;padding:18px 0}
+#lw-home .lw-support{grid-template-columns:1fr;gap:20px;padding:34px 0}
+#lw-home .lw-support h2{font-size:21px}
+#lw-home .lw-support-links{justify-content:flex-start;gap:24px}
+#lw-home .lw-note{font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){
+#lw-home *,#lw-home *::before,#lw-home *::after{animation:none!important;transition:none!important}
+#lw-home.lw-js [data-lw],#lw-home.lw-js .lw-hero-copy>*{opacity:1!important;transform:none!important}
+}
+
+body:has(#lw-home) .footer_margin{margin:0!important;padding:0!important;height:0!important}
+body:has(#lw-home) #footer{padding:44px 0!important;background:#f7f7fa!important;border-top:1px solid #e6e8f0!important}
+body:has(#lw-home) #footer .st-footer{display:grid!important;grid-template-columns:1.3fr 1fr 1.4fr .8fr!important;gap:32px!important;max-width:1536px!important;margin:0 auto!important;padding:0 48px!important}
+body:has(#lw-home) #footer .bt_logo a{font-size:0!important;line-height:1!important;height:auto!important;letter-spacing:0!important}
+body:has(#lw-home) #footer .bt_logo{height:auto!important;margin-bottom:12px!important}
+body:has(#lw-home) #footer .st-footer__menu-dropdown,body:has(#lw-home) #footer .bt_sns{display:none!important}
+body:has(#lw-home) #footer .bt_info_list{display:block!important}
+body:has(#lw-home) #footer .bt_info_list>div{display:block!important;line-height:1.8!important;margin:0!important}
+@media(max-width:1024px){body:has(#lw-home) #footer .st-footer{grid-template-columns:1fr 1fr!important;padding:0 24px!important;gap:28px!important}}
+@media(max-width:600px){body:has(#lw-home) #footer{padding:30px 0 80px!important}body:has(#lw-home) #footer .st-footer{padding:0 18px!important;gap:25px 18px!important}body:has(#lw-home) #footer .st-footer__brand{grid-column:1/-1!important}}
+/* --- BEST 10 (카페24 메인상품 진열 3번) ---------------------------------- */
+#lw-home .lw-best .ec-base-product{margin:0!important;padding:0!important}
+#lw-home .lw-best .ec-base-product ul.prdList{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:44px 18px!important;width:100%!important;margin:0!important;padding:0!important;transform:none!important;counter-reset:lwrank}
+#lw-home .lw-best .ec-base-product ul.prdList>li{float:none!important;width:auto!important;margin:0!important;padding:0!important;opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important;transition:none!important;counter-increment:lwrank}
+#lw-home .lw-best .prdList__item{margin:0!important;padding:0!important}
+#lw-home .lw-best .thumbnail{position:relative;margin:0!important;padding:0!important;border:0!important}
+#lw-home .lw-best .thumbnail::before{content:counter(lwrank,decimal-leading-zero);position:absolute;left:0;top:0;z-index:2;min-width:38px;height:38px;padding:0 8px;display:flex;align-items:center;justify-content:center;background:#fff;color:#262735;font:600 13px/1 'Jost','Pretendard Variable',sans-serif;letter-spacing:.04em;pointer-events:none}
+#lw-home .lw-best li:nth-child(-n+3) .thumbnail::before{background:#2f3042;color:#fff}
+#lw-home .lw-best .thumbnail>a{display:block!important;aspect-ratio:3/4!important;border-radius:12px!important;background:#f4f4f8;overflow:hidden}
+#lw-home .lw-best .thumbnail>a>img{display:block!important;position:static!important;width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important;opacity:1!important;transition:transform 1.1s var(--lw-ease)!important}
+#lw-home .lw-best .thumbnail:hover>a>img{transform:scale(1.045)!important}
+#lw-home .lw-best .thumbnail .prdList__hover,#lw-home .lw-best .sale_box{display:none!important}
+#lw-home .lw-best .icon__box{border-radius:0!important}
+#lw-home .lw-best .description{margin:0!important;padding:14px 0 0!important;text-align:left!important}
+#lw-home .lw-best .description .name{margin:0 0 7px!important;line-height:1.5!important}
+#lw-home .lw-best .description .name a,#lw-home .lw-best .description .name a>span:not(.title){font-family:inherit!important;font-size:13px!important;font-weight:500!important;color:#2f3042!important;letter-spacing:-.02em!important}
+#lw-home .lw-best .description .spec{margin:0!important;padding:0!important}
+#lw-home .lw-best .description .spec>li{margin:0!important;padding:0!important;line-height:1.6!important}
+#lw-home .lw-best .description .st-rate{font-size:12px!important;color:#968c8d!important;margin-left:7px}
+#lw-home .lw-best .icon:empty{display:none}
+
+/* --- 상품 리뷰 (후기 게시판 4번) ---------------------------------------- */
+#lw-home .lw-reviews{background:var(--lw-ivory);border-top:1px solid var(--lw-line);border-bottom:1px solid var(--lw-line)}
+#lw-home .lw-rv-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+#lw-home .lw-rv-list.displaynone{display:none!important}
+#lw-home .lw-rv{background:#fff;border:1px solid var(--lw-line);transition:transform .5s var(--lw-ease),box-shadow .5s var(--lw-ease)}
+#lw-home .lw-rv:hover{transform:translateY(-4px);box-shadow:0 14px 30px -18px rgba(38,39,53,.35)}
+#lw-home .lw-rv a{display:block;height:100%}
+#lw-home .lw-rv__thumb{aspect-ratio:1/1;overflow:hidden;background:#eff0f5}
+#lw-home .lw-rv__thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.1s var(--lw-ease)}
+#lw-home .lw-rv:hover .lw-rv__thumb img{transform:scale(1.05)}
+#lw-home .lw-rv__body{padding:18px 18px 20px}
+#lw-home .lw-rv__stars{height:14px;font-size:13px;letter-spacing:2px;color:#2f3042;margin-bottom:10px}
+#lw-home .lw-rv__title{font-size:14px;font-weight:600;line-height:1.55;letter-spacing:-.02em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:43px}
+#lw-home .lw-rv__product{font-size:12px;color:var(--lw-muted);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#lw-home .lw-rv__product a{display:inline;height:auto}
+#lw-home .lw-rv__meta{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#8a8ba1;margin-top:14px;padding-top:12px;border-top:1px solid var(--lw-line)}
+#lw-home .lw-rv-sample{display:none;margin-bottom:18px}
+#lw-home .lw-reviews.is-empty .lw-rv-sample{display:grid}
+#lw-home .lw-rv__badge{display:inline-block;font:600 10px/1 'Jost','Pretendard Variable',sans-serif;letter-spacing:.12em;color:#968c8d;border:1px solid #d9d3d4;padding:4px 6px;margin-left:8px;vertical-align:1px}
+#lw-home .lw-rv__fit{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+#lw-home .lw-rv__fit span{font-size:11px;color:#6b6d86;background:#f3f4f8;padding:4px 8px}
+#lw-home .lw-rv__text{font-size:12px;line-height:1.7;color:#666779;margin-top:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#lw-home .lw-rv-sample-note{display:none;font-size:11px;color:#8a8ba1;margin:-4px 0 22px}
+#lw-home .lw-reviews.is-empty .lw-rv-sample-note{display:block}
+#lw-home .lw-rv-empty{display:none;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;padding:44px;background:#fff;border:1px solid var(--lw-line)}
+#lw-home .lw-reviews.is-empty .lw-rv-empty{display:grid}
+#lw-home .lw-rv-empty h3{font-size:24px;font-weight:600;letter-spacing:-.04em;line-height:1.4;word-break:keep-all}
+#lw-home .lw-rv-empty>div>p{font-size:14px;line-height:1.8;color:#666779;margin-top:12px;word-break:keep-all}
+#lw-home .lw-rv-empty .lw-button{margin-top:24px}
+#lw-home .lw-rv-tips{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:lwtip}
+#lw-home .lw-rv-tips li{counter-increment:lwtip;display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start;padding:16px 18px;background:var(--lw-ivory);font-size:13px;line-height:1.6;color:#45465c}
+#lw-home .lw-rv-tips li::before{content:counter(lwtip,decimal-leading-zero);font:600 12px/1.9 'Jost',sans-serif;letter-spacing:.06em;color:#6b6d86}
+#lw-home .lw-rv-tips b{display:block;font-weight:600;color:#262735;margin-bottom:2px}
+
+/* --- 인스타그램 --------------------------------------------------------- */
+#lw-home .lw-insta__grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:1fr;gap:8px;list-style:none;margin:0;padding:0}
+#lw-home .lw-insta__grid li{position:relative;aspect-ratio:1/1;overflow:hidden;background:#eff0f5}
+#lw-home .lw-insta__grid li:first-child{grid-column:span 2;grid-row:span 2;aspect-ratio:auto}
+#lw-home .lw-insta__grid a,#lw-home .lw-insta__grid span.lw-insta__tile{display:block;width:100%;height:100%}
+#lw-home .lw-insta__grid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1.1s var(--lw-ease)}
+#lw-home .lw-insta__grid .lw-insta__over{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(38,39,53,.42);opacity:0;transition:opacity .35s ease;color:#fff}
+/* 카테고리·룩북·후기·인스타 모서리를 상품 썸네일과 같은 12px 로 */
+#lw-home .lw-category-grid figure,#lw-home .lw-look__img,#lw-home .lw-insta__grid li{border-radius:12px}
+#lw-home .lw-rv,#lw-home .lw-rv-empty{border-radius:12px;overflow:hidden}
+#lw-home .lw-insta__grid .lw-insta__over svg{width:26px;height:26px;transform:scale(.8);transition:transform .45s var(--lw-ease)}
+#lw-home .lw-insta__grid li:hover img{transform:scale(1.06)}
+#lw-home .lw-insta__grid li:hover .lw-insta__over{opacity:1}
+#lw-home .lw-insta__grid li:hover .lw-insta__over svg{transform:none}
+#lw-home .lw-insta__tag{font:500 13px/1 'Jost','Pretendard Variable',sans-serif;letter-spacing:.04em;color:#6b6d86}
+#lw-home .lw-insta__follow[hidden]{display:none!important}
+@media(max-width:1024px){
+#lw-home .lw-best .ec-base-product ul.prdList{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:32px 14px!important}
+#lw-home .lw-rv-list{grid-template-columns:repeat(2,minmax(0,1fr))}
+#lw-home .lw-rv-empty{grid-template-columns:1fr;gap:28px;padding:32px}
+#lw-home .lw-insta__grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:600px){
+#lw-home .lw-best .ec-base-product ul.prdList{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:26px 12px!important}
+#lw-home .lw-best .thumbnail::before{min-width:32px;height:32px;font-size:12px}
+#lw-home .lw-best .description .name a,#lw-home .lw-best .description .name a>span:not(.title){font-size:12px!important}
+#lw-home .lw-rv-list{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:0 -18px;padding:0 18px 6px;scrollbar-width:none}
+#lw-home .lw-rv{flex:0 0 72vw;scroll-snap-align:start}
+#lw-home .lw-rv-empty{padding:24px 20px}
+#lw-home .lw-rv-empty h3{font-size:20px}
+#lw-home .lw-insta__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+}
+
+/* 헤더 · 공지 띠 정렬 — 본문(.lw-wrap, 최대 1440px)과 같은 좌우 기준선 */
+body:has(#lw-home){--lw-side:max(48px,calc((100% - 1440px) / 2))}
+body:has(#lw-home) .main_top_banner{display:flex!important;align-items:center;justify-content:center;height:36px;padding:0!important;box-sizing:border-box}
+body:has(#lw-home) .main_top_banner .top_banner_box_inner,body:has(#lw-home) .main_top_banner .top_banner_text{position:static!important;margin:0!important;padding:0!important;line-height:1!important}
+body:has(#lw-home) .main_top_banner .top_banner_text a{font-family:'Pretendard Variable','Pretendard',sans-serif!important;font-size:12px!important;font-weight:500!important;letter-spacing:.01em!important;line-height:36px!important;color:#eff0f5!important}
+body:has(#lw-home) .main_top_banner .top_banner_close{position:absolute!important;top:0!important;bottom:0!important;right:var(--lw-side)!important;left:auto!important;width:auto!important;height:36px!important;display:flex!important;align-items:center;margin:0!important;padding:0!important}
+body:has(#lw-home) .main_top_banner .top_banner_close .icon{position:relative!important;display:block!important;width:14px!important;height:14px!important;background:none!important;filter:none!important;opacity:.7;margin:0!important;cursor:pointer;font-size:0!important;transform:rotate(45deg)!important}
+body:has(#lw-home) .main_top_banner .top_banner_close .icon::before,body:has(#lw-home) .main_top_banner .top_banner_close .icon::after{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:14px!important;height:1.5px!important;margin-top:-.75px!important;background:#eff0f5!important;transform:none!important}
+body:has(#lw-home) .main_top_banner .top_banner_close .icon::after{transform:rotate(90deg)!important}
+body:has(#lw-home) .main_top_banner .top_banner_close input,body:has(#lw-home) .main_top_banner .top_banner_close label{display:none!important}
+body:has(#lw-home) .main_top_banner .top_banner_close .icon:hover{opacity:1}
+@media(min-width:1025px){
+body:has(#lw-home) #header .inner{padding-left:var(--lw-side)!important;padding-right:var(--lw-side)!important}
+body:has(#lw-home) #header .inner .top_nav_box{padding-left:0!important;padding-right:0!important;align-items:center}
+body:has(#lw-home) #header .inner .top_nav_box .top_logo{height:64px!important;display:flex!important;align-items:center;margin:0!important}
+body:has(#lw-home) #header .top_category>ul{gap:44px!important}
+body:has(#lw-home) #header .top_category>ul>li>a{font-family:'Pretendard Variable','Pretendard',sans-serif!important;font-size:14px!important;font-weight:500!important;letter-spacing:-.01em!important;color:#262735!important;text-transform:none!important}
+body:has(#lw-home) #header .top_mypage{display:flex!important;align-items:center;gap:22px;height:64px}
+body:has(#lw-home) #header .top_mypage>*{margin:0!important}
+body:has(#lw-home) #header .top_member_links,body:has(#lw-home) #header .top_member_links a,body:has(#lw-home) #header .top_member_links span{font-family:'Pretendard Variable','Pretendard',sans-serif!important;font-size:12px!important;font-weight:500!important;letter-spacing:.02em!important;color:#666779!important}
+body:has(#lw-home) #header .top_member_links{margin-right:6px!important}
+}
+</style>
+<div id="lw-home">
+
+<!-- 1. HERO — 기존 캠페인 + 신규 레깅스 캠페인 4장 자동 롤링 -->
+<section class="lw-hero" aria-label="메인 프로모션" aria-roledescription="carousel" tabindex="0">
+<div class="lw-hero__slides" aria-live="off">
+<article class="lw-hero__slide is-active" aria-hidden="false" aria-label="1 / 4">
+<img src="/SkinImg/hero-leggings/hero-05-morning-run.png?v=20260924" width="1672" height="941" alt="강변에서 네이비 레깅스를 입고 스트레칭하는 러너" fetchpriority="high" loading="eager">
+<div class="lw-hero-copy"><p class="lw-eyebrow">MORNING RUN · FRESH START</p><h1 id="lw-hero-title">오늘을 가볍게<br>시작해</h1><p class="lw-hero-desc">가볍고 탄탄한 퍼포먼스 핏.<br>매일의 러닝을 기분 좋게.</p><a class="lw-button" href="/product/list.html?cate_no=26">퍼포먼스 레깅스 <span aria-hidden="true">→</span></a></div>
+</article>
+<article class="lw-hero__slide" aria-hidden="true" aria-label="2 / 4">
+<img src="https://ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/leggingsworld-campaign-20260924.png" width="1536" height="1024" alt="햇살이 드는 스튜디오에서 세이지와 아이보리 운동복을 입은 두 모델" loading="lazy">
+<div class="lw-hero-copy"><p class="lw-eyebrow">LEGGINGS WORLD · EVERYDAY ACTIVE</p><h2>나의 일상에,<br>편안한 움직임</h2><p class="lw-hero-desc">운동하는 순간부터 쉬어가는 시간까지.<br>매일 손이 가는 나만의 액티브웨어.</p><a class="lw-button" href="/product/list.html?cate_no=26">레깅스 컬렉션 <span aria-hidden="true">→</span></a></div>
+</article>
+<article class="lw-hero__slide" aria-hidden="true" aria-label="3 / 4">
+<img src="/SkinImg/hero-leggings/hero-02-modern-pilates.png?v=20260924" width="1672" height="941" alt="모던한 필라테스 스튜디오에서 블랙 레깅스를 입은 모델" loading="lazy">
+<div class="lw-hero-copy"><p class="lw-eyebrow">MODERN PILATES · SCULPT &amp; MOVE</p><h2>움직임을<br>더 아름답게</h2><p class="lw-hero-desc">몸의 라인을 따라 자연스럽게.<br>집중하는 순간까지 편안한 핏.</p><a class="lw-button" href="/product/list.html?cate_no=26">레깅스 컬렉션 <span aria-hidden="true">→</span></a></div>
+</article>
+<article class="lw-hero__slide" aria-hidden="true" aria-label="4 / 4">
+<img src="/SkinImg/hero-leggings/hero-04-soft-weekend.png?v=20260924" width="1672" height="941" alt="편안한 공간에서 리브드 레깅스를 입고 쉬는 모델" loading="lazy">
+<div class="lw-hero-copy"><p class="lw-eyebrow">SOFT WEEKEND · EASY COMFORT</p><h2>가장 편안한<br>순간까지</h2><p class="lw-hero-desc">부드러운 촉감과 여유로운 무드.<br>쉼에도 자연스럽게 어울리는 레깅스.</p><a class="lw-button" href="/product/list.html?cate_no=26">소프트 컬렉션 <span aria-hidden="true">→</span></a></div>
+</article>
+</div>
+<div class="lw-hero__nav" aria-label="히어로 슬라이드 제어">
+<button class="lw-hero__arrow lw-hero__prev" type="button" aria-label="이전 슬라이드">‹</button>
+<div class="lw-hero__dots" role="tablist" aria-label="슬라이드 선택"><button class="lw-hero__dot" type="button" role="tab" aria-label="슬라이드 1" aria-selected="true"></button><button class="lw-hero__dot" type="button" role="tab" aria-label="슬라이드 2" aria-selected="false"></button><button class="lw-hero__dot" type="button" role="tab" aria-label="슬라이드 3" aria-selected="false"></button><button class="lw-hero__dot" type="button" role="tab" aria-label="슬라이드 4" aria-selected="false"></button></div>
+<button class="lw-hero__arrow lw-hero__next" type="button" aria-label="다음 슬라이드">›</button>
+</div>
+<span class="lw-scrollcue" aria-hidden="true"></span>
+</section>
+
+<!-- 2. 혜택 띠 — 문구는 여기서 바꾼다. 같은 묶음을 두 번 넣어야 끊김 없이 흐른다 -->
+<div class="lw-ticker" aria-label="쇼핑 혜택">
+<div class="lw-ticker__track">
+<span>5만원 이상 무료배송</span><span>30일 무료 반품</span><span>신규가입 3,000원 쿠폰</span><span>매일 입기 좋은 액티브웨어</span><span>5만원 이상 무료배송</span><span>30일 무료 반품</span><span>신규가입 3,000원 쿠폰</span><span>매일 입기 좋은 액티브웨어</span>
+<span aria-hidden="true">5만원 이상 무료배송</span><span aria-hidden="true">30일 무료 반품</span><span aria-hidden="true">신규가입 3,000원 쿠폰</span><span aria-hidden="true">매일 입기 좋은 액티브웨어</span><span aria-hidden="true">5만원 이상 무료배송</span><span aria-hidden="true">30일 무료 반품</span><span aria-hidden="true">신규가입 3,000원 쿠폰</span><span aria-hidden="true">매일 입기 좋은 액티브웨어</span>
+</div>
+</div>
+
+<!-- 3. 바로가기 -->
+<nav class="lw-quick" aria-label="컬렉션 바로가기"><a href="#lw-products">추천 상품</a><a href="#lw-new">신상품</a><a href="#lw-best">BEST 10</a><a href="#lw-finder">핏 파인더</a><a href="/product/list.html?cate_no=26">레깅스</a><a href="/product/list.html?cate_no=25">상의</a><a href="/product/list.html?cate_no=24">아우터</a><a href="/product/list.html?cate_no=28">액세서리</a><a href="#lw-reviews">리뷰</a><a href="#lw-size">사이즈 가이드</a><a href="/product/list.html?cate_no=27">SALE</a></nav>
+
+<!-- 4. 추천 상품 — 관리자 > 상품 > 메인 진열 의 "추천상품" 그룹(모듈 1번)에 진열한 상품만 나온다. 진열한 상품이 없으면 섹션 전체가 숨겨진다 -->
+<section id="lw-products" class="lw-products lw-newin lw-auto lw-block lw-wrap" aria-labelledby="lw-products-title">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">EVERYDAY ESSENTIALS</p><h2 id="lw-products-title">매일 입고 싶은 추천 아이템</h2><p>일상과 운동을 함께하는 레깅스월드의 추천 상품</p></div><a class="lw-link" href="/product/list.html?cate_no=26">레깅스 전체 보기 ↗</a></div>
+<div module="product_listmain_1" class="ec-base-product" data-lw>
+<!--
+$count = 10
+$basket_result = /product/add_basket.html
+$basket_option = /product/basket_option.html
+$cache = yes
+-->
+<ul class="prdList grid5">
+<!--@import(/product/list_product.html)-->
+</ul>
+</div>
+<div class="lw-product-bottom"><a class="lw-button" href="#lw-finder">나에게 맞는 핏 찾기 <span aria-hidden="true">↓</span></a></div>
+</section>
+
+<!-- 4-2. 신상품 — 관리자 > 상품 > 메인 진열 의 "신상품" 그룹(모듈 2번)에 진열한 상품이 최대 10개까지 나온다 -->
+<section id="lw-new" class="lw-products lw-newin lw-auto lw-block lw-wrap" aria-labelledby="lw-new-title">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">NEW ARRIVALS</p><h2 id="lw-new-title">이번 주 새로 들어온 신상품</h2><p>가장 먼저 만나는 레깅스월드의 새로운 제품</p></div><a class="lw-link" href="/product/list.html">전체 상품 보기 ↗</a></div>
+<div module="product_listmain_2" class="ec-base-product" data-lw>
+<!--
+$count = 10
+$basket_result = /product/add_basket.html
+$basket_option = /product/basket_option.html
+$cache = yes
+-->
+<ul class="prdList grid5">
+<!--@import(/product/list_product.html)-->
+</ul>
+</div>
+</section>
+
+<!-- 5. 핏 파인더 — 탭을 누르면 활동별 추천이 바뀐다 -->
+<section id="lw-finder" class="lw-finder lw-block" aria-labelledby="lw-finder-title"><div class="lw-wrap">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">FIT FINDER</p><h2 id="lw-finder-title">오늘은 어떤 움직임인가요?</h2><p>활동을 고르면 어울리는 핏과 아이템을 알려 드려요.</p></div></div>
+<div class="lw-tabs" role="tablist" aria-label="활동 선택" data-lw>
+<button type="button" class="lw-tab" role="tab" id="lw-tab-yoga" aria-controls="lw-panel-yoga" aria-selected="true">요가 · 필라테스</button>
+<button type="button" class="lw-tab" role="tab" id="lw-tab-run" aria-controls="lw-panel-run" aria-selected="false" tabindex="-1">러닝</button>
+<button type="button" class="lw-tab" role="tab" id="lw-tab-daily" aria-controls="lw-panel-daily" aria-selected="false" tabindex="-1">데일리</button>
+<button type="button" class="lw-tab" role="tab" id="lw-tab-out" aria-controls="lw-panel-out" aria-selected="false" tabindex="-1">아웃도어</button>
+</div>
+<div class="lw-panels" data-lw="fade">
+<div class="lw-panel" role="tabpanel" id="lw-panel-yoga" aria-labelledby="lw-tab-yoga">
+<div class="lw-panel__media"><img src="/SkinImg/img/studio9/insta-1.jpg?v=20260924b" alt="리포머 위에서 스트레칭하는 모델" loading="lazy"></div>
+<div class="lw-panel__copy"><p class="lw-kicker">YOGA · PILATES</p><h3>깊게 숙여도,<br>허리는 그대로</h3><p>동작이 큰 수업일수록 허리 밴드가 말려 내려가지 않는 게 중요해요. 하이웨이스트와 부드러운 크롭 탑 조합을 추천해요.</p>
+<ul class="lw-points"><li><b>추천 핏</b><span>하이웨이스트 레깅스 + 크롭 탑</span></li><li><b>체크 포인트</b><span>허리 밴드 높이, 앞판 봉제선 유무</span></li><li><b>함께 쓰기</b><span>데일리 요가 매트</span></li></ul>
+<a class="lw-button" href="/product/list.html?cate_no=26">요가 레깅스 보기 <span aria-hidden="true">→</span></a></div>
+</div>
+<div class="lw-panel" role="tabpanel" id="lw-panel-run" aria-labelledby="lw-tab-run" hidden>
+<div class="lw-panel__media"><img src="/SkinImg/img/studio9/journal-3.jpg?v=20260924b" alt="강변을 달리는 모델" loading="lazy"></div>
+<div class="lw-panel__copy"><p class="lw-kicker">RUNNING</p><h3>오래 달려도<br>가볍게, 단단하게</h3><p>다리를 잡아 주는 컴프레션 타이츠와 땀이 빨리 마르는 상의가 기본이에요. 아침·저녁 러닝엔 가벼운 바람막이를 한 겹 더하세요.</p>
+<ul class="lw-points"><li><b>추천 핏</b><span>컴프레션 러닝 타이츠 + 롱슬리브</span></li><li><b>체크 포인트</b><span>허벅지 쓸림, 주머니 위치</span></li><li><b>함께 쓰기</b><span>스포츠 양말 3족 세트</span></li></ul>
+<a class="lw-button" href="/product/list.html?cate_no=26">러닝 아이템 보기 <span aria-hidden="true">→</span></a></div>
+</div>
+<div class="lw-panel" role="tabpanel" id="lw-panel-daily" aria-labelledby="lw-tab-daily" hidden>
+<div class="lw-panel__media"><img src="/SkinImg/img/studio9/journal-1.jpg?v=20260924b" alt="공항에서 플리스 셋업을 입은 모델" loading="lazy"></div>
+<div class="lw-panel__copy"><p class="lw-kicker">DAILY</p><h3>운동복인데,<br>외출복처럼</h3><p>출근길·여행길에도 부담 없는 차분한 컬러를 골라 보세요. 레깅스 위에 플리스 집업 하나면 하루 종일 편안해요.</p>
+<ul class="lw-points"><li><b>추천 핏</b><span>에어 레깅스 + 라이트 플리스 집업</span></li><li><b>체크 포인트</b><span>비침 없는 두께, 무릎 늘어짐</span></li><li><b>함께 쓰기</b><span>에센셜 크롭 탑</span></li></ul>
+<a class="lw-button" href="/product/list.html?cate_no=25">데일리 룩 보기 <span aria-hidden="true">→</span></a></div>
+</div>
+<div class="lw-panel" role="tabpanel" id="lw-panel-out" aria-labelledby="lw-tab-out" hidden>
+<div class="lw-panel__media"><img src="/SkinImg/img/studio9/insta-3.jpg?v=20260924b" alt="숲길을 걷는 모델" loading="lazy"></div>
+<div class="lw-panel__copy"><p class="lw-kicker">OUTDOOR</p><h3>바람 부는 날에도<br>한 겹이면 충분하게</h3><p>산책·가벼운 등산엔 바람을 막아 주는 윈드 러너 재킷을 더하세요. 안에는 몸을 잡아 주는 레깅스가 걷기 편해요.</p>
+<ul class="lw-points"><li><b>추천 핏</b><span>윈드 러너 재킷 + 하이웨이스트 레깅스</span></li><li><b>체크 포인트</b><span>소매 조임, 후드 유무</span></li><li><b>함께 쓰기</b><span>스포츠 양말 3족 세트</span></li></ul>
+<a class="lw-button" href="/product/list.html?cate_no=24">아우터 보기 <span aria-hidden="true">→</span></a></div>
+</div>
+</div>
+</div></section>
+
+<!-- 6. 컬렉션 -->
+<section id="lw-collections" class="lw-collections lw-block" aria-labelledby="lw-collection-title"><div class="lw-wrap">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">SHOP BY CATEGORY</p><h2 id="lw-collection-title">나에게 맞는 컬렉션</h2><p>지금 필요한 아이템을 가볍게 찾아보세요.</p></div></div>
+<ul class="lw-category-grid">
+<li data-lw style="--d:0s"><a href="/product/list.html?cate_no=26"><figure><img src="/SkinImg/img/studio9/cat-leggings-v2.png?v=20260924" alt="깔끔한 스튜디오에서 차콜 레깅스를 입은 모델" loading="lazy" width="600" height="750"></figure><h3>레깅스 <span aria-hidden="true">↗</span></h3><p>데일리부터 요가, 러닝까지</p></a></li>
+<li data-lw style="--d:.08s"><a href="/product/list.html?cate_no=25"><figure><img src="/SkinImg/img/studio9/cat-top-v2.png?v=20260924" alt="깔끔한 스튜디오에서 세이지 액티브 탑을 입은 모델" loading="lazy" width="600" height="750"></figure><h3>상의 <span aria-hidden="true">↗</span></h3><p>브라탑 · 크롭 탑 · 롱슬리브</p></a></li>
+<li data-lw style="--d:.16s"><a href="/product/list.html?cate_no=24"><figure><img src="/SkinImg/img/studio9/cat-outer-v2.png?v=20260924" alt="깔끔한 스튜디오에서 베이지 재킷과 네이비 레깅스를 입은 모델" loading="lazy" width="600" height="750"></figure><h3>아우터 <span aria-hidden="true">↗</span></h3><p>일상 위에 더하는 한 겹</p></a></li>
+<li data-lw style="--d:.24s"><a href="/product/list.html?cate_no=28"><figure><img src="/SkinImg/img/studio9/cat-acc.jpg?v=20260924b" alt="액세서리 컬렉션" loading="lazy" width="600" height="750"></figure><h3>액세서리 <span aria-hidden="true">↗</span></h3><p>운동을 함께하는 작은 디테일</p></a></li>
+</ul></div></section>
+
+<!-- 7. 소재 이야기 — 오른쪽 글을 내리면 왼쪽 사진이 바뀐다 -->
+<section id="lw-story" class="lw-story lw-block" aria-labelledby="lw-story-title"><div class="lw-wrap lw-story__grid">
+<div class="lw-story__sticky" aria-hidden="true">
+<div class="lw-story__frame">
+<img class="is-on" src="/SkinImg/img/studio9/fabric.jpg?v=20260924b" alt="" loading="lazy">
+<img src="/SkinImg/img/studio9/insta-2.jpg?v=20260924b" alt="" loading="lazy">
+<img src="/SkinImg/img/studio9/journal-2.jpg?v=20260924b" alt="" loading="lazy">
+</div>
+<div class="lw-story__bar"><i class="is-on"></i><i></i><i></i></div>
+</div>
+<div class="lw-story__steps">
+<div class="lw-story__intro" data-lw><p class="lw-kicker">MATERIAL STORY</p><h2 id="lw-story-title">입었을 때 느껴지는 것부터<br>다시 생각했습니다</h2><p>레깅스는 하루 중 가장 오래 몸에 닿는 옷이에요. 그래서 원단을 고를 때 세 가지를 먼저 봅니다.</p></div>
+<article class="lw-step is-on" data-step="0"><div class="lw-step__img"><img src="/SkinImg/img/studio9/fabric.jpg?v=20260924b" alt="레깅스 허리 밴드를 손가락으로 가리키는 모습" loading="lazy"></div><p class="lw-step__no">01 · FIT</p><h3>허리는 편안하게, 라인은 매끈하게</h3><p>넓은 허리 밴드가 배를 조이지 않고 부드럽게 받쳐 줘요. 앉았다 일어나도 말려 내려가지 않도록 밴드 폭과 봉제선을 다듬었습니다.</p></article>
+<article class="lw-step" data-step="1"><div class="lw-step__img"><img src="/SkinImg/img/studio9/insta-2.jpg?v=20260924b" alt="창가에서 스트레칭하는 모델" loading="lazy"></div><p class="lw-step__no">02 · STRETCH</p><h3>어느 방향으로 움직여도 따라오게</h3><p>앞뒤, 좌우로 고르게 늘어나는 원단이라 깊은 스쿼트나 런지에서도 당기는 느낌이 적어요. 다시 제자리로 돌아오는 복원력도 함께 봅니다.</p></article>
+<article class="lw-step" data-step="2"><div class="lw-step__img"><img src="/SkinImg/img/studio9/journal-2.jpg?v=20260924b" alt="물방울이 맺힌 원단 클로즈업" loading="lazy"></div><p class="lw-step__no">03 · DRY</p><h3>땀은 빠르게, 몸은 산뜻하게</h3><p>땀을 겉으로 빨리 내보내는 구조라 운동이 끝난 뒤에도 끈적임이 덜해요. 세탁 후에도 금방 말라 매일 입기 좋습니다.</p></article>
+</div>
+</div></section>
+
+<!-- 8. IN MOTION — 레깅스 착용 영상 5장면. 움직이는 WebP(영상 대신)라 소리 없이 반복되고, 화면에 보일 때만 내려받는다.
+     파일 위치 : 이미지 호스팅 /web/lwvideo/ (lw-waist · lw-walk · lw-touch · lw-side · lw-turn 의 .webp + 대표 .jpg) -->
+<section id="lw-motion" class="lw-motion lw-block" aria-labelledby="lw-motion-title"><div class="lw-wrap">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">IN MOTION</p><h2 id="lw-motion-title">움직여 봐야 아는 핏</h2><p>사진으로는 다 보이지 않는 순간을 영상으로 담았어요.</p></div><a class="lw-link" href="/product/list.html?cate_no=26" style="border-color:#a6a9ba">레깅스 보러 가기 ↗</a></div>
+<div class="lw-motion__grid" data-lw>
+<div class="lw-motion__stage">
+<img class="is-on" onerror="var s=document.getElementById('lw-motion');if(s)s.hidden=true" src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-waist.jpg" data-anim="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-waist.webp" alt="허리 밴드 장면 — 앉고 숙여도 말려 내려가지 않는 넓은 밴드" loading="lazy">
+<img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-walk.jpg" data-anim="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-walk.webp" alt="걷는 핏 장면 — 발걸음마다 따라오는 매끈한 다리 라인" loading="lazy">
+<img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-touch.jpg" data-anim="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-touch.webp" alt="원단 터치 장면 — 당겨도 금방 돌아오는 탄탄한 복원력" loading="lazy">
+<img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-side.jpg" data-anim="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-side.webp" alt="옆 라인 장면 — 옆에서 봐도 깔끔한 봉제선" loading="lazy">
+<img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-turn.jpg" data-anim="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-turn.webp" alt="전신 핏 장면 — 한 바퀴 돌아보는 전체 실루엣" loading="lazy">
+<p class="lw-motion__cap" aria-live="polite"><b>01 · WAIST</b><span>허리 밴드</span></p>
+</div>
+<ul class="lw-motion__list" role="tablist" aria-label="영상 장면 선택">
+<li><button type="button" class="lw-motion__btn" role="tab" aria-selected="true" style="--dur:4s" data-i="0"><span class="lw-motion__no">01</span><span class="lw-motion__txt"><strong>허리 밴드</strong><span>앉고 숙여도 말려 내려가지 않는 넓은 밴드</span></span><span class="lw-motion__thumb"><img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-waist.jpg" alt="" loading="lazy"></span><i class="lw-motion__bar" aria-hidden="true"></i></button></li>
+<li><button type="button" class="lw-motion__btn" role="tab" aria-selected="false" style="--dur:10s" data-i="1" tabindex="-1"><span class="lw-motion__no">02</span><span class="lw-motion__txt"><strong>걷는 핏</strong><span>발걸음마다 따라오는 매끈한 다리 라인</span></span><span class="lw-motion__thumb"><img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-walk.jpg" alt="" loading="lazy"></span><i class="lw-motion__bar" aria-hidden="true"></i></button></li>
+<li><button type="button" class="lw-motion__btn" role="tab" aria-selected="false" style="--dur:10s" data-i="2" tabindex="-1"><span class="lw-motion__no">03</span><span class="lw-motion__txt"><strong>원단 터치</strong><span>당겨도 금방 돌아오는 탄탄한 복원력</span></span><span class="lw-motion__thumb"><img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-touch.jpg" alt="" loading="lazy"></span><i class="lw-motion__bar" aria-hidden="true"></i></button></li>
+<li><button type="button" class="lw-motion__btn" role="tab" aria-selected="false" style="--dur:4s" data-i="3" tabindex="-1"><span class="lw-motion__no">04</span><span class="lw-motion__txt"><strong>옆 라인</strong><span>옆에서 봐도 깔끔한 봉제선</span></span><span class="lw-motion__thumb"><img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-side.jpg" alt="" loading="lazy"></span><i class="lw-motion__bar" aria-hidden="true"></i></button></li>
+<li><button type="button" class="lw-motion__btn" role="tab" aria-selected="false" style="--dur:8s" data-i="4" tabindex="-1"><span class="lw-motion__no">05</span><span class="lw-motion__txt"><strong>전신 핏</strong><span>한 바퀴 돌아보는 전체 실루엣</span></span><span class="lw-motion__thumb"><img src="//ecimg.cafe24img.com/pg3411b90353001051/adia902222/web/lwvideo/lw-turn.jpg" alt="" loading="lazy"></span><i class="lw-motion__bar" aria-hidden="true"></i></button></li>
+</ul>
+</div>
+</div></section>
+
+<!-- 9. 숫자로 보는 약속 — 화면에 들어오면 숫자가 올라간다. 수치는 data-to 를 바꾼다 -->
+<section class="lw-block lw-wrap" aria-label="레깅스월드의 약속">
+<div class="lw-stats">
+<div class="lw-stat" data-lw style="--d:0s"><div class="lw-stat__num"><span data-count data-to="210">210</span><small>g</small></div><h3>가벼운 무게</h3><p>입은 줄 모르게 가벼운 에어 레깅스</p></div>
+<div class="lw-stat" data-lw style="--d:.08s"><div class="lw-stat__num"><span data-count data-to="30">30</span><small>일</small></div><h3>무료 반품</h3><p>받아 보고 입어 본 뒤 천천히 결정하세요</p></div>
+<div class="lw-stat" data-lw style="--d:.16s"><div class="lw-stat__num"><span data-count data-to="5">5</span><small>만원</small></div><h3>이상 무료배송</h3><p>5만원 이상 구매하면 배송비가 없어요</p></div>
+<div class="lw-stat" data-lw style="--d:.24s"><div class="lw-stat__num"><span data-count data-to="3000" data-comma>3,000</span><small>원</small></div><h3>신규가입 쿠폰</h3><p>가입하면 바로 쓸 수 있는 첫 구매 쿠폰</p></div>
+</div>
+</section>
+
+<!-- 10. 룩북 — 데스크톱은 세로로 스크롤하면 가로로 흐르고, 모바일은 손가락으로 넘긴다 -->
+<section id="lw-look" class="lw-look" aria-labelledby="lw-look-title">
+<div class="lw-look__pin">
+<div class="lw-wrap lw-look__head"><div class="lw-heading" style="margin:0"><div><p class="lw-kicker">LOOKBOOK · FW26</p><h2 id="lw-look-title">움직이는 하루의 장면들</h2><p>레깅스월드와 함께한 일상의 순간을 모았어요.</p></div><a class="lw-link" href="/product/list.html">전체 상품 보기 ↗</a></div></div>
+<div class="lw-look__track">
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=26"><div class="lw-look__img"><img src="/SkinImg/img/studio9/hero.jpg?v=20260924b" alt="도시가 보이는 창가의 모델" loading="lazy"></div><figcaption><b>도시의 아침</b><span>레깅스</span></figcaption></a></figure>
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=25"><div class="lw-look__img"><img src="/SkinImg/img/studio9/hero-2.jpg?v=20260924b" alt="옥상에서 크롭 탑을 입은 모델" loading="lazy"></div><figcaption><b>루프탑 스트레칭</b><span>상의</span></figcaption></a></figure>
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=24"><div class="lw-look__img"><img src="/SkinImg/img/studio9/hero-3.jpg?v=20260924b" alt="설산이 보이는 테라스의 모델" loading="lazy"></div><figcaption><b>산장의 오후</b><span>아우터</span></figcaption></a></figure>
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=26"><div class="lw-look__img"><img src="/SkinImg/img/studio9/card-b.jpg?v=20260924b" alt="강변을 달리는 모델" loading="lazy"></div><figcaption><b>강변 러닝</b><span>레깅스</span></figcaption></a></figure>
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=28"><div class="lw-look__img"><img src="/SkinImg/img/studio9/insta-5.jpg?v=20260924b" alt="방수 재킷 소매 클로즈업" loading="lazy"></div><figcaption><b>비 온 뒤 산책</b><span>아우터</span></figcaption></a></figure>
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=25"><div class="lw-look__img"><img src="/SkinImg/img/studio9/insta-6.jpg?v=20260924b" alt="세이지 컬러 브라탑" loading="lazy"></div><figcaption><b>세이지 브라탑</b><span>상의</span></figcaption></a></figure>
+<figure class="lw-look__card"><a href="/product/list.html?cate_no=26"><div class="lw-look__img"><img src="/SkinImg/img/studio9/cat-acc.jpg?v=20260924b" alt="요가 매트를 들고 걷는 모델" loading="lazy"></div><figcaption><b>수업 가는 길</b><span>액세서리</span></figcaption></a></figure>
+</div>
+<div class="lw-look__progress" aria-hidden="true"><i></i></div>
+</div>
+</section>
+
+<!-- 10. BEST 10 — 관리자 > 상품 > 메인 진열 의 "추가카테고리1" 그룹(모듈 3번)에 진열한 상품만 나온다(최대 10개, 1~3위는 진한 번호). 진열한 상품이 없으면 섹션이 숨겨진다 -->
+<section id="lw-best" class="lw-best lw-auto lw-block lw-wrap" aria-labelledby="lw-best-title">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">BEST 10</p><h2 id="lw-best-title">지금 가장 많이 찾는 인기상품</h2><p>레깅스월드 고객님들이 가장 많이 담은 제품이에요.</p></div><a class="lw-link" href="/product/list.html">전체 상품 보기 ↗</a></div>
+<div module="product_listmain_3" class="ec-base-product" data-lw>
+<!--
+$count = 10
+$basket_result = /product/add_basket.html
+$basket_option = /product/basket_option.html
+$cache = yes
+-->
+<ul class="prdList grid5">
+<!--@import(/product/list_product.html)-->
+</ul>
+</div>
+</section>
+
+<!-- 12. 사이즈 가이드 — 허리·엉덩이 둘레를 움직이면 추천 사이즈가 바뀐다.
+     ※ 아래 표는 레깅스 일반 기준입니다. 실제 판매 사이즈표와 다르면 표와 JS 의 SIZES 값을 함께 고쳐 주세요. -->
+<section id="lw-size" class="lw-size lw-block lw-wrap" aria-labelledby="lw-size-title">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">SIZE GUIDE</p><h2 id="lw-size-title">내 사이즈, 30초면 충분해요</h2><p>허리와 엉덩이 둘레를 맞추면 추천 사이즈를 알려 드려요.</p></div></div>
+<div class="lw-size__grid">
+<div class="lw-size__form" data-lw>
+<div class="lw-range"><label for="lw-waist">허리 둘레 <output id="lw-waist-out" for="lw-waist">68<small>cm</small></output></label><input type="range" id="lw-waist" min="56" max="90" step="1" value="68"></div>
+<div class="lw-range"><label for="lw-hip">엉덩이 둘레 <output id="lw-hip-out" for="lw-hip">94<small>cm</small></output></label><input type="range" id="lw-hip" min="82" max="112" step="1" value="94"></div>
+<div class="lw-result" aria-live="polite"><div class="lw-result__size" id="lw-size-result">M</div><p id="lw-size-text"><b>M 사이즈</b>를 추천해요.<br>두 치수가 서로 다른 사이즈에 걸치면 큰 쪽을 골라 주세요.</p></div>
+</div>
+<div data-lw style="--d:.1s">
+<table class="lw-size__table">
+<caption class="displaynone">레깅스 사이즈표 (단위 cm)</caption>
+<thead><tr><th scope="col">사이즈</th><th scope="col">허리</th><th scope="col">엉덩이</th><th scope="col">추천 키</th></tr></thead>
+<tbody>
+<tr data-size="S"><th scope="row">S</th><td>60–65</td><td>84–90</td><td>150–160</td></tr>
+<tr data-size="M" class="is-on"><th scope="row">M</th><td>66–71</td><td>91–96</td><td>155–165</td></tr>
+<tr data-size="L"><th scope="row">L</th><td>72–77</td><td>97–102</td><td>160–170</td></tr>
+<tr data-size="XL"><th scope="row">XL</th><td>78–84</td><td>103–108</td><td>165–175</td></tr>
+</tbody>
+</table>
+<p class="lw-size__note">일반 기준이라 상품마다 조금씩 다를 수 있어요. 정확한 치수는 각 상품 상세페이지의 사이즈표를 확인해 주세요.</p>
+</div>
+</div>
+</section>
+
+<!-- 11. 상품 리뷰 — 상품 사용후기 게시판(4번)의 최신 글이 카드로 나온다. 글이 없으면 '첫 후기' 안내가 대신 보인다 -->
+<section id="lw-reviews" class="lw-reviews lw-block" aria-labelledby="lw-reviews-title"><div class="lw-wrap">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">REVIEW</p><h2 id="lw-reviews-title">입어 본 분들의 이야기</h2><p>실제 구매 고객님이 남겨 주신 후기예요.</p></div><a class="lw-link" href="/board/product/list.html?board_no=4">후기 전체 보기 ↗</a></div>
+<div module="board_list_4" class="lw-rv-list" data-lw>
+<!--
+$count = 8
+$product_name_cut = 24
+$login_page_url = /member/login.html
+$deny_access_url = /index.html
+-->
+<article class="lw-rv"><a href="{$link_board_detail}"><div class="lw-rv__thumb"><img src="{$product_img_src}" alt="" loading="lazy" onerror="this.parentNode.style.display='none'"></div><div class="lw-rv__body"><p class="lw-rv__stars" data-point="{$point_count}"></p><h3 class="lw-rv__title">{$subject}</h3><p class="lw-rv__product">{$product_name}</p><p class="lw-rv__meta"><span>{$writer}</span><span>{$write_date}</span></p></div></a></article>
+<article class="lw-rv"><a href="{$link_board_detail}"><div class="lw-rv__thumb"><img src="{$product_img_src}" alt="" loading="lazy" onerror="this.parentNode.style.display='none'"></div><div class="lw-rv__body"><p class="lw-rv__stars" data-point="{$point_count}"></p><h3 class="lw-rv__title">{$subject}</h3><p class="lw-rv__product">{$product_name}</p><p class="lw-rv__meta"><span>{$writer}</span><span>{$write_date}</span></p></div></a></article>
+</div>
+<!-- 샘플 후기 : 게시판에 글이 하나도 없을 때만 보이는 '예시' 카드. 실제 후기가 올라오면 자동으로 숨겨진다(삭제해도 된다) -->
+<p class="lw-rv-sample-note" data-lw>※ 아래는 후기 화면 예시입니다. 실제 후기가 등록되면 자동으로 바뀝니다.</p>
+<div class="lw-rv-list lw-rv-sample" data-lw>
+<article class="lw-rv"><a href="/board/product/list.html?board_no=4"><div class="lw-rv__thumb"><img src="/SkinImg/img/studio9/prod-leggings.jpg?v=20260924b" alt="" loading="lazy"></div><div class="lw-rv__body"><p class="lw-rv__stars" aria-label="5점 만점에 5점">★★★★★<span class="lw-rv__badge">예시</span></p><h3 class="lw-rv__title">허리 밴드가 말려 내려가지 않아요</h3><p class="lw-rv__text">요가 수업에서 앞으로 숙이는 동작이 많은데 밴드가 그대로 있어서 좋았어요. 비침도 거의 없어요.</p><div class="lw-rv__fit"><span>163cm</span><span>평소 M · M 구매</span><span>핏 딱 맞음</span></div><p class="lw-rv__product">에어 레깅스 25인치</p><p class="lw-rv__meta"><span>김**</span><span>예시</span></p></div></a></article>
+<article class="lw-rv"><a href="/board/product/list.html?board_no=4"><div class="lw-rv__thumb"><img src="/SkinImg/img/studio9/prod-top.jpg?v=20260924b" alt="" loading="lazy"></div><div class="lw-rv__body"><p class="lw-rv__stars" aria-label="5점 만점에 5점">★★★★★<span class="lw-rv__badge">예시</span></p><h3 class="lw-rv__title">레깅스랑 세트로 입기 좋아요</h3><p class="lw-rv__text">기장이 딱 하이웨이스트 위로 떨어져서 따로 신경 쓸 게 없어요. 캡이 들뜨지 않는 점도 좋아요.</p><div class="lw-rv__fit"><span>158cm</span><span>평소 S · S 구매</span><span>살짝 여유</span></div><p class="lw-rv__product">에센셜 크롭 탑</p><p class="lw-rv__meta"><span>이**</span><span>예시</span></p></div></a></article>
+<article class="lw-rv"><a href="/board/product/list.html?board_no=4"><div class="lw-rv__thumb"><img src="/SkinImg/img/studio9/prod-outer.jpg?v=20260924b" alt="" loading="lazy"></div><div class="lw-rv__body"><p class="lw-rv__stars" aria-label="5점 만점에 4점">★★★★☆<span class="lw-rv__badge">예시</span></p><h3 class="lw-rv__title">아침 러닝할 때 딱이에요</h3><p class="lw-rv__text">바람은 잘 막아 주고 가벼워요. 소매가 조금 길어서 별 하나 뺐지만 색감은 사진과 같아요.</p><div class="lw-rv__fit"><span>167cm</span><span>평소 M · M 구매</span><span>소매 조금 김</span></div><p class="lw-rv__product">윈드 러너 재킷</p><p class="lw-rv__meta"><span>박**</span><span>예시</span></p></div></a></article>
+<article class="lw-rv"><a href="/board/product/list.html?board_no=4"><div class="lw-rv__thumb"><img src="/SkinImg/img/studio9/prod-mat.jpg?v=20260924b" alt="" loading="lazy"></div><div class="lw-rv__body"><p class="lw-rv__stars" aria-label="5점 만점에 5점">★★★★★<span class="lw-rv__badge">예시</span></p><h3 class="lw-rv__title">들고 다니기 가벼운 매트</h3><p class="lw-rv__text">필라테스 갈 때 어깨에 메고 다녀요. 미끄럼이 적고 냄새도 거의 없었어요.</p><div class="lw-rv__fit"><span>필라테스 주 3회</span><span>휴대용</span></div><p class="lw-rv__product">데일리 요가 매트</p><p class="lw-rv__meta"><span>최**</span><span>예시</span></p></div></a></article>
+</div></div></section>
+
+<!-- 14. 인스타그램 — 계정 주소는 /layout/basic/js/store-content.js 의 social.instagram 에 넣으면
+     '팔로우' 버튼과 사진 링크가 자동으로 그 주소로 연결된다(비어 있으면 버튼은 숨김). 사진은 아래 src 를 바꾼다 -->
+<section id="lw-insta" class="lw-insta lw-block lw-wrap" aria-labelledby="lw-insta-title">
+<div class="lw-heading" data-lw><div><p class="lw-kicker">INSTAGRAM</p><h2 id="lw-insta-title">일상 속 레깅스월드</h2><p><span class="lw-insta__tag">#레깅스월드 #LEGGINGSWORLD</span> 태그로 여러분의 순간을 나눠 주세요.</p></div><a class="lw-link lw-insta__follow" href="#" target="_blank" rel="noopener" hidden>인스타그램 팔로우 ↗</a></div>
+<ul class="lw-insta__grid">
+<li data-lw style="--d:0.00s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/insta-1.jpg?v=20260924b" alt="리포머 위의 모델" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.05s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/insta-2.jpg?v=20260924b" alt="창가에서 스트레칭하는 모델" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.10s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/insta-3.jpg?v=20260924b" alt="숲길을 걷는 모델" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.15s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/insta-4.jpg?v=20260924b" alt="레깅스 허리 밴드 클로즈업" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.20s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/insta-5.jpg?v=20260924b" alt="재킷 소매 클로즈업" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.25s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/insta-6.jpg?v=20260924b" alt="세이지 브라탑" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.00s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/journal-1.jpg?v=20260924b" alt="공항의 모델" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.05s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/journal-3.jpg?v=20260924b" alt="강변을 달리는 모델" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+<li data-lw style="--d:0.10s"><a class="lw-insta__tile" href="#lw-insta" data-lw-insta><img src="/SkinImg/img/studio9/cat-top-v2.png?v=20260924" alt="세이지 액티브 탑을 입은 모델" loading="lazy"><span class="lw-insta__over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none"/></svg></span></a></li>
+</ul>
+</section>
+
+</div>
+
+<script>
+/* LEGGINGS WORLD 메인 인터랙션 — #lw-home 안에서만 동작한다. 오류가 나도 내용은 그대로 보인다. */
+try{(function(){
+var root=document.getElementById('lw-home');if(!root)return;
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+var Q=function(s,c){return Array.prototype.slice.call((c||root).querySelectorAll(s))};
+var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+
+/* 0) 진열 상품이 없어 숨겨진 섹션은 바로가기에서도 뺀다 */
+Q('.lw-quick a[href^="#lw-"]').forEach(function(a){var t=root.querySelector(a.getAttribute('href'));if(t&&t.offsetParent===null)a.style.display='none'});
+
+/* 1) 스크롤 등장 */
+if(!reduce&&'IntersectionObserver' in window){
+  root.classList.add('lw-js');
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+  Q('[data-lw]').forEach(function(el){io.observe(el)});
+}
+
+/* 메인 히어로 : 6초 자동 롤링 · 버튼/점/키보드 지원 · 마우스나 포커스가 올라오면 일시정지 */
+var hero=root.querySelector('.lw-hero'),heroSlides=Q('.lw-hero__slide',hero),heroDots=Q('.lw-hero__dot',hero),heroNow=0,heroTimer=null,heroPaused=false;
+function heroShow(i,user){if(!heroSlides.length)return;heroNow=(i+heroSlides.length)%heroSlides.length;
+  heroSlides.forEach(function(s,k){var on=k===heroNow;s.classList.toggle('is-active',on);s.setAttribute('aria-hidden',on?'false':'true')});
+  heroDots.forEach(function(d,k){var on=k===heroNow;d.setAttribute('aria-selected',on?'true':'false');d.tabIndex=on?0:-1});
+  if(user)heroSchedule();}
+function heroSchedule(){clearTimeout(heroTimer);if(reduce||heroPaused||heroSlides.length<2)return;heroTimer=setTimeout(function(){heroShow(heroNow+1);heroSchedule()},6000)}
+if(hero&&heroSlides.length){
+  var heroPrev=hero.querySelector('.lw-hero__prev'),heroNext=hero.querySelector('.lw-hero__next');
+  if(heroPrev)heroPrev.addEventListener('click',function(){heroShow(heroNow-1,true)});
+  if(heroNext)heroNext.addEventListener('click',function(){heroShow(heroNow+1,true)});
+  heroDots.forEach(function(d,i){d.addEventListener('click',function(){heroShow(i,true)})});
+  hero.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){e.preventDefault();heroShow(heroNow-1,true)}else if(e.key==='ArrowRight'){e.preventDefault();heroShow(heroNow+1,true)}});
+  hero.addEventListener('mouseenter',function(){heroPaused=true;clearTimeout(heroTimer)});
+  hero.addEventListener('mouseleave',function(){heroPaused=false;heroSchedule()});
+  hero.addEventListener('focusin',function(){heroPaused=true;clearTimeout(heroTimer)});
+  hero.addEventListener('focusout',function(){heroPaused=false;heroSchedule()});
+  document.addEventListener('visibilitychange',function(){if(document.hidden)clearTimeout(heroTimer);else heroSchedule()});
+  heroShow(0);heroSchedule();
+}
+
+/* 2) 핏 파인더 탭 (방향키 지원) */
+var tabs=Q('.lw-tab');
+function openTab(t,focus){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));if(!p)return;p.hidden=!on;p.classList.remove('is-anim');if(on&&!reduce){void p.offsetWidth;p.classList.add('is-anim')}});if(focus)t.focus()}
+tabs.forEach(function(t,i){t.addEventListener('click',function(){openTab(t)});t.addEventListener('keydown',function(e){var k=e.key,n=null;if(k==='ArrowRight')n=tabs[(i+1)%tabs.length];else if(k==='ArrowLeft')n=tabs[(i-1+tabs.length)%tabs.length];else if(k==='Home')n=tabs[0];else if(k==='End')n=tabs[tabs.length-1];if(n){e.preventDefault();openTab(n,true)}})});
+
+/* 3) 숫자 카운트업 */
+var nums=Q('[data-count]');
+function fmt(v,el){return el.hasAttribute('data-comma')?v.toLocaleString('ko-KR'):String(v)}
+if(!reduce&&'IntersectionObserver' in window){
+  nums.forEach(function(el){el.textContent='0'});
+  var io2=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io2.unobserve(e.target);var el=e.target,to=+el.getAttribute('data-to'),t0=null;
+    function step(ts){if(!t0)t0=ts;var k=clamp((ts-t0)/1400,0,1);k=1-Math.pow(1-k,3);el.textContent=fmt(Math.round(to*k),el);if(k<1)requestAnimationFrame(step)}requestAnimationFrame(step)})},{threshold:.5});
+  nums.forEach(function(el){io2.observe(el)});
+}
+
+/* 4) 사이즈 계산기 — 표를 바꾸면 여기 값도 같이 바꾼다 [사이즈, 허리 최대, 엉덩이 최대] */
+var SIZES=[['S',65,90],['M',71,96],['L',77,102],['XL',84,108]];
+var w=document.getElementById('lw-waist'),h=document.getElementById('lw-hip'),res=document.getElementById('lw-size-result'),txt=document.getElementById('lw-size-text'),rows=Q('.lw-size__table tbody tr'),last='';
+function pick(v,idx){for(var i=0;i<SIZES.length;i++){if(v<=SIZES[i][idx])return i}return SIZES.length-1}
+function fill(inp){var p=(inp.value-inp.min)/(inp.max-inp.min)*100;inp.style.setProperty('--p',p+'%')}
+function calc(){if(!w||!h)return;var wi=pick(+w.value,1),hi=pick(+h.value,2),i=Math.max(wi,hi),s=SIZES[i][0];
+  document.getElementById('lw-waist-out').innerHTML=w.value+'<small>cm</small>';document.getElementById('lw-hip-out').innerHTML=h.value+'<small>cm</small>';fill(w);fill(h);
+  var over=(+w.value>SIZES[SIZES.length-1][1])||(+h.value>SIZES[SIZES.length-1][2]),split=wi!==hi;
+  txt.innerHTML=over?'<b>XL 사이즈</b>보다 여유 있는 핏이 필요할 수 있어요.<br>상품 문의 게시판에 치수를 남겨 주시면 안내해 드릴게요.':'<b>'+s+' 사이즈</b>를 추천해요.<br>'+(split?'허리는 '+SIZES[wi][0]+', 엉덩이는 '+SIZES[hi][0]+'에 가까워 큰 쪽으로 골랐어요.':'두 치수가 모두 '+s+' 범위에 들어요.');
+  rows.forEach(function(r){r.classList.toggle('is-on',r.getAttribute('data-size')===s)});
+  if(s!==last){res.textContent=s;if(!reduce){res.classList.remove('is-pop');void res.offsetWidth;res.classList.add('is-pop')}last=s}}
+if(w&&h){w.addEventListener('input',calc);h.addEventListener('input',calc);calc()}
+
+/* 5) 아코디언 — 하나를 열면 나머지는 닫는다 */
+var dets=Q('.lw-acc details');
+dets.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)dets.forEach(function(o){if(o!==d)o.open=false})})});
+
+/* 7) 리뷰 : 글이 없으면 '첫 후기' 안내, 평점은 별로 표시 */
+var rvSec=root.querySelector('.lw-reviews');
+if(rvSec){var rvs=Q('.lw-rv-list:not(.lw-rv-sample) .lw-rv',rvSec).filter(function(r){var t=r.querySelector('.lw-rv__title');return t&&t.textContent.replace(/\s/g,'')&&t.textContent.indexOf('{'+'$')<0});
+  Q('.lw-rv-list:not(.lw-rv-sample) .lw-rv',rvSec).forEach(function(r){if(rvs.indexOf(r)<0)r.parentNode.removeChild(r)});
+  if(!rvs.length){rvSec.classList.add('is-empty');var l=rvSec.querySelector('.lw-rv-list:not(.lw-rv-sample)');if(l)l.style.display='none'}
+  rvs.forEach(function(r){var st=r.querySelector('.lw-rv__stars'),n=parseInt(st&&st.getAttribute('data-point'),10);if(st&&n>=1&&n<=5){st.textContent='★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);st.setAttribute('aria-label','5점 만점에 '+n+'점')}})}
+
+/* 8) 인스타그램 : store-content.js 의 social.instagram 주소로 연결 */
+(function(){var url='';try{var c=window.STORE_CONTENT||window.storeContent||window.ST_CONTENT||window.stContent;url=(c&&c.social&&c.social.instagram)||''}catch(e){}
+  var f=root.querySelector('.lw-insta__follow');
+  if(url){if(f){f.href=url;f.hidden=false}Q('[data-lw-insta]').forEach(function(a){a.href=url;a.target='_blank';a.rel='noopener'})}
+  else{Q('[data-lw-insta]').forEach(function(a){a.removeAttribute('href');a.setAttribute('aria-hidden','true')})}})();
+/* 8-1) 인스타그램 사진 : social.instagramPhotos(직접 지정) 또는 social.instagramFeed(연동 서비스 JSON 주소)가 있으면 샘플 사진을 교체 */
+(function(){var s={};try{var c=window.STORE_CONTENT||window.storeContent||window.ST_CONTENT||window.stContent;s=(c&&c.social)||{}}catch(e){}
+  var tiles=Q('.lw-insta__grid .lw-insta__tile');if(!tiles.length)return;
+  function norm(d){var l=d&&(d.posts||d.data||d);if(!Array.isArray(l))return[];
+    return l.map(function(p){return{img:p.img||p.thumbnailUrl||p.thumbnail_url||p.mediaUrl||p.media_url,link:p.link||p.permalink}}).filter(function(p){return p.img})}
+  function apply(list){list.slice(0,tiles.length).forEach(function(p,i){var a=tiles[i],im=a.querySelector('img');if(!im)return;
+    im.src=p.img;im.alt='인스타그램 게시물';if(p.link){a.href=p.link;a.target='_blank';a.rel='noopener';a.removeAttribute('aria-hidden')}})}
+  if(s.instagramPhotos&&s.instagramPhotos.length)apply(norm(s.instagramPhotos));
+  else if((s.instagramFeed||s.instagramToken)&&window.fetch)fetch(s.instagramFeed||'https://graph.instagram.com/me/media?fields=media_type,media_url,thumbnail_url,permalink&limit='+tiles.length+'&access_token='+encodeURIComponent(s.instagramToken)).then(function(r){return r.json()}).then(function(d){apply(norm(d))}).catch(function(){})})();
+
+/* 9) IN MOTION : 장면 자동 전환(보일 때만) · 클릭 전환 · 움직이는 WebP 지연 로드 */
+(function(){var sec=root.querySelector('.lw-motion');if(!sec)return;
+  var imgs=Q('.lw-motion__stage img',sec),btns=Q('.lw-motion__btn',sec),cap=sec.querySelector('.lw-motion__cap'),cur=0,timer=null,seen=false;
+  var tags=['WAIST','WALK','FABRIC','SIDE','360°'];
+  function load(i){var im=imgs[i];if(!im||im.__anim)return;var a=im.getAttribute('data-anim');if(!a||reduce)return;im.__anim=1;var pre=new Image();pre.onload=function(){im.src=a};pre.src=a}
+  function show(i,user){cur=i;imgs.forEach(function(im,k){im.classList.toggle('is-on',k===i)});
+    btns.forEach(function(b,k){var on=k===i;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;var bar=b.querySelector('.lw-motion__bar');if(bar){bar.style.animation='none';void bar.offsetWidth;bar.style.animation=''}});
+    if(cap)cap.innerHTML='<b>0'+(i+1)+' · '+tags[i]+'</b><span>'+btns[i].querySelector('strong').textContent+'</span>';
+    load(i);load((i+1)%imgs.length);schedule()}
+  function schedule(){clearTimeout(timer);if(reduce||!seen)return;var d=parseFloat(btns[cur].style.getPropertyValue('--dur'))||6;timer=setTimeout(function(){show((cur+1)%btns.length)},d*1000)}
+  btns.forEach(function(b,i){b.addEventListener('click',function(){show(i,true)});b.addEventListener('keydown',function(e){var n=null;if(e.key==='ArrowDown'||e.key==='ArrowRight')n=(i+1)%btns.length;else if(e.key==='ArrowUp'||e.key==='ArrowLeft')n=(i-1+btns.length)%btns.length;if(n!==null){e.preventDefault();show(n,true);btns[n].focus()}})});
+  sec.addEventListener('mouseenter',function(){sec.classList.add('is-paused');clearTimeout(timer)});
+  sec.addEventListener('mouseleave',function(){sec.classList.remove('is-paused');show(cur)});
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){es.forEach(function(e){seen=e.isIntersecting;if(seen){show(cur)}else{clearTimeout(timer)}})},{threshold:.35}).observe(sec)}
+  else{seen=true;show(0)}})();
+
+/* 6) 스크롤 연동 : 히어로 패럴랙스 · 소재 이야기 단계 · 룩북 가로 이동 */
+var steps=Q('.lw-step'),frames=Q('.lw-story__frame img'),bars=Q('.lw-story__bar i'),cur=0;
+var look=root.querySelector('.lw-look'),track=root.querySelector('.lw-look__track'),bar=root.querySelector('.lw-look__progress i'),pinOn=false,dist=0;
+var desk=window.matchMedia?matchMedia('(min-width:1025px)'):{matches:true};
+function setStep(i){if(i===cur)return;cur=i;steps.forEach(function(s,k){s.classList.toggle('is-on',k===i)});frames.forEach(function(f,k){f.classList.toggle('is-on',k===i)});bars.forEach(function(b,k){b.classList.toggle('is-on',k<=i)})}
+function layoutLook(){if(!look||!track)return;pinOn=!reduce&&desk.matches;look.classList.toggle('is-pinned',pinOn);track.style.transform='';
+  if(pinOn){dist=Math.max(0,track.scrollWidth-track.clientWidth+96);look.style.height=(look.querySelector('.lw-look__pin').offsetHeight+dist)+'px'}else{look.style.height='';dist=0}}
+var ticking=false;
+function run(){ticking=false;var vh=window.innerHeight;
+  if(hero&&!reduce){var r=hero.getBoundingClientRect();if(r.bottom>0){var y=clamp(-r.top*.18,0,120);hero.style.setProperty('--lw-hero-y',y.toFixed(1)+'px')}}
+  if(steps.length){var mid=vh*.5,best=0;steps.forEach(function(s,k){if(s.getBoundingClientRect().top<mid)best=k});setStep(best)}
+  if(look&&track){var lr=look.getBoundingClientRect(),p;
+    if(pinOn){var span=lr.height-(look.querySelector('.lw-look__pin').offsetHeight);p=span>0?clamp(-lr.top/span,0,1):0;track.style.transform='translate3d('+(-dist*p).toFixed(1)+'px,0,0)'}
+    else{var m=track.scrollWidth-track.clientWidth;p=m>0?track.scrollLeft/m:0}
+    if(bar)bar.style.transform='scaleX('+p.toFixed(4)+')'}}
+function on(){if(!ticking){ticking=true;requestAnimationFrame(run)}}
+window.addEventListener('scroll',on,{passive:true});
+if(track)track.addEventListener('scroll',on,{passive:true});
+window.addEventListener('resize',function(){layoutLook();on()});
+if(desk.addEventListener)desk.addEventListener('change',function(){layoutLook();on()});
+window.addEventListener('load',function(){layoutLook();on()});
+layoutLook();run();
+})()}catch(e){}
+</script>
+<!--@define(cmc_log)-->

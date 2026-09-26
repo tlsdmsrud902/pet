@@ -1,0 +1,24 @@
+<section class="pet-page-hero pet-menu-hero" aria-label="컬렉션 안내">
+ <img src="/SkinImg/pet/shop-hero.png" alt="세이지와 크림 컬러의 반려생활 용품" width="1600" height="900" fetchpriority="high">
+ <div><small>THE EVERYDAY COLLECTION</small><h1>Good things.<br>For your best friend.</h1><p>함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.</p>
+ <nav aria-label="컬렉션 메뉴"><a data-pet-menu="all" href="/product/search.html">전체상품</a><a data-pet-menu="dog" href="/product/search.html?keyword=강아지">강아지</a><a data-pet-menu="cat" href="/product/search.html?keyword=고양이">고양이</a><a data-pet-menu="walk" href="/product/search.html?keyword=산책">산책/외출</a><a data-pet-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
+</section>
+<script>
+(function(){
+ var hero=document.querySelector('.pet-menu-hero');if(!hero)return;
+ var params=new URLSearchParams(location.search),word=params.get('keyword')||'',board=location.pathname.indexOf('/board/')===0;
+ if(board&&params.get('board_no')!=='4'){hero.remove();return;}
+ var key=board?'review':/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
+ var data={
+  all:['shop-hero.png','세이지와 크림 컬러의 반려생활 용품','THE EVERYDAY COLLECTION','Good things.<br>For your best friend.','함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.'],
+  dog:['submenu-dog.png','쿠션에서 쉬는 강아지와 놀이 용품','THE DOG COLLECTION','For happy dogs.<br>And their people.','신나는 놀이부터 포근한 잠자리까지.<br>강아지의 하루를 채우는 다정한 선택.'],
+  cat:['submenu-cat.png','스크래처 곁에서 쉬는 고양이','THE CAT COLLECTION','Their own world.<br>A little softer.','긁고, 숨고, 느긋하게 쉬는 시간.<br>고양이만의 취향을 존중하는 일상.'],
+  walk:['submenu-walk.png','세이지 하네스를 입고 산책하는 코커 스패니얼','THE OUTDOOR COLLECTION','Small steps.<br>Big adventures.','익숙한 골목도 함께라면 새로운 여행.<br>가볍고 편안한 외출을 준비해보세요.'],
+  review:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','LIFE, SHARED','Real moments.<br>Shared with love.','함께 써본 경험이 더 좋은 선택으로.<br>반려가족의 일상과 사용 후기를 만나보세요.']
+ }[key],img=hero.querySelector('img');
+ hero.dataset.collection=key;img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
+ function reveal(){hero.classList.add('is-ready')}
+ img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src='/SkinImg/pet/'+data[0];if(img.complete&&img.naturalWidth)reveal();
+ hero.querySelector('[data-pet-menu="'+key+'"]').setAttribute('aria-current','page');
+}());
+</script>

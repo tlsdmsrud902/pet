@@ -1,0 +1,21 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "path": "D:/pet/adia902222_s2_260925195134_d_skin1_E/skin1/SkinImg/pet/submenu-dog.png",
+      "prompt": "Use case: photorealistic-natural. Premium modern pet shop category banner, panoramic 3:1 composition. A cheerful cream cockapoo reclining on an oatmeal dog cushion with a small terracotta rope toy, on the RIGHT third. Warm ivory plaster studio living-room background. Entire LEFT 55 percent is calm empty softly lit background for dark website text; subjects stay wholly within right 40 percent, with generous headroom and no cropping. Cohesive cream, sage, oatmeal pastel palette, real editorial photography, soft daylight, refined natural textures. No text, logos, watermark, collage, illustrations or UI. One continuous photograph."
+    },
+    {
+      "path": "D:/pet/adia902222_s2_260925195134_d_skin1_E/skin1/SkinImg/pet/submenu-cat.png",
+      "prompt": "Use case: photorealistic-natural. Premium modern pet shop category banner, panoramic 3:1 composition. An elegant silver tabby cat sitting next to a sculptural cream scratching post and muted sage felt ball, on the RIGHT third. Pale sage plaster interior background. Entire LEFT 55 percent is calm empty softly lit background for dark website text; subjects stay wholly within right 40 percent, with generous headroom and no cropping. Cohesive cream, sage, oatmeal pastel palette, real editorial photography, soft daylight, refined natural textures. No text, logos, watermark, collage, illustrations or UI. One continuous photograph."
+    },
+    {
+      "path": "D:/pet/adia902222_s2_260925195134_d_skin1_E/skin1/SkinImg/pet/submenu-walk.png",
+      "prompt": "Use case: photorealistic-natural. Premium modern pet shop category banner, panoramic 3:1 composition. A chestnut cocker spaniel wearing a simple sage harness with leash leading out of frame, standing on a sunlit limestone garden path on the RIGHT third. Soft pale olive garden bokeh background. Entire LEFT 55 percent is calm empty softly lit background for dark website text; subjects stay wholly within right 40 percent, with generous headroom and no cropping. Cohesive cream, sage, oatmeal pastel palette, real editorial photography, soft daylight, refined natural textures. No text, logos, watermark, collage, illustrations or UI. One continuous photograph."
+    },
+    {
+      "path": "D:/pet/adia902222_s2_260925195134_d_skin1_E/skin1/SkinImg/pet/submenu-review.png",
+      "prompt": "Use case: photorealistic-natural. Premium modern pet shop category banner, panoramic 3:1 composition. A border collie gently resting its chin on a seated adult owner’s hand on an oatmeal sofa, owner face outside frame, all on the RIGHT third. Soft blush-ivory living room background. Entire LEFT 55 percent is calm empty softly lit background for dark website text; subjects stay wholly within right 40 percent, with generous headroom and no cropping. Cohesive cream, sage, oatmeal pastel palette, real editorial photography, soft daylight, refined natural textures. No text, logos, watermark, collage, illustrations or UI. One continuous photograph."
+    }
+  ]
+}

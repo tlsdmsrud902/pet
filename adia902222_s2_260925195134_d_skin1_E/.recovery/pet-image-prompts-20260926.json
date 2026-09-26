@@ -1,0 +1,50 @@
+{
+  "mode": "Built-in image_gen tool",
+  "outputDirectory": "D:/pet/adia902222_s2_260925195134_d_skin1_E/skin1/SkinImg/pet",
+  "assets": [
+    [
+      "coupon-dog",
+      "Premium editorial pet portrait for a vertical coupon ticket illustration: a happy cream toy poodle with one front paw resting on a small wrapped sage green gift box with ivory ribbon, warm peach studio background, subtle fine grain, natural soft lighting, beautifully detailed real fur, sophisticated and charming, full puppy upper body in lower two thirds, top third uncluttered for html title. No text, lettering, logos, numerals, discounts or border. Portrait 3:4."
+    ],
+    [
+      "coupon-cat",
+      "Premium editorial pet portrait for a vertical coupon ticket: elegant silver British shorthair cat sitting beside a small pale butter yellow wrapped gift box with forest green ribbon, pastel sage studio background, soft directional daylight and realistic fur, sophisticated gentle humor, cat and gift in lower two thirds, top third empty for html title. No text, lettering, logos, numerals, discounts or border. Portrait 3:4."
+    ],
+    [
+      "coupon-gifts",
+      "Premium still life for vertical pet coupon ticket: stacked ivory and pale apricot gift boxes with sage fabric ribbons, a small cotton dog rope toy and one bone shaped biscuit thoughtfully styled at their base, muted warm lavender studio background, luxury ecommerce editorial photography, softly lit realistic paper and fabric. Objects occupy lower two thirds, top third uncluttered. No text, letters, logos, numerals, discounts or border. Portrait 3:4."
+    ],
+    [
+      "sale-hero",
+      "Premium modern pet shop seasonal sale hero photo, wide 16:9. A charismatic tricolor corgi sitting on an architectural sage green platform on the right, surrounded by three restrained wrapped cream and pale peach gift boxes, olive leash folded nearby. Seamless warm ivory studio with sculptural curved background and soft natural shadows. Left half is elegant empty warm cream negative space for dark website copy. Photorealistic fur and tactile materials, tasteful minimalist art direction. No text, letters, logos, discount numbers or watermark."
+    ],
+    [
+      "shop-hero",
+      "Premium pet ecommerce category header photograph, panoramic 16:9. Close editorial still life of thoughtfully arranged pet accessories on the right: matte cream elevated ceramic bowl, olive woven collar, pale peach rope toy, folded oat linen blanket, small blush grooming brush. Continuous soft sage background with dappled window light. Left half empty sage wall for page heading. Refined composition, realistic tactile materials, quiet modern Scandinavian styling. No animals, text, logos, letters or numbers."
+    ],
+    [
+      "starter-home",
+      "Portrait 4:5 editorial photograph. A small golden retriever puppy cautiously exploring a lovely new home. In foreground a neatly arranged oat linen dog cushion, small pale terracotta bowl, a simple olive lead, cream folded blanket and cotton toy. Sunlit modern ivory apartment, tactile wooden floor. Cohesive sage, cream, soft peach palette, warm real fur, refined pet lifestyle magazine photograph. No lettering, branding, typography or graphics."
+    ],
+    [
+      "guide-walk",
+      "Landscape 4:3 editorial photograph. A small wirehaired terrier standing patiently by a pale sage front door, olive leash hanging neatly on a brass wall hook, oat canvas walk bag on a bench, soft sunlight entering from doorway. Calm modern home, carefully composed eye level pet photograph, muted cream sage and terracotta palette, realistic fur and anatomy. No human face, no text, branding or graphics."
+    ],
+    [
+      "guide-rest",
+      "Landscape 4:3 editorial photograph. A relaxed white and gray adult cat curled asleep on an oatmeal linen oval cushion in a beautiful sunlit window nook. Pale apricot curtains, warm ivory wall, a small indoor olive tree partly visible, dappled soft afternoon shadows. Premium pet interior magazine aesthetic, peaceful realistic animal, detail-rich natural textures. No text, letters, logos or graphics."
+    ],
+    [
+      "guide-play",
+      "Landscape 4:3 editorial photograph. An alert small dachshund playfully sniffing a pale sage fabric snuffle mat with simple folded fabric petals, a terracotta cotton rope toy nearby, warm ivory carpet and minimal soft cream interior. Natural low perspective, candid joyful pet expression, authentic anatomy and fur, refined warm restrained palette, editorial pet photography. No letters, logos, writing or graphics."
+    ],
+    [
+      "community-home",
+      "Landscape 4:3 premium candid lifestyle photograph. A young adult couple seen only from shoulders down seated casually on an oatmeal sofa with a happy medium black and white border collie nestled comfortably between them, one hand gently on its shoulder. Tasteful sage throw blanket, side table with ceramic cup, sunlight in contemporary cream home. Natural comfortable non-posed moment, real anatomy, sophisticated pet magazine photography. No text, logos, graphics, no branding."
+    ],
+    [
+      "story-outdoor",
+      "Landscape 16:9 premium pet lifestyle photograph. A chestnut cocker spaniel in a muted olive harness walking beside an adult owner whose face is out of frame, through a beautiful leafy neighborhood path in warm morning light. Sage foliage, pale stone architecture, coral canvas walk pouch, refined natural candid energy, realistic fur and anatomy. Dog centered-right with context on left, strong modern editorial composition, no text, brand logos or graphics."
+    ]
+  ]
+}
