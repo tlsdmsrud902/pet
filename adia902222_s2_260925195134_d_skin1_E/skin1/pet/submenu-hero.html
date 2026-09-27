@@ -1,7 +1,7 @@
 <section class="pet-page-hero pet-menu-hero" aria-label="컬렉션 안내">
  <img src="/SkinImg/pet/shop-hero.png" alt="세이지와 크림 컬러의 반려생활 용품" width="1600" height="900" fetchpriority="high">
  <div><small>THE EVERYDAY COLLECTION</small><h1>Good things.<br>For your best friend.</h1><p>함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.</p>
- <nav aria-label="컬렉션 메뉴"><a data-pet-menu="all" href="/product/search.html">전체상품</a><a data-pet-menu="dog" href="/product/list.html?cate_no=24">강아지</a><a data-pet-menu="cat" href="/product/list.html?cate_no=25">고양이</a><a data-pet-menu="walk" href="/product/list.html?cate_no=26">산책/외출</a><a data-pet-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
+ <nav aria-label="컬렉션 메뉴"><a data-pet-menu="all" href="/product/list.html?cate_no=42">전체상품</a><a data-pet-menu="dog" href="/product/list.html?cate_no=24">강아지</a><a data-pet-menu="cat" href="/product/list.html?cate_no=25">고양이</a><a data-pet-menu="walk" href="/product/list.html?cate_no=26">산책/외출</a><a data-pet-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
 </section>
 <!-- 상품분류 목록에서만 보이는 검색창 (상품검색 페이지는 자체 검색창이 있다) -->
 <form class="pet-list-search" action="/product/search.html" method="get" role="search" hidden>
@@ -19,7 +19,7 @@
  // SALE(27)은 전용 세일 화면이 따로 있다
  if(list&&cate==='27'){hero.remove();return;}
  // 상품분류 번호 : 24 강아지 · 25 고양이 · 26 산책/외출 (관리자 대분류)
- var byCate={'24':'dog','25':'cat','26':'walk'};
+ var byCate={'42':'all','24':'dog','25':'cat','26':'walk'};
  var key=board?'review':list?(byCate[cate]||'all'):/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
  var data={
   all:['shop-hero.png','세이지와 크림 컬러의 반려생활 용품','THE EVERYDAY COLLECTION','Good things.<br>For your best friend.','함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.'],

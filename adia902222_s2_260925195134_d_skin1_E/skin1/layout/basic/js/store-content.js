@@ -139,7 +139,7 @@ window.STORE_CONTENT = {
 
 	/* 푸터 SHOP MENU 4개 링크 (게시판 주소는 몰마다 다릅니다)      BUYER EDITABLE */
 	footerMenu: [
-		{ label: 'Shop',   link: '/product/search.html' },
+		{ label: 'Shop',   link: '/product/list.html?cate_no=42' },
 		{ label: 'Order',  link: '/myshop/order/list.html' },
 		{ label: 'Q&A',    link: '/board/product/list.html?board_no=6' },
 		{ label: 'Notice', link: '/board/free/list.html?board_no=1' }
@@ -154,7 +154,7 @@ window.STORE_CONTENT = {
 		title: '에어 레깅스',
 		sub: '210g. 입은 줄 모르게.',
 		buttonText: '컬렉션 보기',
-		buttonLink: '/product/search.html',
+		buttonLink: '/product/list.html?cate_no=42',
 		image: '/SkinImg/pet/hero-home.png',
 		imageMobile: '/SkinImg/pet/hero-home.png'
 	},
@@ -165,7 +165,7 @@ window.STORE_CONTENT = {
 	   --------------------------------------------------------------------- */
 	arrivals: {
 		seeAllText: 'SEE ALL',
-		seeAllLink: '/product/search.html'
+		seeAllLink: '/product/list.html?cate_no=42'
 	},
 
 	/* ---------------------------------------------------------------------
@@ -193,7 +193,7 @@ window.STORE_CONTENT = {
 		titleHtml: '원단부터<br>다시 만들었습니다',
 		desc: '겉감은 회복력이 좋은 나일론, 안감은 땀을 빨리 내보내는 구조로 짰습니다. 같은 패턴을 세 시즌째 다듬는 이유입니다.',
 		buttonText: '소재 이야기 읽기',
-		buttonLink: '/product/search.html'
+		buttonLink: '/product/list.html?cate_no=42'
 	},
 
 	/* ---------------------------------------------------------------------
@@ -382,7 +382,7 @@ window.STORE_CONTENT = {
   c.brand.instagramHandle = '';
   c.intro = {enabled: false};
   c.hero = {tag:'EVERYDAY, TOGETHER', title:'함께 사는 일상', sub:'더 좋은 것들로.',
-    buttonText:'컬렉션 보기', buttonLink:'/product/search.html', image:base+'hero-home.png', imageMobile:base+'hero-home.png'};
+    buttonText:'컬렉션 보기', buttonLink:'/product/list.html?cate_no=42', image:base+'hero-home.png', imageMobile:base+'hero-home.png'};
   c.onStore.hoverImages = ['category-walk.png','category-cat.png','products-flatlay.png','product-bed.png'].map(function (s) {return base+s});
   c.fabric = {image:base+'product-bed.png', eyebrow:'REST & LIVING', titleHtml:'편안한 하루의<br>시작과 끝',
     desc:'조용한 공간, 몸을 펼칠 수 있는 크기, 관리하기 편한 소재. 우리 아이가 쉬는 자리를 생각합니다.',
