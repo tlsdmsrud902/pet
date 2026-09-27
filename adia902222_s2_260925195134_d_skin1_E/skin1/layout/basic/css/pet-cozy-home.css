@@ -547,3 +547,83 @@ body:has(#lw-home.pet-cozy) :is(#footer,.footer_margin){margin-top:0!important}
 /* 히어로 3장면(영상 · 산책 · 휴식) : 장면이 줄어든 만큼 스크롤 길이도 줄인다 */
 #lw-home .pe-hero-track{height:250vh;min-height:1700px}
 @media(max-width:767px){#lw-home .pe-hero-track{height:245svh;min-height:1700px}}
+
+/* ==========================================================================
+   9. 장면 속 상품 (Shop the look)
+   PC(1024px~) : 무대가 화면에 고정되고, 스크롤하면 장면이 한 장씩 옆으로 넘어간다(장면마다 잠깐 멈춤).
+   태블릿·모바일 : 장면을 세로로 쌓는다. 사진 비율(--ar)을 그대로 써서 + 위치가 어긋나지 않는다.
+   ========================================================================== */
+#lw-home .cz-looks{margin-top:var(--cz-space)}
+#lw-home .cz-looks__count{display:none;margin:0;font:italic 500 16px/1 var(--cz-serif);color:var(--cz-muted)}
+#lw-home .cz-looks__count b{font-weight:600;color:var(--cz-ink)}
+#lw-home .cz-looks__track{display:grid;gap:clamp(56px,7vw,96px);width:min(1440px,calc(100% - var(--cz-gutter)*2));margin:0 auto}
+#lw-home .cz-look{display:grid;gap:22px}
+#lw-home .cz-look__info{order:2}
+#lw-home .cz-look__no{margin:0;font:italic 400 clamp(52px,5.6vw,84px)/.9 var(--cz-serif);letter-spacing:-.04em;color:var(--cz-coral)}
+#lw-home .cz-look__info h3{margin:14px 0 0;font-size:clamp(21px,1.9vw,27px);font-weight:750;line-height:1.3;letter-spacing:-.04em;color:var(--cz-ink)}
+#lw-home .cz-look__meta{margin:10px 0 0;font-size:13px;letter-spacing:.02em;color:var(--cz-muted)}
+#lw-home .cz-look__list{margin:22px 0 26px;padding:0;list-style:none;border-top:1px solid var(--cz-line)}
+#lw-home .cz-look__list button{display:flex;justify-content:space-between;align-items:center;gap:14px;width:100%;padding:14px 2px;border:0;border-bottom:1px solid var(--cz-line);background:none;font:inherit;font-size:14px;color:var(--cz-ink);text-align:left;cursor:pointer;transition:color .2s,padding .3s var(--cz-ease)}
+#lw-home .cz-look__list button b{font-weight:700;white-space:nowrap}
+#lw-home .cz-look__list button:hover,#lw-home .cz-look__list button:focus-visible{color:var(--cz-accent);padding-left:8px;outline:0}
+#lw-home .cz-look__media{position:relative;order:1;margin:0;aspect-ratio:var(--ar);overflow:hidden;background:var(--cz-oat)}
+#lw-home .cz-look__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#lw-home .cz-look__spot{position:absolute;left:var(--x);top:var(--y);z-index:2;width:40px;height:40px;margin:-20px 0 0 -20px;padding:0;border:0;border-radius:50%;background:#fff;color:var(--cz-ink);box-shadow:0 8px 20px -8px rgba(40,32,26,.55);cursor:pointer;transition:transform .3s var(--cz-ease),background .25s,color .25s}
+#lw-home .cz-look__spot::before,#lw-home .cz-look__spot::after{content:'';position:absolute;left:50%;top:50%;width:14px;height:1.8px;margin:-.9px 0 0 -7px;border-radius:2px;background:currentColor;transition:transform .3s var(--cz-ease)}
+#lw-home .cz-look__spot::after{transform:rotate(90deg)}
+#lw-home .cz-look__spot:hover,#lw-home .cz-look__spot:focus-visible{transform:scale(1.12);background:var(--cz-ink);color:#fff9f3;outline:0}
+#lw-home .cz-look__spot:hover::after{transform:rotate(180deg)}
+#lw-home .cz-look.is-active .cz-look__spot,#lw-home .cz-looks:not(.is-pinned) .cz-look__spot{animation:cz-spot 2.4s ease-out infinite}
+#lw-home .cz-look__spot:nth-of-type(2){animation-delay:.6s!important}
+#lw-home .cz-look__spot:nth-of-type(3){animation-delay:1.2s!important}
+@keyframes cz-spot{0%{box-shadow:0 0 0 0 rgba(255,255,255,.75),0 8px 20px -8px rgba(40,32,26,.55)}70%,100%{box-shadow:0 0 0 16px rgba(255,255,255,0),0 8px 20px -8px rgba(40,32,26,.55)}}
+
+@media (min-width:1024px){
+  #lw-home .cz-looks.is-pinned .cz-looks__stage{position:sticky;top:var(--cz-head,90px);display:flex;flex-direction:column;justify-content:center;height:calc(100vh - var(--cz-head,90px));overflow:hidden}
+  #lw-home .cz-looks.is-pinned .cz-head{margin-bottom:clamp(18px,3vh,36px)}
+  #lw-home .cz-looks.is-pinned .cz-looks__count{display:block}
+  #lw-home .cz-looks.is-pinned .cz-looks__track{display:flex;align-items:center;gap:clamp(64px,7vw,128px);width:max-content;margin:0;will-change:transform}
+  #lw-home .cz-looks.is-pinned .cz-look{--h:min(calc(100vh - var(--cz-head,90px) - 190px),600px,calc((100vw - 480px) / var(--ar)));grid-template-columns:clamp(250px,21vw,320px) calc(var(--h) * var(--ar));align-items:center;gap:clamp(32px,3.4vw,60px);opacity:.3;transition:opacity .6s ease}
+  #lw-home .cz-looks.is-pinned .cz-look.is-active{opacity:1}
+  #lw-home .cz-looks.is-pinned .cz-look__info{order:0}
+  #lw-home .cz-looks.is-pinned .cz-look__media{order:0;height:var(--h)}
+  #lw-home .cz-looks.is-pinned .cz-look:not(.is-active) .cz-look__spot{pointer-events:none}
+  #lw-home .cz-looks:not(.is-pinned) .cz-look{grid-template-columns:minmax(260px,.42fr) 1fr;align-items:center;gap:48px}
+  #lw-home .cz-looks:not(.is-pinned) .cz-look__info{order:0}
+}
+@media (max-width:767px){
+  #lw-home .cz-look__spot{width:34px;height:34px;margin:-17px 0 0 -17px}
+  #lw-home .cz-look__spot::before,#lw-home .cz-look__spot::after{width:12px;margin-left:-6px}
+}
+
+/* 상품 구매 레이어 */
+html.cz-qv-open{overflow:hidden}
+#lw-home .cz-qv{position:fixed;inset:0;z-index:5100;display:grid;place-items:center;padding:20px;background:rgba(40,32,26,.5);animation:cz-qv-in .25s ease}
+#lw-home .cz-qv[hidden]{display:none}
+#lw-home .cz-qv__box{position:relative;display:grid;grid-template-columns:1fr 1fr;width:min(880px,100%);max-height:calc(100vh - 40px);overflow:auto;border-radius:16px;background:#fff9f3;box-shadow:0 40px 80px -30px rgba(40,32,26,.55);animation:cz-qv-up .4s var(--cz-ease)}
+#lw-home .cz-qv__img{margin:0;aspect-ratio:1/1;background:var(--cz-oat)}
+#lw-home .cz-qv__img img{display:block;width:100%;height:100%;object-fit:cover}
+#lw-home .cz-qv__body{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,3.6vw,48px)}
+#lw-home .cz-qv__cat{margin:0;font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--cz-muted)}
+#lw-home .cz-qv__body h3{margin:12px 0 0;font-size:clamp(24px,2.4vw,32px);font-weight:750;line-height:1.25;letter-spacing:-.045em;color:var(--cz-ink)}
+#lw-home .cz-qv__review{margin:10px 0 0;font-size:13px;font-weight:600;color:var(--cz-muted)}
+#lw-home .cz-qv__review b{color:var(--cz-coral)}
+#lw-home .cz-qv__price{display:flex;align-items:baseline;gap:8px;margin:18px 0 0;font-size:15px;color:var(--cz-ink)}
+#lw-home .cz-qv__price em{font-style:normal;font-size:18px;font-weight:800;color:var(--cz-coral)}
+#lw-home .cz-qv__price b{font-size:22px;font-weight:800;letter-spacing:-.02em}
+#lw-home .cz-qv__price s{font-size:14px;color:#a49689}
+#lw-home .cz-qv__desc{margin:16px 0 0;padding-top:16px;border-top:1px solid var(--cz-line);font-size:14px;line-height:1.75;color:#5e5249}
+#lw-home .cz-qv__actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;margin-top:28px}
+#lw-home .cz-qv__more{font-size:14px;font-weight:600;color:var(--cz-ink);text-decoration:underline;text-underline-offset:4px}
+#lw-home .cz-qv__close{position:absolute;right:14px;top:14px;z-index:2;display:grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:var(--cz-ink);cursor:pointer}
+#lw-home .cz-qv__close:hover{background:var(--cz-ink);color:#fff9f3}
+#lw-home .cz-qv__close:focus:not(:focus-visible){outline:0}
+@keyframes cz-qv-in{from{opacity:0}}
+@keyframes cz-qv-up{from{opacity:0;transform:translateY(24px)}}
+@media (max-width:767px){
+  #lw-home .cz-qv{align-items:end;padding:0}
+  #lw-home .cz-qv__box{grid-template-columns:1fr;max-height:92vh;border-radius:16px 16px 0 0}
+  #lw-home .cz-qv__img{aspect-ratio:4/3}
+  #lw-home .cz-qv__body{padding:24px 22px 28px}
+}
+@media (prefers-reduced-motion:reduce){#lw-home .cz-look__spot,#lw-home .cz-qv,#lw-home .cz-qv__box{animation:none!important}}

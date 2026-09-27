@@ -381,6 +381,115 @@
     if ('ResizeObserver' in window && track) new ResizeObserver(remeasure).observe(track);
   }
 
+  // 9. 장면 속 상품 : PC 에서는 무대를 고정하고 스크롤한 만큼 장면을 한 장씩 옆으로 넘긴다(장면마다 잠깐 머묾).
+  //    사진 속 + 나 상품 줄을 누르면 구매 레이어가 열린다. 상품 정보는 index.html 의 #cz-looks-data.
+  function initLooks(root) {
+    var sec = root.querySelector('.cz-looks');
+    if (!sec) return;
+    var data = {};
+    try { data = JSON.parse(document.getElementById('cz-looks-data').textContent); } catch (e) {}
+    var IMG = 'https://cdn.jsdelivr.net/gh/tlsdmsrud902/pet@0cb86c5/cafe24-assets/products/';
+    var html = document.documentElement;
+
+    /* 구매 레이어 */
+    var qv = document.getElementById('cz-qv'), lastBtn = null;
+    var won = function (n) { return Number(n).toLocaleString('ko-KR') + '원'; };
+    function reviewOf(no) {
+      try {
+        var c = JSON.parse(sessionStorage.getItem('petpia-reviews-v3'));
+        var list = (c && c.items || []).filter(function (it) { return String(it.productNo) === String(no); });
+        if (!list.length) return '';
+        var pts = list.filter(function (it) { return it.point; });
+        var avg = pts.length ? pts.reduce(function (s, it) { return s + it.point; }, 0) / pts.length : 0;
+        return (avg ? '<b>★ ' + avg.toFixed(1) + '</b> · ' : '') + '리뷰 ' + list.length;
+      } catch (e) { return ''; }
+    }
+    function openQV(no, from) {
+      var p = data[no];
+      if (!p || !qv) return;
+      lastBtn = from || null;
+      var img = qv.querySelector('.cz-qv__img img');
+      img.src = IMG + p.img + '.jpg'; img.alt = p.name;
+      qv.querySelector('.cz-qv__cat').textContent = p.cat;
+      qv.querySelector('#cz-qv-name').textContent = p.name;
+      qv.querySelector('.cz-qv__price').innerHTML = p.retail
+        ? '<em>' + Math.round((1 - p.price / p.retail) * 100) + '%</em><b>' + won(p.price) + '</b><s>' + won(p.retail) + '</s>'
+        : '<b>' + won(p.price) + '</b>';
+      qv.querySelector('.cz-qv__desc').textContent = p.desc;
+      var rv = qv.querySelector('.cz-qv__review'), r = reviewOf(no);
+      rv.innerHTML = r; rv.hidden = !r;
+      var url = '/product/detail.html?product_no=' + no;
+      qv.querySelector('[data-qv-buy]').href = url;
+      qv.querySelector('[data-qv-more]').href = url;
+      qv.hidden = false;
+      html.classList.add('cz-qv-open');
+      qv.querySelector('[data-qv-close]').focus({ preventScroll: true });
+    }
+    function closeQV() {
+      if (!qv || qv.hidden) return;
+      qv.hidden = true;
+      html.classList.remove('cz-qv-open');
+      if (lastBtn) lastBtn.focus({ preventScroll: true });
+    }
+    sec.querySelectorAll('[data-prd]').forEach(function (b) {
+      b.addEventListener('click', function () { openQV(b.dataset.prd, b); });
+    });
+    if (qv) {
+      qv.querySelector('[data-qv-close]').addEventListener('click', closeQV);
+      qv.addEventListener('click', function (e) { if (e.target === qv) closeQV(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeQV(); });
+    }
+
+    /* 고정 무대 + 장면 넘김 */
+    var pin = sec.querySelector('[data-looks-pin]'), stage = sec.querySelector('.cz-looks__stage');
+    var track = sec.querySelector('[data-looks-track]'), looks = Array.from(sec.querySelectorAll('.cz-look'));
+    var now = sec.querySelector('[data-looks-now]');
+    var wide = window.matchMedia('(min-width:1024px)'), reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var xs = [], dist = 0, active = -1, raf = 0;
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    // 장면 사이 구간에서 앞 25%·뒤 25% 는 머물고 가운데에서만 움직인다
+    var ease = function (t) { t = Math.min(1, Math.max(0, (t - 0.25) / 0.5)); return t * t * (3 - 2 * t); };
+    function setActive(i) {
+      if (i === active) return;
+      active = i;
+      looks.forEach(function (l, k) { l.classList.toggle('is-active', k === i); });
+      if (now) now.textContent = pad(i + 1);
+    }
+    function measure() {
+      if (!wide.matches || reduce.matches || looks.length < 2) {
+        sec.classList.remove('is-pinned'); pin.style.height = ''; track.style.transform = ''; dist = 0;
+        looks.forEach(function (l) { l.classList.add('is-active'); });
+        return;
+      }
+      sec.classList.add('is-pinned');
+      track.style.transform = 'none';
+      var sw = stage.clientWidth;
+      xs = looks.map(function (l) { return l.offsetLeft - (sw - l.offsetWidth) / 2; });
+      dist = Math.round(window.innerHeight * 0.85) * (looks.length - 1);
+      pin.style.height = (stage.offsetHeight + dist) + 'px';
+      active = -1;
+      update();
+    }
+    function update() {
+      raf = 0;
+      if (!dist) return;
+      var top = parseFloat(getComputedStyle(stage).top) || 0;
+      var p = Math.min(1, Math.max(0, (top - pin.getBoundingClientRect().top) / dist));
+      var f = p * (looks.length - 1), i = Math.min(looks.length - 2, Math.floor(f)), e = ease(f - i);
+      var x = xs[i] + (xs[i + 1] - xs[i]) * e;
+      track.style.transform = 'translate3d(' + (-x).toFixed(1) + 'px,0,0)';
+      setActive(Math.round(i + e));
+    }
+    var t = null;
+    function remeasure() { clearTimeout(t); t = setTimeout(measure, 150); }
+    measure();
+    window.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', remeasure);
+    window.addEventListener('load', measure);
+    wide.addEventListener('change', measure);
+    looks.forEach(function (l) { var im = l.querySelector('img'); if (im && !im.complete) im.addEventListener('load', remeasure, { once: true }); });
+  }
+
   function initReveal(root) {
     if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var io = new IntersectionObserver(function (entries) {
@@ -400,6 +509,7 @@
     fillPlaceholders(root);
     initFinder(root);
     initHotspots(root);
+    initLooks(root);
     initStarter(root);
     initRails(root);
     initRailPin(root);

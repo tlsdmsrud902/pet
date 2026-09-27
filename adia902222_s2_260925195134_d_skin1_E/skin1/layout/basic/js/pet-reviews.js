@@ -150,6 +150,7 @@
         });
         box.appendChild(ul);
       }
+      desc.appendChild(el('div', 'pr-gap')); // 가격 줄 수가 달라도 리뷰는 카드 맨 아래 같은 위치에
       desc.appendChild(box);
     });
   }

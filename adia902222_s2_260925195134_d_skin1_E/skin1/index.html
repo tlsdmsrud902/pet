@@ -273,22 +273,113 @@
     </div>
   </section>
 
-  <!-- 9. 산책 스토리 -->
-  <section class="cz-story cz-wrap" aria-labelledby="cz-story-title">
-    <div class="cz-story__media">
-      <img src="/SkinImg/pet/story-outdoor.png" alt="초록 산책길을 걷는 코커 스패니얼과 보호자" width="1672" height="941" loading="lazy">
-      <button class="cz-hotspot" style="--x:47%;--y:56%" type="button" aria-expanded="false" aria-controls="cz-look-walk" aria-label="사진 속 산책 용품 보기"><span>+</span></button>
-      <div class="cz-hotspot-card" id="cz-look-walk" style="--x:47%;--y:56%" hidden><small>Walk essentials</small><strong>가볍게 떠나는 산책</strong><a href="/product/search.html?keyword=하네스">하네스 &amp; 리드줄 보기</a></div>
-      <button class="cz-hotspot" style="--x:25%;--y:10%" type="button" aria-expanded="false" aria-controls="cz-look-bag" aria-label="함께 준비할 외출 용품 보기"><span>+</span></button>
-      <div class="cz-hotspot-card" id="cz-look-bag" style="--x:25%;--y:10%" hidden><small>Outdoor edit</small><strong>밖에서도 편안하게</strong><a href="/product/search.html?keyword=산책가방">산책 가방 보기</a></div>
+  <!-- 9. 장면 속 상품 (Shop the look) : 스크롤하면 장면이 한 장씩 옆으로 넘어가고, 사진 속 + 를 누르면 상품 구매 레이어가 열린다 (pet-cozy-home.js initLooks)
+       + 위치(--x/--y)는 사진 원본 비율 기준 %, 상품 정보는 아래 cz-looks-data 에 있다 -->
+  <section class="cz-looks" id="cz-looks" aria-labelledby="cz-looks-title">
+   <div class="cz-looks__pin" data-looks-pin>
+    <div class="cz-looks__stage">
+     <header class="cz-head cz-wrap"><div><p class="cz-kicker">Shop the look</p><h2 id="cz-looks-title">장면 속 그 상품</h2></div>
+      <p class="cz-looks__count" aria-hidden="true"><b data-looks-now>01</b> / <span>04</span></p></header>
+     <div class="cz-looks__track" data-looks-track>
+      <article class="cz-look" aria-label="01 산책" style="--ar:1.777">
+       <div class="cz-look__info">
+        <p class="cz-look__no">01</p>
+        <h3>골목 끝까지,<br>가볍게 걷는 오후</h3>
+        <p class="cz-look__meta">오후 4시 · 동네 산책 · 40분</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="29"><span>세이지 워킹 하네스</span><b>31,000원</b></button></li>
+         <li><button type="button" data-prd="26"><span>올리브 코튼 리드줄</span><b>17,000원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/list.html?cate_no=26">산책 용품 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img src="/SkinImg/pet/story-outdoor.png" alt="세이지 하네스를 하고 보호자와 산책하는 코커 스패니얼" width="1672" height="941" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="29" style="--x:56%;--y:55%" aria-label="세이지 워킹 하네스 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="26" style="--x:42%;--y:31%" aria-label="올리브 코튼 리드줄 보기"></button>
+       </figure>
+      </article>
+      <article class="cz-look" aria-label="02 휴식" style="--ar:1.777">
+       <div class="cz-look__info">
+        <p class="cz-look__no">02</p>
+        <h3>햇살 드는 거실,<br>둘이 나란히 낮잠</h3>
+        <p class="cz-look__meta">오후 2시 · 거실 창가 · 한숨 푹</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="14"><span>부클 도넛 쿠션 베드</span><b>42,000원</b></button></li>
+         <li><button type="button" data-prd="36"><span>코튼 매듭 로프</span><b>7,900원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/search.html?keyword=베드">쿠션 · 베드 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img src="/SkinImg/pet/hero-home.png" alt="부클 도넛 베드에서 함께 쉬는 푸들과 고양이" width="1672" height="941" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="14" style="--x:50%;--y:63%" aria-label="부클 도넛 쿠션 베드 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="36" style="--x:43%;--y:76%" aria-label="코튼 매듭 로프 보기"></button>
+       </figure>
+      </article>
+      <article class="cz-look" aria-label="03 놀이" style="--ar:1.333">
+       <div class="cz-look__info">
+        <p class="cz-look__no">03</p>
+        <h3>비 오는 날엔<br>코로 하는 보물찾기</h3>
+        <p class="cz-look__meta">저녁 7시 · 실내 놀이 · 20분</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="15"><span>노즈워크 스너플 매트</span><b>26,000원</b></button></li>
+         <li><button type="button" data-prd="38"><span>매듭 로프 토이 테라코타</span><b>8,900원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/search.html?keyword=장난감">장난감 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img src="/SkinImg/pet/guide-play.png" alt="노즈워크 매트에서 간식을 찾는 닥스훈트와 테라코타 로프 장난감" width="1448" height="1086" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="15" style="--x:36%;--y:74%" aria-label="노즈워크 스너플 매트 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="38" style="--x:87%;--y:65%" aria-label="매듭 로프 토이 테라코타 보기"></button>
+       </figure>
+      </article>
+      <article class="cz-look" aria-label="04 첫날" style="--ar:.8">
+       <div class="cz-look__info">
+        <p class="cz-look__no">04</p>
+        <h3>우리 집에 온 첫날,<br>필요한 건 여기에</h3>
+        <p class="cz-look__meta">입양 첫날 · 새 자리 만들기</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="25"><span>린넨 볼스터 베드</span><b>48,000원</b></button></li>
+         <li><button type="button" data-prd="19"><span>세라믹 워터볼 피치</span><b>16,000원</b></button></li>
+         <li><button type="button" data-prd="27"><span>니트 퍼피 인형</span><b>12,000원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/detail.html?product_no=20">스타터 세트 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img src="/SkinImg/pet/starter-home.png" alt="린넨 베드와 물그릇, 인형이 놓인 거실을 걷는 골든 리트리버 강아지" width="1122" height="1402" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="25" style="--x:24%;--y:64%" aria-label="린넨 볼스터 베드 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="19" style="--x:18%;--y:84%" aria-label="세라믹 워터볼 피치 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="27" style="--x:84%;--y:76%" aria-label="니트 퍼피 인형 보기"></button>
+       </figure>
+      </article>
+     </div>
     </div>
-    <div class="cz-story__card">
-      <p class="cz-kicker">Let's go outside</p>
-      <h2 id="cz-story-title">산책이 기다려지는 이유</h2>
-      <p>발걸음은 가볍게, 함께하는 시간은 길게.<br>익숙한 골목도 새로운 여행이 되는 우리만의 산책 준비.</p>
-      <a class="cz-btn" href="/product/search.html?keyword=산책">산책 컬렉션 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
-      <small class="cz-story__hint">사진 속 <b>+</b>를 눌러 살펴보세요</small>
+   </div>
+   <!-- 상품 구매 레이어 -->
+   <div class="cz-qv" id="cz-qv" hidden>
+    <div class="cz-qv__box" role="dialog" aria-modal="true" aria-labelledby="cz-qv-name">
+     <button class="cz-qv__close" type="button" data-qv-close aria-label="닫기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/></svg></button>
+     <figure class="cz-qv__img"><img src="" alt=""></figure>
+     <div class="cz-qv__body">
+      <p class="cz-qv__cat"></p>
+      <h3 id="cz-qv-name"></h3>
+      <p class="cz-qv__review" hidden></p>
+      <p class="cz-qv__price"></p>
+      <p class="cz-qv__desc"></p>
+      <div class="cz-qv__actions"><a class="cz-btn" data-qv-buy href="#">구매하러 가기<span><svg><use href="#cz-arrow"/></svg></span></a><a class="cz-qv__more" data-qv-more href="#">상품 상세 보기</a></div>
+     </div>
     </div>
+   </div>
+   <script type="application/json" id="cz-looks-data">{
+    "29":{"name":"세이지 워킹 하네스","cat":"WALK · 산책/외출","img":"p19","price":31000,"desc":"가슴과 등을 넓게 받쳐 줘서 당겨도 목에 부담이 덜해요. 세이지 색이 초록 산책길과 잘 어울려요."},
+    "26":{"name":"올리브 코튼 리드줄","cat":"WALK · 산책/외출","img":"p16","price":17000,"desc":"손에 부드럽게 감기는 코튼 리드줄. 오래 잡고 걸어도 손이 편해요."},
+    "14":{"name":"부클 도넛 쿠션 베드","cat":"REST · 쿠션/베드","img":"p04","price":42000,"desc":"도넛 모양 가장자리에 턱을 괴고 쉬는 폭신한 부클 베드. 털이 잘 붙지 않는 소재예요."},
+    "36":{"name":"코튼 매듭 로프","cat":"PLAY · 장난감","img":"p26","price":7900,"retail":9900,"desc":"작은 아이도 물고 다니기 좋은 가벼운 매듭 로프. 매듭이 단단해 쉽게 풀리지 않아요."},
+    "15":{"name":"노즈워크 스너플 매트","cat":"PLAY · 장난감","img":"p05","price":26000,"desc":"주름 사이에 간식을 숨겨 코로 찾는 놀이 매트. 산책을 못 나가는 날 실내 놀이로 좋아요."},
+    "38":{"name":"매듭 로프 토이 테라코타","cat":"PLAY · 장난감","img":"p28","price":8900,"desc":"물고 흔들기 좋은 굵은 매듭 로프. 테라코타 색이라 거실에 두어도 예뻐요."},
+    "25":{"name":"린넨 볼스터 베드","cat":"REST · 쿠션/베드","img":"p15","price":48000,"desc":"사방이 도톰한 볼스터라 기대어 쉬기 좋은 린넨 베드. 커버를 벗겨 세탁할 수 있어요."},
+    "19":{"name":"세라믹 워터볼 피치","cat":"MEAL · 식기","img":"p09","price":16000,"desc":"묵직한 세라믹이라 물을 마셔도 밀리지 않아요. 피치 색이 주방에도 잘 어울려요."},
+    "27":{"name":"니트 퍼피 인형","cat":"PLAY · 장난감","img":"p17","price":12000,"desc":"잘 때 물고 들어가기 좋은 부드러운 니트 인형. 세탁해도 모양이 잘 유지돼요."}
+   }</script>
   </section>
 
   <!-- 10. 인기 상품 -->
