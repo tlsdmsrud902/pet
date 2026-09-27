@@ -691,3 +691,9 @@ html.cz-qv-open{overflow:hidden}
 #lw-home .pe-hero-track.is-auto .pe-hero{position:relative!important;top:auto!important;height:calc(100svh - 90px)!important;min-height:560px!important;max-height:760px!important}
 #lw-home .pe-hero-track.is-auto .pe-world-image,#lw-home .pe-hero-track.is-auto .pe-hero__copy{transition:opacity .9s ease!important;will-change:opacity}
 }
+
+/* 모바일 신상품 : 고정(핀) 없이 손가락으로 넘기는 가로 목록 (2열 그리드 규칙이 첫 두 칸을 0 으로 만들던 문제 수정) */
+@media (max-width:767px){
+#lw-home section.cz-products--rail :is(.prdList,.cz-placeholder){grid-template-columns:none!important;grid-auto-flow:column!important;grid-auto-columns:44%!important;overflow-x:auto!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;transform:none!important}
+#lw-home section.cz-products--pin .cz-pin__stage{position:static!important;min-height:0!important}
+}
