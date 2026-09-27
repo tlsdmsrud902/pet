@@ -324,7 +324,6 @@
       // 첫 방문 인트로(로고 화면)가 끝난 뒤에 띄운다
       if (document.documentElement.classList.contains('st-intro-on')) { setTimeout(open, 800); return; }
       pop.hidden = false; go(0); play();
-      var first = pop.querySelector('[data-pop-close]'); if (first) first.focus({ preventScroll: true });
     }
     setTimeout(open, 1200);
   }

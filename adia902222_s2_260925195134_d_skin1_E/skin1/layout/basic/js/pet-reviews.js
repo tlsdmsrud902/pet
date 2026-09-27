@@ -6,12 +6,14 @@
    한 번 읽은 결과는 10분 동안 sessionStorage 에 저장해 페이지마다 다시 요청하지 않는다. */
 (function () {
   'use strict';
-  var BOARD = 4, PAGES = 2, MAX_DETAIL = 24, POOL = 4, CACHE_KEY = 'petpia-reviews-v1', TTL = 10 * 60 * 1000;
+  var BOARD = 4, PAGES = 2, MAX_DETAIL = 24, POOL = 4, CACHE_KEY = 'petpia-reviews-v2', TTL = 10 * 60 * 1000;
   var NOTE = /※\s*PETPIA가 만든[^\n]*교체됩니다\.?/;
 
   function trim(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function lastNum(href) { var m = String(href || '').match(/[?&](?:no|product_no)=(\d+)/) || String(href || '').match(/\/(\d+)\/?(?:[?#].*)?$/); return m ? m[1] : ''; }
+  // 글 번호 : /article/게시판명/4/<글번호>/page/1/ 또는 read.html?no=<글번호> (끝의 page 번호를 잡지 않도록)
+  function articleNo(href) { var m = String(href || '').match(/\/article\/[^/]+\/\d+\/(\d+)/) || String(href || '').match(/[?&]no=(\d+)/); return m ? m[1] : ''; }
   function stars(n) { var s = ''; for (var i = 1; i <= 5; i++) s += i <= Math.round(n) ? '★' : '☆'; return s; }
   function pickImages(html) {
     var out = [];
@@ -42,7 +44,8 @@
     doc.querySelectorAll('tbody tr').forEach(function (tr) {
       var a = tr.querySelector('td.subject a[href*="/article/"], td.subject a[href*="read.html"]');
       if (!a) return;
-      var no = (tr.querySelector('.boardChk') || {}).value || lastNum(a.getAttribute('href'));
+      var no = (tr.querySelector('.boardChk') || {}).value || articleNo(a.getAttribute('href'));
+      if (!no) return;
       var pa = tr.querySelector('a[href*="/product/"]');
       var cells = tr.querySelectorAll('td');
       var texts = Array.prototype.map.call(cells, function (td) { return trim(td.textContent); });

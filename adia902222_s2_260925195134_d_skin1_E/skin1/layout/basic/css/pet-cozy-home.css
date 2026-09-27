@@ -402,7 +402,8 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 .cz-pop__bar{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #efe3d6}
 .cz-pop__bar button{padding:15px 10px;border:0;background:#fff;font:600 14px 'Pretendard Variable','Pretendard',sans-serif;color:#43372f;cursor:pointer}
 .cz-pop__bar button+button{border-left:1px solid #efe3d6}
-.cz-pop__bar button:hover{background:#f6ede2}
+#cz-pop .cz-pop__bar button:hover,#cz-pop .cz-pop__bar button:focus-visible{background:#f6ede2}
+#cz-pop .cz-pop__bar button:focus,#cz-pop .cz-pop__dots button:focus{outline:0!important;box-shadow:none!important}
 
 /* 14. 가이드 */
 #lw-home .cz-journal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}

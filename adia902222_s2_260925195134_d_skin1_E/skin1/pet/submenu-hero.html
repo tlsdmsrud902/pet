@@ -1,14 +1,26 @@
 <section class="pet-page-hero pet-menu-hero" aria-label="컬렉션 안내">
  <img src="/SkinImg/pet/shop-hero.png" alt="세이지와 크림 컬러의 반려생활 용품" width="1600" height="900" fetchpriority="high">
  <div><small>THE EVERYDAY COLLECTION</small><h1>Good things.<br>For your best friend.</h1><p>함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.</p>
- <nav aria-label="컬렉션 메뉴"><a data-pet-menu="all" href="/product/search.html">전체상품</a><a data-pet-menu="dog" href="/product/search.html?keyword=강아지">강아지</a><a data-pet-menu="cat" href="/product/search.html?keyword=고양이">고양이</a><a data-pet-menu="walk" href="/product/search.html?keyword=산책">산책/외출</a><a data-pet-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
+ <nav aria-label="컬렉션 메뉴"><a data-pet-menu="all" href="/product/search.html">전체상품</a><a data-pet-menu="dog" href="/product/list.html?cate_no=24">강아지</a><a data-pet-menu="cat" href="/product/list.html?cate_no=25">고양이</a><a data-pet-menu="walk" href="/product/list.html?cate_no=26">산책/외출</a><a data-pet-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
 </section>
+<!-- 상품분류 목록에서만 보이는 검색창 (상품검색 페이지는 자체 검색창이 있다) -->
+<form class="pet-list-search" action="/product/search.html" method="get" role="search" hidden>
+ <label for="petListKeyword" class="displaynone">상품 검색</label>
+ <input id="petListKeyword" name="keyword" type="search" placeholder="찾으시는 상품을 검색해 보세요" autocomplete="off">
+ <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5" stroke-linecap="round"></path></svg></button>
+</form>
 <script>
 (function(){
  var hero=document.querySelector('.pet-menu-hero');if(!hero)return;
- var params=new URLSearchParams(location.search),word=params.get('keyword')||'',board=location.pathname.indexOf('/board/')===0;
+ var params=new URLSearchParams(location.search),word=params.get('keyword')||'',path=location.pathname,board=path.indexOf('/board/')===0;
+ var catm=path.match(/\/category\/[^\/]+\/(\d+)/),cate=String(params.get('cate_no')||(catm&&catm[1])||'');
+ var list=/\/product\/list\.html$/.test(path)||!!catm;
  if(board&&params.get('board_no')!=='4'){hero.remove();return;}
- var key=board?'review':/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
+ // SALE(27)은 전용 세일 화면이 따로 있다
+ if(list&&cate==='27'){hero.remove();return;}
+ // 상품분류 번호 : 24 강아지 · 25 고양이 · 26 산책/외출 (관리자 대분류)
+ var byCate={'24':'dog','25':'cat','26':'walk'};
+ var key=board?'review':list?(byCate[cate]||'all'):/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
  var data={
   all:['shop-hero.png','세이지와 크림 컬러의 반려생활 용품','THE EVERYDAY COLLECTION','Good things.<br>For your best friend.','함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.'],
   dog:['submenu-dog.png','쿠션에서 쉬는 강아지와 놀이 용품','THE DOG COLLECTION','For happy dogs.<br>And their people.','신나는 놀이부터 포근한 잠자리까지.<br>강아지의 하루를 채우는 다정한 선택.'],
@@ -20,5 +32,6 @@
  function reveal(){hero.classList.add('is-ready')}
  img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src='/SkinImg/pet/'+data[0];if(img.complete&&img.naturalWidth)reveal();
  hero.querySelector('[data-pet-menu="'+key+'"]').setAttribute('aria-current','page');
+ var form=document.querySelector('.pet-list-search');if(form&&list)form.hidden=false;
 }());
 </script>
