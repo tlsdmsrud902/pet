@@ -125,6 +125,7 @@ html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn){border-radius:999px!important
 /* 로고 : 글자 대신 PETPIA 이미지 로고 (SkinImg/pet/logo-petpia.webp) */
 #header .inner .top_nav_box .top_logo a::before,#header .inner .top_nav_box .top_logo a::after,#footer .bt_logo a::before,#footer .bt_logo a::after{content:none!important;display:none!important}
 #header .top_logo a,#footer .bt_logo a{display:inline-flex!important;align-items:center;line-height:0;font-size:0}
+#header .inner .top_nav_box .top_logo a img.pet-logo-img,#footer .bt_logo a img.pet-logo-img{display:block!important}
 .pet-logo-img{display:block;width:auto!important;max-width:none;height:52px}
 #footer .pet-logo-img{height:60px}
 @media (max-width:1024px){#header .pet-logo-img{height:40px}}
