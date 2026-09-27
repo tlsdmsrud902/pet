@@ -684,3 +684,10 @@ html.cz-qv-open{overflow:hidden}
 #lw-home .pe-hero .pe-hero__copy .pe-button{background:#fff9f3!important}
 #lw-home .pe-hero .pe-hero__copy .pe-button,#lw-home .pe-hero .pe-hero__copy .pe-button *{color:#43372f!important;-webkit-text-fill-color:#43372f!important}
 }
+
+/* 모바일 메인 히어로 : 스크롤 연동 없이 한 화면(고정 높이)에서 장면이 부드럽게 바뀐다 (pet-cozy-home.js initWorldHero 의 is-auto) */
+@media (max-width:767px){
+#lw-home .pe-hero-track.is-auto{height:auto!important;min-height:0!important}
+#lw-home .pe-hero-track.is-auto .pe-hero{position:relative!important;top:auto!important;height:calc(100svh - 90px)!important;min-height:560px!important;max-height:760px!important}
+#lw-home .pe-hero-track.is-auto .pe-world-image,#lw-home .pe-hero-track.is-auto .pe-hero__copy{transition:opacity .9s ease!important;will-change:opacity}
+}

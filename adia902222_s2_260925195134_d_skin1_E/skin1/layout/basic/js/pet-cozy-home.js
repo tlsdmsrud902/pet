@@ -127,6 +127,9 @@
     if (!track) return;
     var hero = track.querySelector('.pe-hero');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // 모바일 : 스크롤 연동을 끄고 한 화면에서 장면이 5초마다 부드럽게 바뀐다 (아이폰 관성 스크롤에서 떨려 보이는 문제)
+    var auto = window.matchMedia('(max-width: 767px)');
+    var autoTimer = null;
     var images = Array.from(track.querySelectorAll('[data-world-image]'));
     var copies = Array.from(track.querySelectorAll('[data-world-copy]'));
     var route = Array.from(track.querySelectorAll('[data-world-jump]'));
@@ -147,12 +150,12 @@
       images.forEach(function (img, i) {
         img.style.opacity = String(1 - smooth((Math.abs(position - i) - .28) / .44));
         img.setAttribute('aria-hidden', String(i !== index));
-        img.style.transform = reduce.matches ? 'none' : 'scale(' + (1.02 + clamp(position - i + .5) * .09) + ')';
+        img.style.transform = (reduce.matches || auto.matches) ? 'none' : 'scale(' + (1.02 + clamp(position - i + .5) * .09) + ')';
         if (img.tagName === 'VIDEO') { if (i === index) { var p = img.play(); if (p && p.catch) p.catch(function () {}); } else img.pause(); }
       });
       copies.forEach(function (copy, i) {
         copy.style.opacity = String(1 - smooth((Math.abs(position - i) - .22) / .35));
-        copy.style.transform = reduce.matches ? 'none' : 'translateY(' + ((i - position) * 24) + 'px)';
+        copy.style.transform = (reduce.matches || auto.matches) ? 'none' : 'translateY(' + ((i - position) * 24) + 'px)';
         copy.style.pointerEvents = i === index ? 'auto' : 'none';
         copy.inert = i !== index;
         copy.setAttribute('aria-hidden', String(i !== index));
@@ -165,7 +168,7 @@
     }
     function frame() {
       scheduled = false;
-      if (reduce.matches) return;
+      if (reduce.matches || auto.matches) return;
       var top = parseFloat(getComputedStyle(hero).top) || 0;
       var distance = Math.max(1, track.offsetHeight - hero.offsetHeight);
       drawScene(clamp((top - track.getBoundingClientRect().top) / distance) * Math.max(1, images.length - 1));
@@ -173,7 +176,7 @@
     function requestFrame() { if (!scheduled) { scheduled = true; requestAnimationFrame(frame); } }
     route.forEach(function (button, i) {
       button.addEventListener('click', function () {
-        if (reduce.matches) { drawScene(i); return; }
+        if (reduce.matches || auto.matches) { drawScene(i); startAuto(); return; }
         var top = parseFloat(getComputedStyle(hero).top) || 0;
         var start = track.getBoundingClientRect().top + scrollY - top;
         window.scrollTo({ top: Math.max(0, start + (track.offsetHeight - hero.offsetHeight) * i / Math.max(1, route.length - 1)), behavior: 'smooth' });
@@ -181,8 +184,15 @@
     });
     window.addEventListener('scroll', requestFrame, { passive: true });
     window.addEventListener('resize', requestFrame, { passive: true });
-    reduce.addEventListener('change', function () { drawScene(0); requestFrame(); });
-    drawScene(0); requestFrame();
+    function startAuto() {
+      clearInterval(autoTimer); autoTimer = null;
+      track.classList.toggle('is-auto', auto.matches);
+      if (!auto.matches || reduce.matches || images.length < 2) return;
+      autoTimer = setInterval(function () { drawScene((active + 1) % images.length); }, 5000);
+    }
+    reduce.addEventListener('change', function () { drawScene(0); requestFrame(); startAuto(); });
+    auto.addEventListener('change', function () { drawScene(0); requestFrame(); startAuto(); });
+    drawScene(0); requestFrame(); startAuto();
   }
 
   /* Scroll World (이미지 전용) : 섹션을 스크롤하는 동안 장면마다 카메라가 날아 들어갔다가(가까워짐) 지나간다.
@@ -379,10 +389,13 @@
     var section = pin.closest('.cz-products--pin'), stage = pin.querySelector('.cz-pin__stage');
     var now = pin.querySelector('[data-rail-now]'), total = pin.querySelector('[data-rail-total]');
     var track = null, items = [], dist = 0, lead = -1, raf = 0;
+    // 모바일은 고정(핀) 없이 손가락으로 넘기는 가로 목록 : 섹션 위아래 빈 공간과 스크롤 떨림을 없앤다
+    var mobile = window.matchMedia('(max-width: 767px)');
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     function measure() {
       track = section.querySelector('.ec-base-product:not([hidden]) .prdList') || section.querySelector('.cz-placeholder:not([hidden])');
       if (!track) return;
+      if (mobile.matches) { section.classList.remove('is-pinned'); pin.style.height = ''; dist = 0; section.style.removeProperty('--cz-rail-x'); return; }
       section.classList.add('is-pinned');
       section.style.setProperty('--cz-rail-x', '0px');
       items = Array.from(track.children);
