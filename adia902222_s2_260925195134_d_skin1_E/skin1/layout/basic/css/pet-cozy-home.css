@@ -348,6 +348,49 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 #lw-home .cz-review-list a{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:15px;font-weight:600;line-height:1.55;letter-spacing:-.03em}
 #lw-home .cz-review-list span{display:block;margin-top:6px;font-size:13px;color:var(--cz-muted)}
 
+/* 13-1. 최신 포토리뷰 8개 (pet-reviews.js 가 채운다) */
+#lw-home .pr-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px}
+#lw-home .pr-card{display:flex;flex-direction:column;color:var(--cz-ink)}
+#lw-home .pr-card__photo{position:relative;aspect-ratio:1;overflow:hidden;background:var(--cz-oat)}
+#lw-home .pr-card__photo img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--cz-ease)}
+#lw-home .pr-card:hover .pr-card__photo img{transform:scale(1.05)}
+#lw-home .pr-card__tag{position:absolute;left:10px;top:10px;padding:4px 9px;border-radius:999px;background:rgba(255,249,243,.92);font-size:11px;font-weight:700;color:var(--cz-accent)}
+#lw-home .pr-card__body{display:flex;flex-direction:column;gap:6px;padding:14px 2px 0}
+#lw-home .pr-card .pr-stars{font-size:13px}
+#lw-home .pr-card__title{font-size:15px;font-weight:700;letter-spacing:-.03em;line-height:1.4}
+#lw-home .pr-card__text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:13px;line-height:1.6;color:var(--cz-muted)}
+#lw-home .pr-card__meta{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:12px;color:var(--cz-muted)}
+#lw-home .pr-card__product{font-weight:600;color:var(--cz-accent)}
+#lw-home .cz-live .pr-empty{display:none;padding:40px 24px;background:var(--cz-oat);text-align:center;font-size:15px;color:var(--cz-muted)}
+#lw-home .cz-live.is-empty .pr-empty{display:block}
+#lw-home .cz-live.is-empty .pr-grid{display:none}
+#lw-home .cz-head__links{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px}
+#lw-home .cz-head__links .cz-btn{min-height:46px;font-size:14px}
+#lw-home .cz-head__links .cz-btn>span{width:34px;height:34px}
+@media (max-width:1023px){#lw-home .pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* 이벤트 레이어 팝업 (2장 롤링 · 오늘 하루 닫기) */
+.cz-pop{position:fixed;inset:0;z-index:5000;display:grid;place-items:center;padding:20px;background:rgba(40,32,26,.45)}
+.cz-pop[hidden]{display:none}
+.cz-pop__box{position:relative;width:min(400px,100%);background:#fff9f3;box-shadow:0 30px 60px -20px rgba(40,32,26,.5);overflow:hidden}
+.cz-pop__track{display:flex;transition:transform .6s cubic-bezier(.2,.75,.2,1)}
+.cz-pop__slide{flex:0 0 100%;display:block;color:#43372f;text-decoration:none}
+.cz-pop__img{position:relative;aspect-ratio:1/1;overflow:hidden}
+.cz-pop__img img{display:block;width:100%;height:100%;object-fit:cover}
+.cz-pop__badge{position:absolute;left:18px;top:18px;padding:6px 12px;border-radius:999px;background:#43372f;color:#fff9f3;font:600 12px 'Pretendard Variable','Pretendard',sans-serif;letter-spacing:.02em}
+.cz-pop__txt{padding:20px 22px 22px}
+.cz-pop__txt small{display:block;font:italic 400 16px/1.2 'Fraunces',Georgia,serif;color:#a5553a}
+.cz-pop__txt strong{display:block;margin:6px 0 6px;font-size:24px;font-weight:750;letter-spacing:-.05em;line-height:1.25}
+.cz-pop__txt p{margin:0 0 16px;font-size:14px;line-height:1.6;color:#6c5a4f}
+.cz-pop__txt em{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:#43372f;color:#fff9f3;font:600 14px 'Pretendard Variable','Pretendard',sans-serif;font-style:normal}
+.cz-pop__dots{position:absolute;right:16px;top:16px;display:flex;gap:6px}
+.cz-pop__dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.6);cursor:pointer}
+.cz-pop__dots button[aria-current=true]{width:22px;border-radius:999px;background:#fff}
+.cz-pop__bar{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #efe3d6}
+.cz-pop__bar button{padding:15px 10px;border:0;background:#fff;font:600 14px 'Pretendard Variable','Pretendard',sans-serif;color:#43372f;cursor:pointer}
+.cz-pop__bar button+button{border-left:1px solid #efe3d6}
+.cz-pop__bar button:hover{background:#f6ede2}
+
 /* 14. 가이드 */
 #lw-home .cz-journal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
 #lw-home .cz-note{display:block;padding:12px 12px 30px;border-radius:var(--cz-r-lg);transition:transform .4s var(--cz-ease),box-shadow .4s}

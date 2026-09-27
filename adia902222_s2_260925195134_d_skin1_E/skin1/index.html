@@ -342,6 +342,15 @@
     </div>
   </section>
 
+  <!-- 13-1. 최신 포토리뷰 8개 : 상품 사용후기(board_no=4)의 최신 사진 후기를 pet-reviews.js 가 채운다 -->
+  <section class="cz-sec cz-wrap cz-live" aria-labelledby="cz-live-title">
+    <header class="cz-head"><div><p class="cz-kicker">Photo reviews</p><h2 id="cz-live-title">반려가족의 포토리뷰</h2></div>
+      <div class="cz-head__links"><a class="cz-link" href="/board/product/list.html?board_no=4">리뷰 전체 보기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a><a class="cz-btn cz-btn--soft" href="/board/product/list.html?board_no=4">포토리뷰 쓰고 3,000P<span><svg><use href="#cz-arrow"/></svg></span></a></div>
+    </header>
+    <div class="pr-grid" data-pet-photoreviews></div>
+    <p class="pr-empty">아직 등록된 포토리뷰가 없어요. 첫 포토리뷰를 남겨 주세요.</p>
+  </section>
+
   <!-- 14. 가이드 -->
   <section class="cz-sec cz-wrap" aria-labelledby="cz-journal-title">
     <header class="cz-head"><div><p class="cz-kicker">Little notes</p><h2 id="cz-journal-title">함께 지내는 법</h2></div><p>반려생활이 한결 편해지는 작은 메모.</p></header>
@@ -389,4 +398,22 @@
       <img src="/SkinImg/pet/wordmark-petpia.webp" alt="PETPIA — 글자 위에 앞발을 걸친 푸들과 그 옆을 걸어가는 고양이" width="2146" height="724" loading="lazy">
     </div>
   </section>
+
+  <!-- 이벤트 레이어 팝업 : 2장이 4초마다 넘어간다. 오늘 하루 닫기는 그날 자정까지 다시 뜨지 않는다 -->
+  <div class="cz-pop" id="cz-pop" role="dialog" aria-modal="true" aria-label="PETPIA 이벤트" hidden>
+    <div class="cz-pop__box">
+      <div class="cz-pop__track">
+        <a class="cz-pop__slide" href="/coupon/coupon_zone.html">
+          <div class="cz-pop__img"><img src="/SkinImg/pet/coupon-gifts.png" alt="리본을 묶은 선물 상자와 로프 장난감" width="1086" height="1448"><span class="cz-pop__badge">SALE EVENT</span></div>
+          <div class="cz-pop__txt"><small>Lucky coupon</small><strong>최대 반값 쿠폰 뽑기</strong><p>세일 기간, 쿠폰을 뽑아 최대 50% 할인 혜택을 받아 보세요.</p><em>쿠폰 뽑으러 가기 →</em></div>
+        </a>
+        <a class="cz-pop__slide" href="/board/product/list.html?board_no=4">
+          <div class="cz-pop__img"><img src="/SkinImg/pet/submenu-review-puppy.png" alt="보호자의 손에 턱을 기댄 아기 강아지" width="2172" height="724"><span class="cz-pop__badge">REVIEW EVENT</span></div>
+          <div class="cz-pop__txt"><small>Share your moment</small><strong>포토리뷰 쓰면 3,000P</strong><p>상품 사진과 함께 후기를 남기면 적립금 3,000원을 드려요.</p><em>포토리뷰 쓰러 가기 →</em></div>
+        </a>
+      </div>
+      <div class="cz-pop__dots"><button type="button" aria-label="1번 이벤트" aria-current="true"></button><button type="button" aria-label="2번 이벤트" aria-current="false"></button></div>
+      <div class="cz-pop__bar"><button type="button" data-pop-today>오늘 하루 닫기</button><button type="button" data-pop-close>닫기</button></div>
+    </div>
+  </div>
 </main>

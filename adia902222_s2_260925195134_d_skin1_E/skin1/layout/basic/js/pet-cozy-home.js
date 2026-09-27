@@ -290,6 +290,44 @@
     request();
   }
 
+  /* 이벤트 레이어 팝업 : 4초마다 다음 장으로, 오늘 하루 닫기는 자정까지 localStorage 에 기억 */
+  function initPopup() {
+    var pop = document.getElementById('cz-pop');
+    if (!pop) return;
+    var KEY = 'petpia-pop-hide-until';
+    try { if (Number(localStorage.getItem(KEY)) > Date.now()) return; } catch (e) {}
+    var track = pop.querySelector('.cz-pop__track');
+    var dots = Array.from(pop.querySelectorAll('.cz-pop__dots button'));
+    var n = pop.querySelectorAll('.cz-pop__slide').length, cur = 0, timer = null;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function go(i) {
+      cur = (i + n) % n;
+      track.style.transform = 'translateX(' + (-100 * cur) + '%)';
+      dots.forEach(function (d, k) { d.setAttribute('aria-current', String(k === cur)); });
+    }
+    function play() { stop(); if (!reduce && n > 1) timer = setInterval(function () { go(cur + 1); }, 4000); }
+    function stop() { if (timer) clearInterval(timer); timer = null; }
+    function close() { stop(); pop.hidden = true; document.removeEventListener('keydown', onKey); }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    dots.forEach(function (d, k) { d.addEventListener('click', function () { go(k); play(); }); });
+    pop.querySelector('[data-pop-close]').addEventListener('click', close);
+    pop.querySelector('[data-pop-today]').addEventListener('click', function () {
+      var end = new Date(); end.setHours(24, 0, 0, 0);
+      try { localStorage.setItem(KEY, String(end.getTime())); } catch (e) {}
+      close();
+    });
+    pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
+    pop.addEventListener('mouseenter', stop); pop.addEventListener('mouseleave', play);
+    document.addEventListener('keydown', onKey);
+    function open() {
+      // 첫 방문 인트로(로고 화면)가 끝난 뒤에 띄운다
+      if (document.documentElement.classList.contains('st-intro-on')) { setTimeout(open, 800); return; }
+      pop.hidden = false; go(0); play();
+      var first = pop.querySelector('[data-pop-close]'); if (first) first.focus({ preventScroll: true });
+    }
+    setTimeout(open, 1200);
+  }
+
   function initMisc(root) {
     var free = root.querySelector('[data-free-over]'), ship = (window.STORE_CONTENT || {}).shipping;
     if (free && ship && ship.freeBar !== false && ship.freeOver > 0) {
@@ -319,6 +357,7 @@
     if (!root) return;
     initWorldHero(root);
     initWorld(root);
+    initPopup();
     fillPlaceholders(root);
     initFinder(root);
     initHotspots(root);
