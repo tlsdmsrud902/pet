@@ -229,6 +229,8 @@ try{(function(){
 	var c=window.STORE_CONTENT||{},f=document.getElementById('s9Float');if(!f)return;
 	var urls={instagram:(c.social&&c.social.instagram)||'',kakao:(c.floating&&c.floating.kakao)||''};
 	['instagram','kakao'].forEach(function(k){var a=f.querySelector('[data-s9="'+k+'"]');if(a&&urls[k]){a.href=urls[k];a.hidden=false}});
+	/* 카카오톡 버튼은 항상 보이게 : 채널 주소가 비어 있으면 카카오톡 채널 홈으로 */
+	var kk=f.querySelector('[data-s9="kakao"]');if(kk){if(!urls.kakao)kk.href='https://pf.kakao.com/';kk.hidden=false;kk.setAttribute('aria-label','카카오톡 상담')}
 	document.querySelectorAll('[data-st-insta-link]').forEach(function(a){if(urls.instagram){a.href=urls.instagram;a.target='_blank';a.rel='noopener'}});
 	var top=f.querySelector('[data-s9="top"]');
 	top.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})});

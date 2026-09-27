@@ -68,7 +68,9 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 #lw-home .pe-hero-track .pe-hero-scroll i{background:rgba(67,55,47,.18)!important}
 #lw-home .pe-hero-track .pe-hero-scroll i::after{background:#43372f!important}
 #lw-home .pe-hero-track .pe-hero-discover{background:rgba(255,249,243,.94)!important;color:#43372f!important}
-#lw-home .pe-hero-track .pe-hero__visual::after{background:linear-gradient(90deg,#fff9f3 0%,rgba(255,249,243,.99) 18%,rgba(255,249,243,.95) 34%,rgba(255,249,243,.78) 48%,rgba(255,249,243,.45) 62%,rgba(255,249,243,.17) 76%,rgba(255,249,243,0) 91%)!important}
+/* 영상 위 크림막 : 글자 쪽만 옅게 덮어 영상이 선명하게 보이도록 (스크롤해도 짙어지지 않음) */
+#lw-home .pe-hero-track .pe-hero__visual::after{opacity:1!important;background:linear-gradient(90deg,rgba(255,249,243,.8) 0%,rgba(255,249,243,.62) 22%,rgba(255,249,243,.3) 38%,rgba(255,249,243,.08) 50%,rgba(255,249,243,0) 58%)!important}
+@media(min-width:768px){#lw-home .pe-hero-track .pe-hero__copy :is(.pe-display,h1,h2,.pe-description,.pe-eyebrow,p){text-shadow:0 0 22px rgba(255,249,243,.95),0 0 6px rgba(255,249,243,.7)}}
 @media(max-width:767px){#lw-home .pe-hero-track .pe-hero__visual::after{background:linear-gradient(180deg,#fff9f3 0%,rgba(255,249,243,.98) 30%,rgba(255,249,243,.76) 48%,rgba(255,249,243,.28) 65%,rgba(255,249,243,0) 80%)!important}}
 #lw-home .pe-hero-track a.pe-button{min-height:54px!important;padding:7px 7px 7px 24px!important;border:1.5px solid #43372f!important;border-radius:999px!important;background:#43372f!important;color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important;box-shadow:none!important;font-size:15px!important;font-weight:600!important}
 #lw-home .pe-hero-track a.pe-button>span{width:40px!important;height:40px!important;flex-basis:40px!important;background:rgba(255,249,243,.16)!important;color:#fff9f3}
@@ -532,3 +534,11 @@ body:has(#lw-home.pet-cozy) :is(#footer,.footer_margin){margin-top:0!important}
   #lw-home .cz-hotspot{animation:none}
   #lw-home.pet-cozy *{transition:none!important}
 }
+
+/* ==========================================================================
+   통일 규칙 : 섹션 간격 · 제목 · 설명을 한 기준으로 (여기 값만 바꾸면 홈 전체가 같이 바뀐다)
+   ========================================================================== */
+#lw-home{--cz-space:clamp(80px,9vw,128px);--cz-h2:clamp(26px,2.7vw,38px);--cz-desc-gap:14px}
+#lw-home :is(.cz-sec,.cz-perks,.cz-finder,.cz-size,.cz-story,.cz-duo,.cz-starter,.cz-reviews,.cz-help,.cz-brand){margin-top:var(--cz-space)}
+#lw-home :is(.cz-head,.cz-sec,.cz-world__copy,.cz-finder__intro,.cz-size__copy,.cz-story__card,.cz-duo__card,.cz-starter__card,.cz-reviews__copy,.cz-help__member) h2{margin-bottom:0!important;font-size:var(--cz-h2)!important;font-weight:750!important;line-height:1.25!important;letter-spacing:-.045em!important}
+#lw-home :is(.cz-world__copy,.cz-finder__intro,.cz-size__copy,.cz-story__card,.cz-duo__card,.cz-starter__card,.cz-reviews__copy,.cz-help__member) h2+p{margin-top:var(--cz-desc-gap)!important;font-size:15px!important;line-height:1.7!important}
