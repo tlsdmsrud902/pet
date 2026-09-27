@@ -122,14 +122,34 @@
   }
 
   /* 기존 스크롤 히어로 : 스크롤 위치에 따라 영상 → 3장의 사진으로 넘어간다 (pet-editorial.js 에서 옮김) */
+  // 스크롤 연동 공통 : 아이폰 관성 스크롤에서 떨리지 않게
+  //  1) 위치(시작점·거리)는 처음 · 폭이 바뀔 때만 재고, 스크롤 중에는 scrollY 만 읽는다 (매 프레임 레이아웃 계산 없음)
+  //  2) 화면 값은 목표값을 부드럽게 따라간다(lerp) : 스크롤 값이 띄엄띄엄 들어와도 움직임이 끊기지 않는다
+  function scrollFollower(measure, target, draw) {
+    var cur = null, running = false, lastW = window.innerWidth, t = null;
+    function loop() {
+      var goal = target();
+      if (cur === null) cur = goal;
+      cur += (goal - cur) * 0.2;
+      if (Math.abs(goal - cur) < 0.0004) cur = goal;
+      draw(cur);
+      if (cur !== goal) requestAnimationFrame(loop); else running = false;
+    }
+    function kick() { if (!running) { running = true; requestAnimationFrame(loop); } }
+    function remeasure() { clearTimeout(t); t = setTimeout(function () { measure(); kick(); }, 120); }
+    measure();
+    window.addEventListener('scroll', kick, { passive: true });
+    // 아이폰 주소창이 접히며 생기는 세로 크기 변화는 무시하고, 폭이 바뀔 때만 다시 잰다
+    window.addEventListener('resize', function () { if (window.innerWidth !== lastW) { lastW = window.innerWidth; remeasure(); } else kick(); });
+    window.addEventListener('load', remeasure);
+    return { kick: kick, remeasure: remeasure, jump: function (v) { cur = v; draw(v); } };
+  }
+
   function initWorldHero(root) {
     var track = root.querySelector('[data-scroll-hero]');
     if (!track) return;
     var hero = track.querySelector('.pe-hero');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // 모바일 : 스크롤 연동을 끄고 한 화면에서 장면이 5초마다 부드럽게 바뀐다 (아이폰 관성 스크롤에서 떨려 보이는 문제)
-    var auto = window.matchMedia('(max-width: 767px)');
-    var autoTimer = null;
     var images = Array.from(track.querySelectorAll('[data-world-image]'));
     var copies = Array.from(track.querySelectorAll('[data-world-copy]'));
     var route = Array.from(track.querySelectorAll('[data-world-jump]'));
@@ -143,56 +163,49 @@
     }
     var clamp = function (n) { return Math.max(0, Math.min(1, n)); };
     var smooth = function (n) { n = clamp(n); return n * n * (3 - 2 * n); };
-    var active = -1, scheduled = false;
+    var last = images.length - 1, active = -1;
     function drawScene(position) {
-      var index = Math.min(images.length - 1, Math.floor(position + .5));
-      hero.style.setProperty('--hero-progress', position / Math.max(1, images.length - 1));
+      var index = Math.min(last, Math.floor(position + .5));
+      hero.style.setProperty('--hero-progress', (position / Math.max(1, last)).toFixed(4));
       images.forEach(function (img, i) {
-        img.style.opacity = String(1 - smooth((Math.abs(position - i) - .28) / .44));
-        img.setAttribute('aria-hidden', String(i !== index));
-        img.style.transform = (reduce.matches || auto.matches) ? 'none' : 'scale(' + (1.02 + clamp(position - i + .5) * .09) + ')';
-        if (img.tagName === 'VIDEO') { if (i === index) { var p = img.play(); if (p && p.catch) p.catch(function () {}); } else img.pause(); }
+        img.style.opacity = (1 - smooth((Math.abs(position - i) - .28) / .44)).toFixed(3);
+        img.style.transform = reduce.matches ? 'none' : 'translate3d(0,0,0) scale(' + (1.02 + clamp(position - i + .5) * .09).toFixed(4) + ')';
       });
       copies.forEach(function (copy, i) {
-        copy.style.opacity = String(1 - smooth((Math.abs(position - i) - .22) / .35));
-        copy.style.transform = (reduce.matches || auto.matches) ? 'none' : 'translateY(' + ((i - position) * 24) + 'px)';
-        copy.style.pointerEvents = i === index ? 'auto' : 'none';
-        copy.inert = i !== index;
-        copy.setAttribute('aria-hidden', String(i !== index));
+        copy.style.opacity = (1 - smooth((Math.abs(position - i) - .22) / .35)).toFixed(3);
+        copy.style.transform = reduce.matches ? 'none' : 'translate3d(0,' + ((i - position) * 24).toFixed(2) + 'px,0)';
       });
       if (index !== active) {
         active = index;
+        images.forEach(function (img, i) {
+          img.setAttribute('aria-hidden', String(i !== index));
+          if (img.tagName === 'VIDEO') { if (i === index) { var p = img.play(); if (p && p.catch) p.catch(function () {}); } else img.pause(); }
+        });
+        copies.forEach(function (copy, i) {
+          copy.style.pointerEvents = i === index ? 'auto' : 'none';
+          copy.inert = i !== index;
+          copy.setAttribute('aria-hidden', String(i !== index));
+        });
         route.forEach(function (b, i) { b.setAttribute('aria-pressed', String(i === index)); });
         if (label) label.textContent = labels[index];
       }
     }
-    function frame() {
-      scheduled = false;
-      if (reduce.matches || auto.matches) return;
+    var m = { start: 0, dist: 1 };
+    var follow = scrollFollower(function () {
       var top = parseFloat(getComputedStyle(hero).top) || 0;
-      var distance = Math.max(1, track.offsetHeight - hero.offsetHeight);
-      drawScene(clamp((top - track.getBoundingClientRect().top) / distance) * Math.max(1, images.length - 1));
-    }
-    function requestFrame() { if (!scheduled) { scheduled = true; requestAnimationFrame(frame); } }
+      m.start = track.getBoundingClientRect().top + window.scrollY - top;
+      m.dist = Math.max(1, track.offsetHeight - hero.offsetHeight);
+    }, function () {
+      return reduce.matches ? 0 : clamp((window.scrollY - m.start) / m.dist) * Math.max(1, last);
+    }, drawScene);
     route.forEach(function (button, i) {
       button.addEventListener('click', function () {
-        if (reduce.matches || auto.matches) { drawScene(i); startAuto(); return; }
-        var top = parseFloat(getComputedStyle(hero).top) || 0;
-        var start = track.getBoundingClientRect().top + scrollY - top;
-        window.scrollTo({ top: Math.max(0, start + (track.offsetHeight - hero.offsetHeight) * i / Math.max(1, route.length - 1)), behavior: 'smooth' });
+        if (reduce.matches) { follow.jump(i); return; }
+        window.scrollTo({ top: Math.max(0, m.start + m.dist * i / Math.max(1, route.length - 1)), behavior: 'smooth' });
       });
     });
-    window.addEventListener('scroll', requestFrame, { passive: true });
-    window.addEventListener('resize', requestFrame, { passive: true });
-    function startAuto() {
-      clearInterval(autoTimer); autoTimer = null;
-      track.classList.toggle('is-auto', auto.matches);
-      if (!auto.matches || reduce.matches || images.length < 2) return;
-      autoTimer = setInterval(function () { drawScene((active + 1) % images.length); }, 5000);
-    }
-    reduce.addEventListener('change', function () { drawScene(0); requestFrame(); startAuto(); });
-    auto.addEventListener('change', function () { drawScene(0); requestFrame(); startAuto(); });
-    drawScene(0); requestFrame(); startAuto();
+    if ('ResizeObserver' in window) new ResizeObserver(follow.remeasure).observe(track);
+    reduce.addEventListener('change', function () { follow.jump(0); follow.kick(); });
   }
 
   /* Scroll World (이미지 전용) : 섹션을 스크롤하는 동안 장면마다 카메라가 날아 들어갔다가(가까워짐) 지나간다.
@@ -383,51 +396,46 @@
   }
 
   // 신상품 : 섹션을 화면에 고정하고, 고정된 동안 내린 거리만큼 상품 줄을 가로로 민다
+  //  · 무대(stage)는 콘텐츠 높이만큼만 차지하고 화면 세로 가운데에 멈춘다 → 섹션 위아래에 빈 공간이 생기지 않는다
   function initRailPin(root) {
     var pin = root.querySelector('[data-rail-pin]');
     if (!pin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var section = pin.closest('.cz-products--pin'), stage = pin.querySelector('.cz-pin__stage');
     var now = pin.querySelector('[data-rail-now]'), total = pin.querySelector('[data-rail-total]');
-    var track = null, items = [], dist = 0, lead = -1, raf = 0;
-    // 모바일은 고정(핀) 없이 손가락으로 넘기는 가로 목록 : 섹션 위아래 빈 공간과 스크롤 떨림을 없앤다
-    var mobile = window.matchMedia('(max-width: 767px)');
+    var track = null, items = [], lead = -1;
+    var m = { start: 0, dist: 0 };
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     function measure() {
       track = section.querySelector('.ec-base-product:not([hidden]) .prdList') || section.querySelector('.cz-placeholder:not([hidden])');
       if (!track) return;
-      if (mobile.matches) { section.classList.remove('is-pinned'); pin.style.height = ''; dist = 0; section.style.removeProperty('--cz-rail-x'); return; }
       section.classList.add('is-pinned');
       section.style.setProperty('--cz-rail-x', '0px');
       items = Array.from(track.children);
-      dist = Math.max(0, track.scrollWidth - track.clientWidth);
-      if (dist < 8) { section.classList.remove('is-pinned'); pin.style.height = ''; return; }
-      pin.style.height = (stage.offsetHeight + dist) + 'px';
+      m.dist = Math.max(0, track.scrollWidth - track.clientWidth);
+      if (m.dist < 8) { section.classList.remove('is-pinned'); pin.style.height = ''; m.dist = 0; return; }
+      var head = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cz-head')) || 90;
+      var vh = document.documentElement.clientHeight;
+      var top = Math.max(head, Math.round(head + (vh - head - stage.offsetHeight) / 2));
+      section.style.setProperty('--cz-stage-top', top + 'px');
+      pin.style.height = (stage.offsetHeight + m.dist) + 'px';
+      m.start = pin.getBoundingClientRect().top + window.scrollY - top;
       if (total) total.textContent = pad(items.length);
-      update();
     }
-    function update() {
-      raf = 0;
-      if (!dist) return;
-      var top = parseFloat(getComputedStyle(stage).top) || 0;
-      var p = Math.min(1, Math.max(0, (top - pin.getBoundingClientRect().top) / dist));
-      section.style.setProperty('--cz-rail-x', (p * dist).toFixed(1) + 'px');
+    function target() { return m.dist ? Math.min(1, Math.max(0, (window.scrollY - m.start) / m.dist)) : 0; }
+    function draw(p) {
+      if (!m.dist) return;
+      section.style.setProperty('--cz-rail-x', (p * m.dist).toFixed(1) + 'px');
       section.style.setProperty('--cz-rail-p', Math.max(0.04, p).toFixed(3));
       var i = Math.round(p * (items.length - 1));
-      if (now) now.textContent = pad(i + 1);
       if (i !== lead) {
+        if (now) now.textContent = pad(i + 1);
         if (items[lead]) items[lead].classList.remove('is-lead');
         if (items[i]) items[i].classList.add('is-lead');
         lead = i;
       }
     }
-    function onScroll() { if (!raf) raf = requestAnimationFrame(update); }
-    var t = null;
-    function remeasure() { clearTimeout(t); t = setTimeout(measure, 150); }
-    measure();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', remeasure);
-    window.addEventListener('load', measure);
-    if ('ResizeObserver' in window && track) new ResizeObserver(remeasure).observe(track);
+    var follow = scrollFollower(measure, target, draw);
+    if ('ResizeObserver' in window && track) new ResizeObserver(follow.remeasure).observe(track);
   }
 
   // 9. 장면 속 상품 : PC 에서는 무대를 고정하고 스크롤한 만큼 장면을 한 장씩 옆으로 넘긴다(장면마다 잠깐 머묾).

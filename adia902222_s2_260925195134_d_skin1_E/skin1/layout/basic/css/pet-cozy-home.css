@@ -685,19 +685,26 @@ html.cz-qv-open{overflow:hidden}
 #lw-home .pe-hero .pe-hero__copy .pe-button,#lw-home .pe-hero .pe-hero__copy .pe-button *{color:#43372f!important;-webkit-text-fill-color:#43372f!important}
 }
 
-/* 모바일 메인 히어로 : 스크롤 연동 없이 한 화면(고정 높이)에서 장면이 부드럽게 바뀐다 (pet-cozy-home.js initWorldHero 의 is-auto) */
-@media (max-width:767px){
-#lw-home .pe-hero-track.is-auto{height:auto!important;min-height:0!important}
-#lw-home .pe-hero-track.is-auto .pe-hero{position:relative!important;top:auto!important;height:calc(100svh - 90px)!important;min-height:560px!important;max-height:760px!important}
-#lw-home .pe-hero-track.is-auto .pe-world-image,#lw-home .pe-hero-track.is-auto .pe-hero__copy{transition:opacity .9s ease!important;will-change:opacity}
-}
-
-/* 모바일 신상품 : 고정(핀) 없이 손가락으로 넘기는 가로 목록 (2열 그리드 규칙이 첫 두 칸을 0 으로 만들던 문제 수정) */
-@media (max-width:767px){
-#lw-home section.cz-products--rail :is(.prdList,.cz-placeholder){grid-template-columns:none!important;grid-auto-flow:column!important;grid-auto-columns:44%!important;overflow-x:auto!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;transform:none!important}
-#lw-home section.cz-products--pin .cz-pin__stage{position:static!important;min-height:0!important}
-}
-
 /* 타이머 팝업 : 사진을 타이머 띠 높이만큼 내려, 타이머에 가려지지 않고 강아지가 사진 가운데쯤 오게 한다 (위 틈은 타이머 띠 뒤에 숨음) */
 .cz-pop__slide--timer .cz-pop__img{background:#e9e3d8}
 .cz-pop__slide--timer .cz-pop__img img{object-position:76% 100%!important;transform:translateY(47px)}
+
+/* 스크롤 연동 떨림 방지 : 움직이는 사진·영상·글자를 GPU 레이어로 분리해 매 프레임 다시 그리지 않게 한다 */
+#lw-home .pe-world-image,#lw-home .pe-hero__copy{will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#lw-home .cz-products--pin.is-pinned :is(.prdList,.cz-placeholder){backface-visibility:hidden;-webkit-backface-visibility:hidden}
+
+/* 모바일 신상품 : 고정(핀) + 가로 이동은 그대로. 무대는 콘텐츠 높이만큼만 차지하고 화면 가운데(JS 가 --cz-stage-top 계산)에 멈춰 위아래 빈 공간이 없다.
+   2열 그리드 규칙이 가로 줄의 첫 두 칸을 0 으로 만들던 문제도 여기서 되돌린다 */
+@media (max-width:767px){
+#lw-home section.cz-products--rail :is(.prdList,.cz-placeholder){grid-template-columns:none!important;grid-auto-flow:column!important;grid-auto-columns:44%!important}
+#lw-home .cz-products--pin.is-pinned .cz-pin__stage{top:var(--cz-stage-top,90px);min-height:0!important;justify-content:flex-start}
+}
+
+/* 모바일 가로 잘림 없애기 : 카테고리 8개는 4칸 × 2줄, 가이드 카드 3장은 세로로 쌓아 모두 보이게 */
+@media (max-width:767px){
+#lw-home ul.cz-cats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-auto-flow:row!important;grid-auto-columns:auto!important;gap:18px 10px!important;overflow:visible!important;scroll-snap-type:none!important;padding:0!important;margin-left:0!important;margin-right:0!important}
+#lw-home ul.cz-cats > li{width:auto!important;min-width:0!important;flex:none!important}
+#lw-home div.cz-journal{display:grid!important;grid-template-columns:1fr!important;grid-auto-flow:row!important;grid-auto-columns:auto!important;gap:16px!important;overflow:visible!important;scroll-snap-type:none!important;padding:0!important;margin-left:0!important;margin-right:0!important}
+#lw-home div.cz-journal > *{width:auto!important;min-width:0!important;flex:none!important}
+#lw-home div.cz-journal img{aspect-ratio:16/10!important;height:auto!important;object-fit:cover}
+}
