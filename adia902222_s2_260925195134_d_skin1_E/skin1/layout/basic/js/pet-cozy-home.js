@@ -126,24 +126,25 @@
   //  1) 위치(시작점·거리)는 처음 · 폭이 바뀔 때만 재고, 스크롤 중에는 scrollY 만 읽는다 (매 프레임 레이아웃 계산 없음)
   //  2) 화면 값은 목표값을 부드럽게 따라간다(lerp) : 스크롤 값이 띄엄띄엄 들어와도 움직임이 끊기지 않는다
   function scrollFollower(measure, target, draw) {
-    var cur = null, running = false, lastW = window.innerWidth, t = null;
+    var cur = null, drawn = null, running = false, lastW = window.innerWidth, t = null;
     function loop() {
       var goal = target();
       if (cur === null) cur = goal;
       cur += (goal - cur) * 0.2;
       if (Math.abs(goal - cur) < 0.0004) cur = goal;
-      draw(cur);
+      // 값이 그대로면 아무것도 쓰지 않는다 : 화면 밖 섹션은 스크롤해도 스타일을 건드리지 않는다
+      if (cur !== drawn) { drawn = cur; draw(cur); }
       if (cur !== goal) requestAnimationFrame(loop); else running = false;
     }
     function kick() { if (!running) { running = true; requestAnimationFrame(loop); } }
-    function remeasure() { clearTimeout(t); t = setTimeout(function () { measure(); kick(); }, 120); }
+    function remeasure() { clearTimeout(t); t = setTimeout(function () { measure(); drawn = null; kick(); }, 120); }
     measure();
     window.addEventListener('scroll', kick, { passive: true });
     // 아이폰 주소창이 접히며 생기는 세로 크기 변화는 무시하고, 폭이 바뀔 때만 다시 잰다
     window.addEventListener('resize', function () { if (window.innerWidth !== lastW) { lastW = window.innerWidth; remeasure(); } else kick(); });
     window.addEventListener('load', remeasure);
     window.addEventListener('cz:head', remeasure);   // 띠배너를 닫아 헤더 위치가 바뀌면 다시 잰다
-    return { kick: kick, remeasure: remeasure, jump: function (v) { cur = v; draw(v); } };
+    return { kick: kick, remeasure: remeasure, jump: function (v) { cur = drawn = v; draw(v); } };
   }
 
   function initWorldHero(root) {
@@ -165,9 +166,12 @@
     var clamp = function (n) { return Math.max(0, Math.min(1, n)); };
     var smooth = function (n) { n = clamp(n); return n * n * (3 - 2 * n); };
     var last = images.length - 1, active = -1;
+    // --hero-progress 는 쓰는 곳(사진 위 덮개, 진행 막대)에만 넣는다. 히어로 전체에 넣으면 영상·사진까지 매 프레임 스타일을 다시 계산해 아이폰에서 떨린다
+    var progressEls = [track.querySelector('.pe-hero__visual'), track.querySelector('.pe-hero-scroll i')].filter(Boolean);
     function drawScene(position) {
       var index = Math.min(last, Math.floor(position + .5));
-      hero.style.setProperty('--hero-progress', (position / Math.max(1, last)).toFixed(4));
+      var prog = (position / Math.max(1, last)).toFixed(4);
+      progressEls.forEach(function (el) { el.style.setProperty('--hero-progress', prog); });
       images.forEach(function (img, i) {
         img.style.opacity = (1 - smooth((Math.abs(position - i) - .28) / .44)).toFixed(3);
         img.style.transform = reduce.matches ? 'none' : 'translate3d(0,0,0) scale(' + (1.02 + clamp(position - i + .5) * .09).toFixed(4) + ')';
@@ -403,17 +407,21 @@
     if (!pin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var section = pin.closest('.cz-products--pin'), stage = pin.querySelector('.cz-pin__stage');
     var now = pin.querySelector('[data-rail-now]'), total = pin.querySelector('[data-rail-total]');
+    var bar = pin.querySelector('.cz-pin__bar i');
     var track = null, items = [], lead = -1;
+    // 위치는 상품 줄(track)과 진행 막대에만 직접 넣는다. 섹션 전체에 CSS 변수를 넣으면 카드 10장을 매 프레임 다시 계산해 아이폰에서 떨린다
+    function setX(x) { if (track) track.style.setProperty('transform', 'translate3d(' + (-x).toFixed(1) + 'px,0,0)', 'important'); }
+    function setP(p) { if (bar) bar.style.setProperty('transform', 'scaleX(' + Math.max(0.04, p).toFixed(3) + ')'); }
     var m = { start: 0, dist: 0 };
     var pad = function (n) { return (n < 10 ? '0' : '') + n; };
     function measure() {
       track = section.querySelector('.ec-base-product:not([hidden]) .prdList') || section.querySelector('.cz-placeholder:not([hidden])');
       if (!track) return;
       section.classList.add('is-pinned');
-      section.style.setProperty('--cz-rail-x', '0px');
+      setX(0);
       items = Array.from(track.children);
       m.dist = Math.max(0, track.scrollWidth - track.clientWidth);
-      if (m.dist < 8) { section.classList.remove('is-pinned'); pin.style.height = ''; m.dist = 0; return; }
+      if (m.dist < 8) { section.classList.remove('is-pinned'); pin.style.height = ''; m.dist = 0; track.style.removeProperty('transform'); return; }
       var hd = document.getElementById('header'), head = hd ? Math.round(hd.getBoundingClientRect().bottom) : 90;
       var vh = document.documentElement.clientHeight;
       var top = Math.max(head, Math.round(head + (vh - head - stage.offsetHeight) / 2));
@@ -425,8 +433,8 @@
     function target() { return m.dist ? Math.min(1, Math.max(0, (window.scrollY - m.start) / m.dist)) : 0; }
     function draw(p) {
       if (!m.dist) return;
-      section.style.setProperty('--cz-rail-x', (p * m.dist).toFixed(1) + 'px');
-      section.style.setProperty('--cz-rail-p', Math.max(0.04, p).toFixed(3));
+      setX(p * m.dist);
+      setP(p);
       var i = Math.round(p * (items.length - 1));
       if (i !== lead) {
         if (now) now.textContent = pad(i + 1);
