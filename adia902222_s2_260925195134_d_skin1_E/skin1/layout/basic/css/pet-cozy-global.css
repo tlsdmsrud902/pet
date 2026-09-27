@@ -98,7 +98,7 @@ body:not(:has(#lw-home)) :is(a,button).btnNormal,body:not(:has(#lw-home)) :is(a,
 body:not(:has(#lw-home)) :is(.btnSubmit,.btnSubmitFix,.btnStrong,.btnNormal,.btnNormalFix,.btnBasic).gFull,
 body:not(:has(#lw-home)) .xans-member-login .login__util div:nth-child(3)>a,body:not(:has(#lw-home)) .xans-member-login .login__sns .wrap_sns_log a,
 html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn){border-radius:999px!important}
-.pet-page-hero nav a,html.st-sale-on #contents :is(.sl-coupon,.sl-cp__back){border-radius:0!important}
+.pet-page-hero nav a,html.st-sale-on #contents .sl-coupon{border-radius:0!important}
 
 /* 포토리뷰 (pet-reviews.js) — 모든 상품 카드 아래 리뷰 요약 + 포토리뷰 2개 */
 .pr-stars{color:#e8866a;letter-spacing:.04em}
@@ -159,4 +159,15 @@ html.st-sale-on #contents .sl-cp__cards.is-stage-2:not(.is-ready) .sl-cp__card{o
   html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(n+2){margin-left:-15%!important}
   html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(1){--sx:64%!important}
   html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(3){--sx:-64%!important}
+}
+
+/* 쿠폰 카드 : 앞·뒤·열린 면 모두 같은 둥근 모서리, 카드 크기는 조금 작게 (2026-09-27) */
+html.st-sale-on #contents .sl-cp__face{border-radius:clamp(14px,1.6vw,26px)!important;overflow:hidden}
+@media (min-width:768px){
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card{width:24%}
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(n+2){margin-left:-7.2%}
+}
+@media (max-width:767px){
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card{width:36%!important}
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(n+2){margin-left:-12.8%!important}
 }

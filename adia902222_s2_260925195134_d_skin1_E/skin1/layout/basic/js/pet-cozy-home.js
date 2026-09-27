@@ -297,16 +297,52 @@
     if (!pop) return;
     var KEY = 'petpia-pop-hide-until';
     try { if (Number(localStorage.getItem(KEY)) > Date.now()) return; } catch (e) {}
+    var SC = window.STORE_CONTENT || {}, cfg = SC.popup;
+    if (cfg && cfg.enabled === false) return;
     var track = pop.querySelector('.cz-pop__track');
+    // store-content.js 의 popup.slides 로 팝업 장을 다시 그린다 (없으면 HTML 기본값 그대로)
+    if (cfg && cfg.slides && cfg.slides.length) {
+      var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]; }); };
+      var saleEnd = (SC.sale && SC.sale.timer && SC.sale.timer.endAt) || '';
+      track.innerHTML = cfg.slides.map(function (s) {
+        var timed = s.type === 'timer';
+        return '<a class="cz-pop__slide' + (timed ? ' cz-pop__slide--timer' : '') + '" href="' + esc(s.link || '#') + '">'
+          + '<div class="cz-pop__img"><img src="' + esc(s.image) + '" alt="' + esc(s.imageAlt) + '"' + (s.imagePosition ? ' style="object-position:' + esc(s.imagePosition) + '"' : '') + '>'
+          + (s.badge ? '<span class="cz-pop__badge">' + esc(s.badge) + '</span>' : '')
+          + (timed ? '<div class="cz-pop__timer" data-end="' + esc(s.endAt || saleEnd) + '" data-ended="' + esc(s.endedText || '이벤트가 종료되었습니다') + '"><span class="cz-pop__tlab"><i></i>' + esc(s.timerLabel || '이벤트 마감까지') + '</span><span class="cz-pop__tval"></span></div>' : '')
+          + '</div><div class="cz-pop__txt">'
+          + (s.kicker ? '<small>' + esc(s.kicker) + '</small>' : '') + (s.title ? '<strong>' + esc(s.title) + '</strong>' : '')
+          + (s.text ? '<p>' + esc(s.text) + '</p>' : '') + (s.button ? '<em>' + esc(s.button) + '</em>' : '')
+          + '</div></a>';
+      }).join('');
+      var dotBox = pop.querySelector('.cz-pop__dots');
+      if (dotBox) dotBox.innerHTML = cfg.slides.map(function (s, k) { return '<button type="button" aria-label="' + (k + 1) + '번 이벤트" aria-current="' + (k === 0) + '"></button>'; }).join('');
+    }
+    // 타이머 팝업 : 남은 시간을 1초마다 갱신
+    var clocks = Array.from(pop.querySelectorAll('.cz-pop__timer'));
+    function parseEnd(s) { var m = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/); return m ? Date.UTC(+m[1], m[2] - 1, +m[3], (m[4] || 23) - 9, m[5] || 59) : NaN; }
+    function tick() {
+      var now = Date.now();
+      clocks.forEach(function (el) {
+        var end = parseEnd(el.getAttribute('data-end')), out = el.querySelector('.cz-pop__tval');
+        if (isNaN(end)) { el.hidden = true; return; }
+        var left = Math.max(0, Math.floor((end - now) / 1000));
+        if (!left) { el.classList.add('is-ended'); out.textContent = el.getAttribute('data-ended'); return; }
+        var d = Math.floor(left / 86400), p = function (v) { return (v < 10 ? '0' : '') + v; };
+        out.innerHTML = '<b>' + d + '</b><small>일</small><b>' + p(Math.floor(left % 86400 / 3600)) + '</b>:<b>' + p(Math.floor(left % 3600 / 60)) + '</b>:<b>' + p(left % 60) + '</b>';
+      });
+    }
+    if (clocks.length) { tick(); setInterval(tick, 1000); }
     var dots = Array.from(pop.querySelectorAll('.cz-pop__dots button'));
     var n = pop.querySelectorAll('.cz-pop__slide').length, cur = 0, timer = null;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var gap = cfg && cfg.interval != null ? Number(cfg.interval) * 1000 : 4000;
     function go(i) {
       cur = (i + n) % n;
       track.style.transform = 'translateX(' + (-100 * cur) + '%)';
       dots.forEach(function (d, k) { d.setAttribute('aria-current', String(k === cur)); });
     }
-    function play() { stop(); if (!reduce && n > 1) timer = setInterval(function () { go(cur + 1); }, 4000); }
+    function play() { stop(); if (!reduce && n > 1 && gap > 0) timer = setInterval(function () { go(cur + 1); }, gap); }
     function stop() { if (timer) clearInterval(timer); timer = null; }
     function close() { stop(); pop.hidden = true; document.removeEventListener('keydown', onKey); }
     function onKey(e) { if (e.key === 'Escape') close(); }
@@ -325,7 +361,7 @@
       if (document.documentElement.classList.contains('st-intro-on')) { setTimeout(open, 800); return; }
       pop.hidden = false; go(0); play();
     }
-    setTimeout(open, 1200);
+    setTimeout(open, cfg && cfg.delay != null ? Number(cfg.delay) * 1000 : 1200);
   }
 
   function initMisc(root) {

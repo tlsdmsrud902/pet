@@ -643,3 +643,15 @@ html.cz-qv-open{overflow:hidden}
 #lw-home .cz-size__art.is-played .cz-size__hint{opacity:0}
 #lw-home .cz-size__steps li{transition:background .25s,box-shadow .25s}
 #lw-home .cz-size__steps li.is-on{background:#fff;box-shadow:inset 0 0 0 2px var(--cz-coral)}
+
+/* 이벤트 팝업 타이머 (store-content.js popup.slides 의 type:'timer') : 사진 아래쪽에 겹치는 어두운 띠 */
+.cz-pop__timer{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:12px;padding:11px 14px;background:linear-gradient(90deg,rgba(24,25,36,.94),rgba(43,44,58,.94) 50%,rgba(24,25,36,.94));color:#fff;font:600 13px/1 'Pretendard Variable','Pretendard',sans-serif}
+.cz-pop__timer[hidden]{display:none}
+.cz-pop__tlab{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.cz-pop__tlab i{width:7px;height:7px;border-radius:50%;background:#f25c6b;box-shadow:0 0 0 3px rgba(242,92,107,.25);animation:czPopBlink 1.4s ease-in-out infinite}
+.cz-pop__tval{display:inline-flex;align-items:baseline;gap:3px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cz-pop__tval b{display:inline-block;min-width:1.9em;padding:5px 4px;border-radius:5px;background:#0f1018;box-shadow:inset 0 -1px 0 rgba(255,255,255,.12);font-size:15px;font-weight:800;text-align:center}
+.cz-pop__tval small{margin:0 5px 0 2px;font-size:11px;font-weight:500;opacity:.75}
+.cz-pop__timer.is-ended .cz-pop__tval{font-size:13px}
+@keyframes czPopBlink{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.cz-pop__tlab i{animation:none}}

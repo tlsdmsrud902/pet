@@ -236,6 +236,10 @@ html.st-sale-on #container #contents > .product_top_image { margin:0; padding:0;
 	box-sizing:border-box;
 }
 
+/* 타이머 + 히어로는 화면 끝에서 끝까지 (공통 CSS의 좌우 여백 !important 를 되돌린다). 띠와 타일은 본문 폭 그대로 */
+html.st-sale-on body #container #contents > .st-sale-event { width:100% !important; max-width:none !important; margin-left:0 !important; margin-right:0 !important; }
+html.st-sale-on #contents .st-sale-event > :not(.sl-timer):not(.sl-hero) { width:calc(100% - var(--st-gutter, 48px) * 2); margin-left:auto; margin-right:auto; box-sizing:border-box; }
+
 /* 공통 : 버튼 / 라벨 / 등장 */
 html.st-sale-on #contents .sl-btn {
 	display:inline-block;
@@ -1387,10 +1391,6 @@ html.st-sale-on #contents .sl-end__sub {
 </div>
 <div data-st-sale>
 	<section class="pet-sale-help"><header><small>BEFORE YOU CHECK OUT</small><h3>기분 좋은 쇼핑의 마무리.</h3><p>구매 전에 알아두면 좋은 세 가지.</p></header><div><article><span>01 / FIT</span><h4>사이즈를 한 번 더</h4><p>상품별 치수와 실제 사용 크기를 비교해주세요. 같은 사이즈 이름도 제품마다 다를 수 있어요.</p><a href="/pet/guide.html">선택 가이드 ↗</a></article><article><span>02 / BENEFITS</span><h4>쿠폰 조건 확인하기</h4><p>발급된 쿠폰의 적용 상품, 최소 주문 금액, 사용 기간을 확인해주세요.</p><a href="/myshop/coupon/coupon.html">내 쿠폰 보기 ↗</a></article><article><span>03 / HELP</span><h4>궁금한 점은 편하게</h4><p>배송·교환 조건은 각 상품 상세 안내에서 확인하고, 추가 질문은 게시판에 남겨주세요.</p><a href="/board/product/list.html?board_no=6">상품 문의하기 ↗</a></article></div></section>
-	<section class="sl-end sl-rv">
-		<h3 class="sl-end__title" data-st-text="sale.end.title">Be Yourself</h3>
-		<p class="sl-end__sub" data-st-text="sale.end.sub">Some pieces stay longer</p>
-	</section>
 </div>
 <script>
 	(function () {

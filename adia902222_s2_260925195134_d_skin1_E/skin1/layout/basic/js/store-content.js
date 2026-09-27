@@ -234,6 +234,50 @@ window.STORE_CONTENT = {
 	},
 
 	/* ---------------------------------------------------------------------
+	   3-4c. 메인 이벤트 팝업 (첫 화면에 뜨는 카드 팝업)             BUYER EDITABLE
+	   · 팝업 한 장 = slides 안의 { … } 한 덩어리. 덩어리를 복사해 붙이면 장이 늘고, 지우면 줄어듭니다.
+	   · type : 'timer'  = 사진 아래쪽에 "이벤트 마감까지 ○일 ○○:○○:○○" 타이머가 붙는 팝업
+	            'normal' = 타이머 없는 일반 팝업
+	   · endAt : 타이머 종료 시각(한국시간 'YYYY-MM-DD HH:MM'). 비워 두면 아래 sale.timer.endAt 을 씁니다.
+	   · image : 사진 주소. imagePosition 은 사진에서 보일 자리('가로% 세로%', 예: '75% 40%')
+	   · 팝업을 끄려면 enabled: false
+	   --------------------------------------------------------------------- */
+	popup: {
+		enabled: true,
+		delay: 1.2,                          // 페이지가 열리고 몇 초 뒤에 띄울지
+		interval: 4,                         // 몇 초마다 다음 장으로 넘길지 (0 이면 자동으로 넘기지 않음)
+		slides: [
+			{
+				type: 'timer',
+				badge: 'SALE EVENT',
+				kicker: 'Lucky coupon',
+				title: '최대 50% 쿠폰 뽑기',
+				text: '세일 기간, 쿠폰을 뽑아 최대 50% 할인 혜택을 받아 보세요.',
+				button: '쿠폰 뽑으러 가기 →',
+				link: '/product/list.html?cate_no=27',
+				image: '/SkinImg/pet/sale-hero.png',
+				imageAlt: '선물 상자 사이에 앉은 코기',
+				imagePosition: '76% 30%',
+				timerLabel: '이벤트 마감까지',
+				endAt: '',
+				endedText: '이벤트가 종료되었습니다'
+			},
+			{
+				type: 'normal',
+				badge: 'REVIEW EVENT',
+				kicker: 'Share your moment',
+				title: '포토리뷰 쓰면 3,000P',
+				text: '상품 사진과 함께 후기를 남기면 적립금 3,000원을 드려요.',
+				button: '포토리뷰 쓰러 가기 →',
+				link: '/board/product/list.html?board_no=4',
+				image: '/SkinImg/pet/hero-home.png',
+				imageAlt: '부클 베드에서 나란히 쉬는 푸들과 고양이',
+				imagePosition: '66% 50%'
+			}
+		]
+	},
+
+	/* ---------------------------------------------------------------------
 	   3-4b. 우측 플로팅 버튼 (인스타그램 · 카카오톡 · TOP)          BUYER EDITABLE
 	   인스타그램 주소는 위 social.instagram 을 씁니다. 주소가 비어 있는 버튼은 숨겨집니다.
 	   kakao 에는 카카오톡 채널 주소(예: https://pf.kakao.com/_xxxx)를 넣으세요.
@@ -276,7 +320,7 @@ window.STORE_CONTENT = {
 		coupon: {                            // 세일 페이지 "랜덤 쿠폰 뽑기" (세일 아이템 바로 위)
 			enabled: true,                   // false 면 숨김
 			eyebrow: 'RANDOM COUPON',
-			title: '최대 반값 쿠폰 뽑기',
+			title: '최대 50% 쿠폰 뽑기',
 			kicker: '뽑으면 무조건 당첨',           // 제목 위 한 줄 문구
 			bubble: '5%부터 50%까지',              // 카드 위 말풍선 문구 (뒤에 강조 단어가 붙습니다)
 			bubbleEm: '랜덤',                       // 말풍선의 굵은 강조 단어
