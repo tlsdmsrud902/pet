@@ -39,9 +39,18 @@ body #wrap,body #container{background:transparent}
 #footer a:hover{color:var(--cz-ink)}
 #aside{background:var(--cz-bg)!important}
 
-/* 맨 위로 버튼 */
-.st-totop{background:var(--cz-ink)!important;box-shadow:0 10px 22px -10px rgba(67,55,47,.6)!important}
-.st-totop:hover,.st-totop:focus-visible{background:var(--cz-coral)!important}
+/* 우측 하단 버튼 : 최근 본 상품(위) · 맨 위로(아래)를 한 줄로 쌓고 같은 모양으로 */
+:root{--cz-fab:48px;--cz-fab-r:clamp(16px,2.4vw,36px);--cz-fab-b:28px}
+@media (max-width:1024px){:root{--cz-fab:44px;--cz-fab-r:14px;--cz-fab-b:16px}}
+.st-totop{right:var(--cz-fab-r)!important;bottom:var(--cz-fab-b)!important}
+.s9-float{right:var(--cz-fab-r)!important;bottom:calc(var(--cz-fab-b) + var(--cz-fab) + 10px)!important;gap:10px!important}
+.st-totop,.s9-float .s9-float__btn{box-sizing:border-box!important;width:var(--cz-fab)!important;height:var(--cz-fab)!important;border:1px solid var(--cz-line)!important;border-radius:50%!important;background:#fff!important;color:var(--cz-ink)!important;box-shadow:0 10px 22px -12px rgba(67,55,47,.45)!important;transition:background .25s,color .25s,border-color .25s,opacity .35s,transform .45s cubic-bezier(.16,1,.3,1),visibility .35s}
+.st-totop svg,.s9-float .s9-float__btn svg{width:20px;height:20px}
+.st-totop:hover,.st-totop:focus-visible,.s9-float .s9-float__btn:hover,.s9-float .s9-float__btn:focus-visible{background:var(--cz-ink)!important;border-color:var(--cz-ink)!important;color:#fff9f3!important;outline:0}
+.s9-float .s9-float__btn--kakao{background:#fee500!important;border-color:#fee500!important;color:#3a1d1d!important}
+
+/* 검색 레이어 : 카페24가 클래스를 붙이기 전(미리보기 등)에도 숨김 */
+[module="Layout_SearchHeader"]:not(.xans-layout-searchheader){position:fixed;left:0;right:0;top:0;opacity:0;visibility:hidden;pointer-events:none}
 
 /* 서브 페이지 배너 */
 .pet-page-hero,.pet-menu-hero.pet-page-hero{border-radius:0!important;overflow:hidden}
