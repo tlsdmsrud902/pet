@@ -6,7 +6,7 @@
    한 번 읽은 결과는 10분 동안 sessionStorage 에 저장해 페이지마다 다시 요청하지 않는다. */
 (function () {
   'use strict';
-  var BOARD = 4, PAGES = 2, MAX_DETAIL = 24, POOL = 4, CACHE_KEY = 'petpia-reviews-v2', TTL = 10 * 60 * 1000;
+  var BOARD = 4, PAGES = 2, MAX_DETAIL = 24, POOL = 3, CACHE_KEY = 'petpia-reviews-v2', TTL = 10 * 60 * 1000;
   var NOTE = /※\s*PETPIA가 만든[^\n]*교체됩니다\.?/;
 
   function trim(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
@@ -61,16 +61,23 @@
     });
     return out;
   }
-  function loadDetail(it) {
+  // 본문 읽기 : 실패하면 조금 쉬었다가 두 번까지 다시 시도한다 (true = 읽음)
+  function loadDetail(it, tries) {
+    tries = tries || 0;
     return fetch('/exec/front/board/product/' + BOARD + '?no=' + it.no + '&board_no=' + BOARD + '&pass_check=F', { credentials: 'same-origin' })
       .then(function (r) { return r.json(); })
       .then(function (d) {
-        if (!d || d.is_secret === true || d.read_auth === false || !d.read) { it.secret = true; return; }
+        if (!d || d.is_secret === true || d.read_auth === false) { it.secret = true; return true; }
+        if (!d.read) throw new Error('empty');
         it.imgs = pickImages((d.read.content_image || '') + ' ' + (d.read.content || ''));
         it.text = pickText(d.read.content);
         it.point = Number(d.read.point_count) || 0;
+        return true;
       })
-      .catch(function () {});
+      .catch(function () {
+        if (tries >= 2) return false;
+        return new Promise(function (res) { setTimeout(res, 500 * (tries + 1)); }).then(function () { return loadDetail(it, tries + 1); });
+      });
   }
   function loadAll() {
     var cached = readCache();
@@ -81,12 +88,12 @@
       var seen = {}, items = [];
       htmls.forEach(function (h) { parseList(h).forEach(function (it) { if (!seen[it.no]) { seen[it.no] = 1; items.push(it); } }); });
       items = items.filter(function (it) { return !it.secret; });
-      var todo = items.slice(0, MAX_DETAIL), i = 0;
-      function worker() { if (i >= todo.length) return Promise.resolve(); var it = todo[i++]; return loadDetail(it).then(worker); }
+      var todo = items.slice(0, MAX_DETAIL), i = 0, failed = 0;
+      function worker() { if (i >= todo.length) return Promise.resolve(); var it = todo[i++]; return loadDetail(it).then(function (ok) { if (!ok) failed++; return worker(); }); }
       var workers = []; for (var w = 0; w < POOL; w++) workers.push(worker());
       return Promise.all(workers).then(function () {
         items = items.filter(function (it) { return !it.secret; });
-        writeCache(items);
+        if (!failed) writeCache(items); // 일부라도 못 읽었으면 저장하지 않고 다음 페이지에서 다시 읽는다
         return items;
       });
     });
