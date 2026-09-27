@@ -334,12 +334,6 @@
       free.textContent = (ship.freeOver % 10000 === 0 ? ship.freeOver / 10000 + '만원' : ship.freeOver.toLocaleString('ko-KR') + '원') + ' 이상 무료배송 · ';
       free.hidden = false;
     }
-    root.querySelectorAll('.cz-review-list li').forEach(function (li) {
-      var a = li.querySelector('a');
-      if (!a || !a.textContent.trim() || a.textContent.indexOf('{$') !== -1) li.remove();
-    });
-    var reviews = root.querySelector('.cz-review-list');
-    if (reviews && !reviews.querySelector('li')) reviews.hidden = true;
   }
 
   function initReveal(root) {
