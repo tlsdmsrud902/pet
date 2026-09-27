@@ -697,3 +697,7 @@ html.cz-qv-open{overflow:hidden}
 #lw-home section.cz-products--rail :is(.prdList,.cz-placeholder){grid-template-columns:none!important;grid-auto-flow:column!important;grid-auto-columns:44%!important;overflow-x:auto!important;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;transform:none!important}
 #lw-home section.cz-products--pin .cz-pin__stage{position:static!important;min-height:0!important}
 }
+
+/* 타이머 팝업 : 사진을 타이머 띠 높이만큼 내려, 타이머에 가려지지 않고 강아지가 사진 가운데쯤 오게 한다 (위 틈은 타이머 띠 뒤에 숨음) */
+.cz-pop__slide--timer .cz-pop__img{background:#e9e3d8}
+.cz-pop__slide--timer .cz-pop__img img{object-position:76% 100%!important;transform:translateY(47px)}
