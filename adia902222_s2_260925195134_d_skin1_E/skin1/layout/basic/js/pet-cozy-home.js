@@ -434,6 +434,12 @@
     sec.querySelectorAll('[data-prd]').forEach(function (b) {
       b.addEventListener('click', function () { openQV(b.dataset.prd, b); });
     });
+    // 섹션에 가까워지면 레이어에 쓸 상품 사진을 미리 받아 둔다 (처음 열 때 빈 칸 방지)
+    var preload = function () { Object.keys(data).forEach(function (k) { new Image().src = IMG + data[k].img + '.jpg'; }); };
+    if ('IntersectionObserver' in window) {
+      var pio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { pio.disconnect(); preload(); } }, { rootMargin: '800px 0px' });
+      pio.observe(sec);
+    } else preload();
     if (qv) {
       qv.querySelector('[data-qv-close]').addEventListener('click', closeQV);
       qv.addEventListener('click', function (e) { if (e.target === qv) closeQV(); });
