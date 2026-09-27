@@ -586,7 +586,18 @@
       }
       [-0.72, 1.18].forEach(function (x) { add(new THREE.CylinderGeometry(0.03, 0.03, 0.26, 10), guideMat[2], x, 0, 0, back); });
       var guides = [[collar], chest.children, back.children];
-      var anchors = [V(-0.92, 0.42, 0.42), V(-0.32, 0.05, 0.7), V(0.24, 1.13, 0)];
+      // 번호 자리 : 1·2 는 고리에서 보는 사람 쪽으로 가장 가까운 점, 3 은 등 점선 가운데
+      var rings = [[collar, 0.5], [chest, 0.7]], ringPt = new THREE.Vector3(), best = new THREE.Vector3();
+      function ringFront(obj, r, out) {
+        var bz = -1e9;
+        for (var a = 0; a < 24; a++) {
+          ringPt.set(Math.cos(a / 24 * Math.PI * 2) * r, Math.sin(a / 24 * Math.PI * 2) * r, 0);
+          obj.localToWorld(ringPt);
+          if (ringPt.z > bz) { bz = ringPt.z; best.copy(ringPt); }
+        }
+        return out.copy(best);
+      }
+      var backMid = V(0.24, 0, 0);
 
       // 바닥 그림자 (부드러운 원)
       var cv = document.createElement('canvas'); cv.width = cv.height = 128;
@@ -654,21 +665,23 @@
             eyes.forEach(function (e) { e.scale.y = 0.12; });
             if (t > nextBlink + 0.12) { eyes.forEach(function (e) { e.scale.y = 1; }); nextBlink = t + 2.5 + Math.random() * 2.5; }
           }
-          if (!dragging && t > idleAt) { rotY += ((base + Math.sin(t * 0.5) * 0.28) - rotY) * 0.04; rotX += (0 - rotX) * 0.05; }
+          // 몸은 가만히 둔다 : 끌어서 돌린 뒤에만 제자리로 천천히 돌아온다 (번호가 흔들리지 않게)
+          if (!dragging && t > idleAt) { rotY += (base - rotY) * 0.05; rotX += (0 - rotX) * 0.05; }
           if (!hovering && t > cycleAt) { setFocus((focus + 1) % 3); cycleAt = t + 2.6; }
         }
         dog.rotation.y = rotY; dog.rotation.x = rotX;
-        dog.position.y = reduce ? 0 : Math.abs(Math.sin(t * 2.2)) * 0.03;
         guides.forEach(function (list, j) {
           var on = focus === j;
           guideMat[j].emissiveIntensity = on ? 0.55 + Math.sin(t * 6) * 0.25 : (focus < 0 ? 0.12 : 0.04);
-          list.forEach(function (m) { m.scale.setScalar(on ? 1.12 : 1); });
         });
         renderer.render(scene, camera);
-        anchors.forEach(function (a, j) {
-          v3.copy(a); dog.localToWorld(v3); v3.project(camera);
-          if (pins[j]) pins[j].style.transform = 'translate(' + ((v3.x + 1) / 2 * W).toFixed(1) + 'px,' + ((1 - v3.y) / 2 * H).toFixed(1) + 'px)';
-        });
+        dog.updateMatrixWorld(true);
+        for (var j = 0; j < 3; j++) {
+          if (j < 2) ringFront(rings[j][0], rings[j][1], v3); else { v3.copy(backMid); back.localToWorld(v3); }
+          v3.project(camera);
+          // transform 대신 translate 속성 : 강조할 때 쓰는 scale 이 위치값까지 키우지 않게
+          if (pins[j]) pins[j].style.translate = ((v3.x + 1) / 2 * W).toFixed(1) + 'px ' + ((1 - v3.y) / 2 * H).toFixed(1) + 'px';
+        }
       }
       function loop() {
         if (raf) return;
