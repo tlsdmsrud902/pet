@@ -214,8 +214,12 @@
   </section>
 
   <!-- 7. 신상품 (가로 스크롤) -->
-  <section id="cz-new" class="cz-sec cz-wrap cz-products cz-products--rail" aria-labelledby="cz-new-title">
+  <!-- 7. 신상품 : 스크롤하면 섹션이 멈추고 상품 줄이 가로로 이동한다 (pet-cozy-home.js initRailPin) -->
+  <section id="cz-new" class="cz-sec cz-wrap cz-products cz-products--rail cz-products--pin" aria-labelledby="cz-new-title">
+   <div class="cz-pin" data-rail-pin>
+   <div class="cz-pin__stage">
     <header class="cz-head"><div><p class="cz-kicker">Just arrived</p><h2 id="cz-new-title">새로 들어왔어요</h2></div>
+      <div class="cz-pin__meter" aria-hidden="true"><span class="cz-pin__count"><b data-rail-now>01</b> / <span data-rail-total>10</span></span><span class="cz-pin__bar"><i></i></span></div>
       <div class="cz-rail-nav"><button type="button" data-rail="-1" aria-label="이전 상품"><svg><use href="#cz-arrow"/></svg></button><button type="button" data-rail="1" aria-label="다음 상품"><svg><use href="#cz-arrow"/></svg></button></div>
     </header>
     <div module="product_listmain_2" class="ec-base-product">
@@ -228,6 +232,8 @@
       <ul class="prdList grid4"><!--@import(/product/list_product.html)--></ul>
     </div>
     <div class="cz-placeholder" data-cz-placeholder hidden></div>
+   </div>
+   </div>
   </section>
 
   <!-- 8. 사이즈 가이드 -->

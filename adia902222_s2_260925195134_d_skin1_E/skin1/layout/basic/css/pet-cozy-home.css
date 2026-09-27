@@ -216,6 +216,16 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 #lw-home .cz-rail-nav button:hover{background:var(--cz-ink);border-color:var(--cz-ink);color:#fff9f3}
 #lw-home .cz-rail-nav button:first-child svg{transform:rotate(180deg)}
 #lw-home .cz-rail-nav svg{width:20px;height:20px}
+/* 신상품 스크롤 고정 : 섹션이 멈춘 동안 세로 스크롤만큼 상품 줄이 왼쪽으로 이동 */
+#lw-home .cz-pin__meter{display:none;align-items:center;gap:14px;margin-left:auto;font:italic 500 15px/1 var(--cz-serif);color:var(--cz-muted)}
+#lw-home .cz-pin__count b{font-weight:600;color:var(--cz-ink)}
+#lw-home .cz-pin__bar{position:relative;width:clamp(90px,12vw,160px);height:2px;background:var(--cz-line);overflow:hidden}
+#lw-home .cz-pin__bar i{position:absolute;inset:0;background:var(--cz-accent);transform:scaleX(var(--cz-rail-p,.04));transform-origin:left}
+#lw-home .cz-products--pin.is-pinned .cz-pin__meter{display:flex}
+#lw-home .cz-products--pin.is-pinned .cz-pin__stage{position:sticky;top:var(--cz-head,90px);display:flex;flex-direction:column;justify-content:center;min-height:calc(100vh - var(--cz-head,90px));min-height:calc(100svh - var(--cz-head,90px));overflow:hidden}
+#lw-home .cz-products--pin.is-pinned :is(.prdList,.cz-placeholder){overflow:visible!important;scroll-snap-type:none;transform:translate3d(calc(var(--cz-rail-x,0px) * -1),0,0)!important;will-change:transform}
+#lw-home .cz-products--pin.is-pinned :is(.prdList>li,.cz-ph){transition:transform .5s var(--cz-ease)}
+#lw-home .cz-products--pin.is-pinned :is(.prdList>li,.cz-ph).is-lead{transform:translateY(-8px)}
 /* 인기상품 : 순위 배지 */
 #lw-home .cz-products--best :is(.prdList,.cz-placeholder){counter-reset:cz-rank}
 #lw-home .cz-products--best :is(.prdList>li,.cz-ph){counter-increment:cz-rank}
@@ -378,10 +388,11 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 .cz-pop__img{position:relative;aspect-ratio:1/1;overflow:hidden}
 .cz-pop__img img{display:block;width:100%;height:100%;object-fit:cover}
 .cz-pop__badge{position:absolute;left:18px;top:18px;padding:6px 12px;border-radius:999px;background:#43372f;color:#fff9f3;font:600 12px 'Pretendard Variable','Pretendard',sans-serif;letter-spacing:.02em}
-.cz-pop__txt{padding:26px 26px 30px}
-#cz-pop .cz-pop__txt small{display:block;font:italic 400 16px/1.2 'Fraunces',Georgia,serif;color:#a5553a}
-#cz-pop .cz-pop__txt strong{display:block;margin:8px 0 10px;font-size:24px;font-weight:750;letter-spacing:-.05em;line-height:1.25}
-#cz-pop .cz-pop__txt p{margin:0 0 26px;font-size:14px;line-height:1.6;color:#6c5a4f}
+#cz-pop .cz-pop__txt{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:20px 22px}
+#cz-pop .cz-pop__txt>*{margin:0}
+#cz-pop .cz-pop__txt small{display:block;margin:0;font:italic 400 16px/1.2 'Fraunces',Georgia,serif;color:#a5553a}
+#cz-pop .cz-pop__txt strong{display:block;margin:0;font-size:24px;font-weight:750;letter-spacing:-.05em;line-height:1.2}
+#cz-pop .cz-pop__txt p{margin:0;font-size:14px;line-height:1.5;color:#6c5a4f}
 .cz-pop__txt em{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;background:#43372f;color:#fff9f3;font:600 14px 'Pretendard Variable','Pretendard',sans-serif;font-style:normal}
 .cz-pop__dots{position:absolute;right:16px;top:16px;display:flex;gap:6px}
 .cz-pop__dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.6);cursor:pointer}
@@ -435,7 +446,7 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
 /* 16. 브랜드 각인 : 크림 바탕 위 PETPIA 이미지(글자 위 푸들 · 고양이). 글자 아랫단이 푸터 윗선에 닿는다. */
 #lw-home.pet-cozy{padding-bottom:0}
 body:has(#lw-home.pet-cozy) :is(#footer,.footer_margin){margin-top:0!important}
-#lw-home .cz-brand{position:relative;overflow:hidden;margin-top:clamp(80px,9vw,128px)}
+#lw-home .cz-brand{position:relative;overflow:hidden;margin-top:clamp(80px,9vw,128px);padding-bottom:clamp(28px,3.5vw,56px);background:linear-gradient(180deg,rgba(246,237,226,0) 0%,rgba(246,237,226,0) 38%,rgba(246,237,226,.55) 70%,var(--cz-oat,#f6ede2) 100%)}
 #lw-home .cz-brand__top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;width:min(1440px,calc(100% - var(--cz-gutter)*2));margin:0 auto}
 #lw-home .cz-brand__title{font-size:clamp(20px,1.9vw,28px);font-weight:700;line-height:1.45;letter-spacing:-.045em;color:var(--cz-ink)}
 #lw-home .cz-brand__sub{margin-top:10px;font-size:15px;line-height:1.7;color:var(--cz-muted)}

@@ -114,7 +114,8 @@
           if (!track) return;
           var card = track.firstElementChild;
           var step = card ? card.getBoundingClientRect().width + 20 : 300;
-          track.scrollBy({ left: step * 2 * Number(btn.dataset.rail), behavior: 'smooth' });
+          if (section.classList.contains('is-pinned')) window.scrollBy({ top: step * 2 * Number(btn.dataset.rail), behavior: 'smooth' });
+          else track.scrollBy({ left: step * 2 * Number(btn.dataset.rail), behavior: 'smooth' });
         });
       });
     });
@@ -336,6 +337,51 @@
     }
   }
 
+  // 신상품 : 섹션을 화면에 고정하고, 고정된 동안 내린 거리만큼 상품 줄을 가로로 민다
+  function initRailPin(root) {
+    var pin = root.querySelector('[data-rail-pin]');
+    if (!pin || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var section = pin.closest('.cz-products--pin'), stage = pin.querySelector('.cz-pin__stage');
+    var now = pin.querySelector('[data-rail-now]'), total = pin.querySelector('[data-rail-total]');
+    var track = null, items = [], dist = 0, lead = -1, raf = 0;
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    function measure() {
+      track = section.querySelector('.ec-base-product:not([hidden]) .prdList') || section.querySelector('.cz-placeholder:not([hidden])');
+      if (!track) return;
+      section.classList.add('is-pinned');
+      section.style.setProperty('--cz-rail-x', '0px');
+      items = Array.from(track.children);
+      dist = Math.max(0, track.scrollWidth - track.clientWidth);
+      if (dist < 8) { section.classList.remove('is-pinned'); pin.style.height = ''; return; }
+      pin.style.height = (stage.offsetHeight + dist) + 'px';
+      if (total) total.textContent = pad(items.length);
+      update();
+    }
+    function update() {
+      raf = 0;
+      if (!dist) return;
+      var top = parseFloat(getComputedStyle(stage).top) || 0;
+      var p = Math.min(1, Math.max(0, (top - pin.getBoundingClientRect().top) / dist));
+      section.style.setProperty('--cz-rail-x', (p * dist).toFixed(1) + 'px');
+      section.style.setProperty('--cz-rail-p', Math.max(0.04, p).toFixed(3));
+      var i = Math.round(p * (items.length - 1));
+      if (now) now.textContent = pad(i + 1);
+      if (i !== lead) {
+        if (items[lead]) items[lead].classList.remove('is-lead');
+        if (items[i]) items[i].classList.add('is-lead');
+        lead = i;
+      }
+    }
+    function onScroll() { if (!raf) raf = requestAnimationFrame(update); }
+    var t = null;
+    function remeasure() { clearTimeout(t); t = setTimeout(measure, 150); }
+    measure();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', remeasure);
+    window.addEventListener('load', measure);
+    if ('ResizeObserver' in window && track) new ResizeObserver(remeasure).observe(track);
+  }
+
   function initReveal(root) {
     if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var io = new IntersectionObserver(function (entries) {
@@ -357,6 +403,7 @@
     initHotspots(root);
     initStarter(root);
     initRails(root);
+    initRailPin(root);
     initMisc(root);
     initReveal(root);
   }
