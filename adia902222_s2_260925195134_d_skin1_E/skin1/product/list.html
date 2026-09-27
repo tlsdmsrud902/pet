@@ -240,7 +240,7 @@ html.st-sale-on #container #contents > .product_top_image { margin:0; padding:0;
 html.st-sale-on body #container #contents > .st-sale-event { width:100% !important; max-width:none !important; margin-left:0 !important; margin-right:0 !important; }
 /* 세일 페이지 세로 간격은 모두 --sl-vgap 하나로 맞춘다 (배너 → 쿠폰 → 상품 제목 → 상품 → 마무리 안내 → 푸터) */
 html.st-sale-on { --sl-vgap:clamp(64px,7vw,112px); }
-html.st-sale-on body #container #contents > .st-sale-event { margin-bottom:var(--sl-vgap) !important; }
+html.st-sale-on body #container #contents > .st-sale-event { margin-bottom:0 !important; }	/* 3단 배너 바로 아래에 쿠폰 섹션을 붙인다 */
 html.st-sale-on #contents #stSaleCoupon { padding-top:var(--sl-vgap) !important; padding-bottom:var(--sl-vgap) !important; margin-bottom:0 !important; }
 html.st-sale-on #contents #stSaleItems.sl-head { margin-top:var(--sl-vgap) !important; }
 /* 마무리 안내는 상품 목록과 같은 왼쪽 선에서 시작 */
