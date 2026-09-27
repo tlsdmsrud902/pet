@@ -128,7 +128,8 @@
 								var bubble = document.createElement('span');
 								bubble.className = 'pet-sale-bubble';
 								bubble.setAttribute('aria-hidden', 'true');
-								bubble.textContent = (config.menu && config.menu.saleBadge) || '50%';
+								var menuCfg = (window.STORE_CONTENT || {}).menu || {};
+								bubble.textContent = menuCfg.saleBadge || '50%';
 								item.appendChild(bubble);
 							}
 							item.appendChild(makeLink(category));

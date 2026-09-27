@@ -660,12 +660,13 @@ html.cz-qv-open{overflow:hidden}
 #lw-home .cz-size__art.is-3d-wait .cz-size__dog{visibility:hidden}
 
 /* Shop the look + 버튼 : 밝은 사진 위에서도 잘 보이게 진한 바탕 · 흰 테두리 · 흰 물결 */
-#lw-home .cz-hotspot{background:var(--cz-ink,#43372f);color:#fff9f3;border:2.5px solid #fff9f3;box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 0 rgba(255,249,243,.75);animation:cz-hot-ring 2.2s infinite}
-#lw-home .cz-hotspot span{font-weight:500}
-#lw-home .cz-hotspot:hover{background:var(--cz-accent,#a5553a)}
-#lw-home .cz-hotspot[aria-expanded=true]{background:#fff9f3;color:var(--cz-ink,#43372f);border-color:var(--cz-ink,#43372f)}
-@keyframes cz-hot-ring{0%{box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 0 rgba(255,249,243,.8)}70%{box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 14px rgba(255,249,243,0)}100%{box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 0 rgba(255,249,243,0)}}
-@media (prefers-reduced-motion:reduce){#lw-home .cz-hotspot{animation:none}}
+#lw-home .cz-look__spot{width:44px;height:44px;margin:-22px 0 0 -22px;background:var(--cz-ink,#43372f);color:#fff9f3;box-shadow:0 0 0 2.5px #fff9f3,0 8px 22px -6px rgba(24,18,14,.65)}
+#lw-home .cz-look__spot::before,#lw-home .cz-look__spot::after{width:16px;height:2.2px;margin:-1.1px 0 0 -8px}
+#lw-home .cz-look__spot:hover,#lw-home .cz-look__spot:focus-visible{background:var(--cz-accent,#a5553a);color:#fff9f3}
+#lw-home .cz-look.is-active .cz-look__spot,#lw-home .cz-looks:not(.is-pinned) .cz-look__spot{animation:cz-spot-ring 2.2s ease-out infinite}
+@keyframes cz-spot-ring{0%{box-shadow:0 0 0 2.5px #fff9f3,0 0 0 2.5px rgba(255,249,243,.85),0 8px 22px -6px rgba(24,18,14,.65)}70%{box-shadow:0 0 0 2.5px #fff9f3,0 0 0 16px rgba(255,249,243,0),0 8px 22px -6px rgba(24,18,14,.65)}100%{box-shadow:0 0 0 2.5px #fff9f3,0 0 0 2.5px rgba(255,249,243,0),0 8px 22px -6px rgba(24,18,14,.65)}}
+@media (max-width:767px){#lw-home .cz-look__spot{width:38px;height:38px;margin:-19px 0 0 -19px}}
+@media (prefers-reduced-motion:reduce){#lw-home .cz-look__spot{animation:none!important}}
 
 /* 이벤트 팝업 타이머는 사진 위쪽에. 배지와 점은 그 아래로 */
 .cz-pop__timer{top:0;bottom:auto}
