@@ -255,7 +255,7 @@ window.STORE_CONTENT = {
 				text: '세일 기간, 쿠폰을 뽑아 최대 50% 할인 혜택을 받아 보세요.',
 				button: '쿠폰 뽑으러 가기 →',
 				link: '/product/list.html?cate_no=27',
-				image: '/SkinImg/pet/sale-hero.png',
+				image: 'https://ecimg.cafe24img.com/pg3415b27572456008/petpia902/pet/sale-hero.png',
 				imageAlt: '선물 상자 사이에 앉은 코기',
 				imagePosition: '76% 30%',
 				timerLabel: '이벤트 마감까지',
@@ -270,7 +270,7 @@ window.STORE_CONTENT = {
 				text: '상품 사진과 함께 후기를 남기면 적립금 3,000원을 드려요.',
 				button: '포토리뷰 쓰러 가기 →',
 				link: '/board/product/list.html?board_no=4',
-				image: '/SkinImg/pet/hero-home.png',
+				image: 'https://ecimg.cafe24img.com/pg3415b27572456008/petpia902/pet/hero-home.png',
 				imageAlt: '부클 베드에서 나란히 쉬는 푸들과 고양이',
 				imagePosition: '66% 50%'
 			}
