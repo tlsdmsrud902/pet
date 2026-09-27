@@ -86,8 +86,8 @@ body:has(#lw-home.pet-cozy) :is(.xans-layout-mobileaction,#contents>[module=Layo
   #lw-home .pe-hero-track .pe-hero__visual{top:auto!important;bottom:0!important;height:43%!important;overflow:hidden}
   #lw-home .pe-hero-track .pe-hero__visual::after{opacity:1!important;background:linear-gradient(180deg,#fff9f3 0%,rgba(255,249,243,0) 26%)!important}
   #lw-home .pe-hero-track .pe-world-image{object-position:50% 50%!important}
-  #lw-home .pe-hero-track .pe-world-image[data-world-image='2']{object-position:72% 50%!important}
-  #lw-home .pe-hero-track .pe-world-image[data-world-image='3']{object-position:64% 50%!important}
+  #lw-home .pe-hero-track .pe-world-image[data-world-image='1']{object-position:72% 50%!important}
+  #lw-home .pe-hero-track .pe-world-image[data-world-image='2']{object-position:64% 50%!important}
   #lw-home .pe-hero-track .pe-world-route{top:auto!important;bottom:14px!important;left:14px!important;right:auto!important;width:auto!important;gap:4px!important;padding:6px 10px!important;border-radius:999px;background:rgba(255,249,243,.9);z-index:4!important}
   #lw-home .pe-hero-track .pe-world-route button{padding:4px 8px!important}
   #lw-home .pe-hero-track .pe-hero-scroll{display:none!important}
@@ -542,3 +542,7 @@ body:has(#lw-home.pet-cozy) :is(#footer,.footer_margin){margin-top:0!important}
 #lw-home :is(.cz-sec,.cz-perks,.cz-finder,.cz-size,.cz-story,.cz-duo,.cz-starter,.cz-reviews,.cz-help,.cz-brand){margin-top:var(--cz-space)}
 #lw-home :is(.cz-head,.cz-sec,.cz-world__copy,.cz-finder__intro,.cz-size__copy,.cz-story__card,.cz-duo__card,.cz-starter__card,.cz-reviews__copy,.cz-help__member) h2{margin-bottom:0!important;font-size:var(--cz-h2)!important;font-weight:750!important;line-height:1.25!important;letter-spacing:-.045em!important}
 #lw-home :is(.cz-world__copy,.cz-finder__intro,.cz-size__copy,.cz-story__card,.cz-duo__card,.cz-starter__card,.cz-reviews__copy,.cz-help__member) h2+p{margin-top:var(--cz-desc-gap)!important;font-size:15px!important;line-height:1.7!important}
+
+/* 히어로 3장면(영상 · 산책 · 휴식) : 장면이 줄어든 만큼 스크롤 길이도 줄인다 */
+#lw-home .pe-hero-track{height:250vh;min-height:1700px}
+@media(max-width:767px){#lw-home .pe-hero-track{height:245svh;min-height:1700px}}

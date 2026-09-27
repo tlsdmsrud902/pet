@@ -131,7 +131,7 @@
     var copies = Array.from(track.querySelectorAll('[data-world-copy]'));
     var route = Array.from(track.querySelectorAll('[data-world-jump]'));
     var label = track.querySelector('.pe-image-label');
-    var labels = ['PETPIA FILM / 01', 'THE EVERYDAY COLLECTION / 02', 'THE OUTDOOR COLLECTION / 03', 'THE HOME COLLECTION / 04'];
+    var labels = ['PETPIA FILM / 01', 'THE OUTDOOR COLLECTION / 02', 'THE HOME COLLECTION / 03'];
     var video = track.querySelector('.pe-world-video');
     if (video) {
       video.muted = true; video.defaultMuted = true; video.setAttribute('muted', '');
