@@ -393,7 +393,7 @@
     if (free && ship && ship.freeBar !== false && ship.freeOver > 0) {
       free.textContent = (ship.freeOver % 10000 === 0 ? ship.freeOver / 10000 + '만원' : ship.freeOver.toLocaleString('ko-KR') + '원') + ' 이상 무료배송 · ';
       free.hidden = false;
-    }
+    } else if (free) free.hidden = true;   // 무료배송 안내를 끄면 HTML 기본 문구도 숨긴다
   }
 
   // 신상품 : 섹션을 화면에 고정하고, 고정된 동안 내린 거리만큼 상품 줄을 가로로 민다

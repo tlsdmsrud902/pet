@@ -195,6 +195,7 @@
 
 		var avgEl = $('[data-st-rv-avg]', root);
 		if (avgEl) { avgEl.textContent = String(avg); }
+		root.classList.add('st-rv--ready');   // 평균을 계산한 뒤에만 숫자·별을 보인다 (처음 0 이 보였다 바뀌는 깜빡임 방지)
 		var starBox = $('[data-st-rv-stars]', root);
 		if (starBox) {
 			starBox.textContent = '';

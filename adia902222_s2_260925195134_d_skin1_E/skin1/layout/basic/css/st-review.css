@@ -254,3 +254,6 @@ html.st-rvm-lock, html.st-rvm-lock body { overflow:hidden !important; }
 	.st-rvm__big { max-height:52vh; }
 	.st-rvm__body { flex:none; overflow:visible; padding:22px 18px 28px; }
 }
+
+/* 평균 평점은 계산이 끝나(st-rv--ready) 보이게 한다 : 처음 "0 / 5" 가 보였다 바뀌는 깜빡임 방지 */
+#stReview:not(.st-rv--ready) [data-st-rv-avg],#stReview:not(.st-rv--ready) [data-st-rv-stars]{visibility:hidden}
