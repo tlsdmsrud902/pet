@@ -713,3 +713,12 @@ html.cz-qv-open{overflow:hidden}
    띠배너를 닫으면 그만큼 올라붙어 빈 공간이 생기지 않는다 */
 #lw-home .pe-hero{top:var(--cz-head,98px);height:calc(100svh - var(--cz-head,98px))}
 @media (max-width:767px){#lw-home .pe-hero{top:var(--cz-head,90px);height:calc(100svh - var(--cz-head,90px))}}
+
+/* 아이폰(사파리) 고정 섹션 떨림 원인 제거
+   사파리는 고정(sticky) 요소의 조상에 잘라내기(overflow clip/hidden)나 transform 이 있으면 스크롤 스레드에서 고정하지 못해,
+   스크롤할 때마다 한 프레임 밀렸다가 제자리로 붙으며 떨린다. (크롬은 같은 경우도 부드럽게 처리해 PC 에서는 보이지 않는다)
+   · 가로 넘침은 페이지를 감싼 요소(#wrap, #lw-home)가 아니라 화면(html)에서 자른다 → 고정 섹션 위에 잘라내는 층이 없다
+   · 신상품(고정 섹션)의 등장 효과는 이동 없이 흐려졌다 나타나기만 한다 */
+html:has(#lw-home){overflow-x:hidden;overflow-x:clip}
+#wrap:has(#lw-home),#lw-home.pet-cozy{overflow:visible!important}
+#lw-home #cz-new.cz-reveal{transform:none!important}
