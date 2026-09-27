@@ -496,6 +496,194 @@
     looks.forEach(function (l) { var im = l.querySelector('img'); if (im && !im.complete) im.addEventListener('load', remeasure, { once: true }); });
   }
 
+  // 8. 사이즈 가이드 3D 강아지 : 화면에 가까워지면 three.js 를 불러와 입체 강아지를 그린다.
+  //    끌어서 돌려 볼 수 있고, 치수 자리(1 목둘레 · 2 가슴둘레 · 3 등길이)가 몸 위에 입체로 표시된다.
+  //    오른쪽 설명에 마우스를 올리면 그 자리가 강조된다. WebGL 을 못 쓰면 원래 SVG 그림이 그대로 남는다.
+  function initSize3D(root) {
+    var art = root.querySelector('.cz-size__art'), mount = art && art.querySelector('[data-size-3d]');
+    if (!mount) return;
+    var steps = Array.from(root.querySelectorAll('.cz-size__steps li'));
+    var pins = Array.from(art.querySelectorAll('[data-pin]'));
+    var started = false;
+    function start() {
+      if (started) return;
+      started = true;
+      var probe = document.createElement('canvas');
+      if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return;
+      // 동적 import 를 문자열로 감싸 카페24 스크립트 압축기가 문법을 건드리지 않게 한다
+      var load = new Function('u', 'return import(u)');
+      load('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js').then(build).catch(function () {});
+    }
+    if ('IntersectionObserver' in window) {
+      var sio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { sio.disconnect(); start(); } }, { rootMargin: '500px 0px' });
+      sio.observe(art);
+    } else start();
+
+    function build(THREE) {
+      var V = function (x, y, z) { return new THREE.Vector3(x, y, z); };
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      mount.appendChild(renderer.domElement);
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(28, 1.3, 0.1, 100);
+      scene.add(new THREE.HemisphereLight(0xfff6ea, 0xcdb9a4, 1.7));
+      var sun = new THREE.DirectionalLight(0xffffff, 1.5); sun.position.set(-3, 5, 5); scene.add(sun);
+      var rim = new THREE.DirectionalLight(0xffe0cc, 0.8); rim.position.set(4, 2.5, -4); scene.add(rim);
+
+      var mat = function (hex, rough) { return new THREE.MeshStandardMaterial({ color: hex, roughness: rough == null ? 0.82 : rough, metalness: 0 }); };
+      var fur = mat(0xf5d7b5), furDark = mat(0xebc59d), earMat = mat(0xe3b88c), muzzle = mat(0xfbe9d4), ink = mat(0x3b2f28, 0.35), pink = mat(0xf2a79c);
+      var guideMat = [0x7fa283, 0xe8866a, 0xe8866a].map(function (hex) {
+        return new THREE.MeshStandardMaterial({ color: hex, roughness: 0.5, emissive: hex, emissiveIntensity: 0.12 });
+      });
+
+      var dog = new THREE.Group(); scene.add(dog);
+      function add(geo, m, x, y, z, parent) { var mesh = new THREE.Mesh(geo, m); mesh.position.set(x, y, z); (parent || dog).add(mesh); return mesh; }
+      function orient(obj, dir) { obj.quaternion.setFromUnitVectors(V(0, 0, 1), dir.clone().normalize()); }
+
+      // 몸통 · 다리
+      var body = add(new THREE.CapsuleGeometry(0.62, 1.25, 10, 28), fur, 0.1, 0.35, 0);
+      body.rotation.z = Math.PI / 2;
+      [[-0.55, 0.32, fur], [-0.55, -0.32, fur], [0.82, 0.32, furDark], [0.82, -0.32, furDark]].forEach(function (l) {
+        add(new THREE.CapsuleGeometry(0.17, 0.5, 6, 16), l[2], l[0], -0.45, l[1]);
+      });
+      // 꼬리 (밑동을 축으로 흔든다)
+      var tail = new THREE.Group(); tail.position.set(1.3, 0.55, 0); dog.add(tail);
+      var tailCurve = new THREE.CatmullRomCurve3([V(0, 0, 0), V(0.34, 0.28, 0), V(0.42, 0.74, 0)]);
+      add(new THREE.TubeGeometry(tailCurve, 24, 0.085, 12), fur, 0, 0, 0, tail);
+      add(new THREE.SphereGeometry(0.085, 14, 12), fur, 0.42, 0.74, 0, tail);
+      // 머리
+      // 머리는 보는 사람 쪽으로 살짝 돌려 얼굴이 보이게 한다
+      var head = new THREE.Group(); head.position.set(-1.05, 1.08, 0); head.rotation.y = 0.6; dog.add(head);
+      add(new THREE.SphereGeometry(0.62, 36, 28), fur, 0, 0, 0, head);
+      add(new THREE.SphereGeometry(0.3, 24, 18), muzzle, -0.5, -0.18, 0, head).scale.set(0.9, 0.75, 1.1);
+      add(new THREE.SphereGeometry(0.1, 18, 14), ink, -0.77, -0.1, 0, head);
+      var eyes = [0.24, -0.24].map(function (z) { return add(new THREE.SphereGeometry(0.085, 16, 12), ink, -0.5, 0.15, z, head); });
+      var shine = mat(0xffffff, 0.2);
+      eyes.forEach(function (e) { add(new THREE.SphereGeometry(0.026, 10, 8), shine, -0.07, 0.035, 0.03, e); });
+      [0.37, -0.37].forEach(function (z) { add(new THREE.SphereGeometry(0.1, 16, 12), pink, -0.43, -0.12, z, head).scale.set(0.4, 0.7, 1); });
+      var mouth = add(new THREE.TorusGeometry(0.09, 0.018, 8, 20, Math.PI), ink, -0.72, -0.3, 0, head);
+      mouth.rotation.set(0, Math.PI / 2, Math.PI);
+      var ears = [1, -1].map(function (s) {
+        var e = add(new THREE.SphereGeometry(0.3, 22, 16), earMat, 0.06, 0.1, 0.56 * s, head);
+        e.scale.set(0.55, 1.25, 0.35); e.rotation.x = -0.35 * s;
+        return e;
+      });
+
+      // 치수 표시 : 1 목걸이 · 2 가슴 점선 고리 · 3 등 점선
+      var collar = add(new THREE.TorusGeometry(0.5, 0.075, 14, 48), guideMat[0], -0.8, 0.66, 0);
+      orient(collar, V(-0.55, 0.8, 0));
+      var chest = new THREE.Group(); chest.position.set(-0.32, 0.35, 0); orient(chest, V(1, 0, 0)); dog.add(chest);
+      for (var i = 0; i < 16; i++) {
+        var dash = add(new THREE.TorusGeometry(0.7, 0.032, 8, 6, (Math.PI * 2 / 16) * 0.55), guideMat[1], 0, 0, 0, chest);
+        dash.rotation.z = i * Math.PI * 2 / 16;
+      }
+      var back = new THREE.Group(); back.position.set(0, 1.13, 0); dog.add(back);
+      for (var k = 0; k < 9; k++) {
+        var seg = add(new THREE.CapsuleGeometry(0.03, 0.1, 4, 8), guideMat[2], -0.62 + k * 0.22, 0, 0, back);
+        seg.rotation.z = Math.PI / 2;
+      }
+      [-0.72, 1.18].forEach(function (x) { add(new THREE.CylinderGeometry(0.03, 0.03, 0.26, 10), guideMat[2], x, 0, 0, back); });
+      var guides = [[collar], chest.children, back.children];
+      var anchors = [V(-0.92, 0.42, 0.42), V(-0.32, 0.05, 0.7), V(0.24, 1.13, 0)];
+
+      // 바닥 그림자 (부드러운 원)
+      var cv = document.createElement('canvas'); cv.width = cv.height = 128;
+      var g2 = cv.getContext('2d'), grd = g2.createRadialGradient(64, 64, 4, 64, 64, 62);
+      grd.addColorStop(0, 'rgba(150,196,164,.75)'); grd.addColorStop(1, 'rgba(150,196,164,0)');
+      g2.fillStyle = grd; g2.fillRect(0, 0, 128, 128);
+      var shadow = new THREE.Mesh(new THREE.PlaneGeometry(4.4, 1.7), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false }));
+      shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.99; scene.add(shadow);
+
+      /* 크기 */
+      var W = 1, H = 1;
+      function resize() {
+        W = mount.clientWidth || 1; H = mount.clientHeight || 1;
+        renderer.setSize(W, H, false);
+        camera.aspect = W / H;
+        camera.position.set(0.5, 1.5, camera.aspect < 1.15 ? 9.6 : 8.2);
+        camera.lookAt(0.05, 0.2, 0);
+        camera.updateProjectionMatrix();
+      }
+      resize();
+      if ('ResizeObserver' in window) new ResizeObserver(resize).observe(mount); else window.addEventListener('resize', resize);
+
+      var clock = new THREE.Clock();
+
+      /* 강조 : 설명 줄 · 번호에 올리면 그 자리만 밝게. 가만히 있으면 1 → 2 → 3 차례로 */
+      var focus = -1, hovering = false, cycleAt = 0;
+      function setFocus(n) {
+        focus = n;
+        pins.forEach(function (p, j) { p.classList.toggle('is-on', j === n); });
+        steps.forEach(function (s, j) { s.classList.toggle('is-on', j === n); });
+      }
+      function hoverOn(j) { hovering = true; setFocus(j); }
+      function hoverOff() { hovering = false; cycleAt = clock.getElapsedTime() + 2; }
+      steps.forEach(function (s, j) { s.addEventListener('mouseenter', function () { hoverOn(j); }); s.addEventListener('mouseleave', hoverOff); });
+      pins.forEach(function (p, j) {
+        p.addEventListener('mouseenter', function () { hoverOn(j); });
+        p.addEventListener('mouseleave', hoverOff);
+        p.addEventListener('click', function () { setFocus(j); });
+      });
+
+      /* 끌어서 돌리기 */
+      var base = 0.5, rotY = base, rotX = 0, dragging = false, lastX = 0, lastY = 0, idleAt = 0;
+      var cvs = renderer.domElement;
+      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastX = e.clientX; lastY = e.clientY; cvs.setPointerCapture(e.pointerId); art.classList.add('is-grab'); });
+      cvs.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        rotY += (e.clientX - lastX) * 0.012;
+        rotX = Math.max(-0.35, Math.min(0.35, rotX + (e.clientY - lastY) * 0.006));
+        lastX = e.clientX; lastY = e.clientY;
+      });
+      function endDrag() { if (!dragging) return; dragging = false; idleAt = clock.getElapsedTime() + 2.5; art.classList.remove('is-grab'); art.classList.add('is-played'); }
+      cvs.addEventListener('pointerup', endDrag);
+      cvs.addEventListener('pointercancel', endDrag);
+
+      /* 그리기 : 화면에 보일 때만 */
+      var visible = true, nextBlink = 2, v3 = new THREE.Vector3(), raf = 0;
+      function frame() {
+        var t = clock.getElapsedTime();
+        if (!reduce) {
+          tail.rotation.y = Math.sin(t * 9) * 0.55; tail.rotation.z = Math.sin(t * 4.5) * 0.08;
+          head.rotation.z = Math.sin(t * 1.2) * 0.08; head.rotation.x = Math.sin(t * 0.8) * 0.12; head.rotation.y = 0.6 + Math.sin(t * 0.7) * 0.15;
+          ears.forEach(function (e, j) { e.rotation.z = Math.sin(t * 1.2 + j) * 0.12; });
+          var br = 1 + Math.sin(t * 2.2) * 0.015; body.scale.set(1, br, br);
+          if (t > nextBlink) {
+            eyes.forEach(function (e) { e.scale.y = 0.12; });
+            if (t > nextBlink + 0.12) { eyes.forEach(function (e) { e.scale.y = 1; }); nextBlink = t + 2.5 + Math.random() * 2.5; }
+          }
+          if (!dragging && t > idleAt) { rotY += ((base + Math.sin(t * 0.5) * 0.28) - rotY) * 0.04; rotX += (0 - rotX) * 0.05; }
+          if (!hovering && t > cycleAt) { setFocus((focus + 1) % 3); cycleAt = t + 2.6; }
+        }
+        dog.rotation.y = rotY; dog.rotation.x = rotX;
+        dog.position.y = reduce ? 0 : Math.abs(Math.sin(t * 2.2)) * 0.03;
+        guides.forEach(function (list, j) {
+          var on = focus === j;
+          guideMat[j].emissiveIntensity = on ? 0.55 + Math.sin(t * 6) * 0.25 : (focus < 0 ? 0.12 : 0.04);
+          list.forEach(function (m) { m.scale.setScalar(on ? 1.12 : 1); });
+        });
+        renderer.render(scene, camera);
+        anchors.forEach(function (a, j) {
+          v3.copy(a); dog.localToWorld(v3); v3.project(camera);
+          if (pins[j]) pins[j].style.transform = 'translate(' + ((v3.x + 1) / 2 * W).toFixed(1) + 'px,' + ((1 - v3.y) / 2 * H).toFixed(1) + 'px)';
+        });
+      }
+      function loop() {
+        if (raf) return;
+        var tick = function () { raf = 0; if (!visible) return; frame(); raf = requestAnimationFrame(tick); };
+        tick();
+      }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) loop(); }).observe(art);
+      }
+      frame();
+      art.classList.add('is-3d');
+      loop();
+    }
+  }
+
   function initReveal(root) {
     if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var io = new IntersectionObserver(function (entries) {
@@ -516,6 +704,7 @@
     initFinder(root);
     initHotspots(root);
     initLooks(root);
+    initSize3D(root);
     initStarter(root);
     initRails(root);
     initRailPin(root);

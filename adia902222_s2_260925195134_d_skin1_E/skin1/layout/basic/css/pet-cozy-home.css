@@ -627,3 +627,19 @@ html.cz-qv-open{overflow:hidden}
   #lw-home .cz-qv__body{padding:24px 22px 28px}
 }
 @media (prefers-reduced-motion:reduce){#lw-home .cz-look__spot,#lw-home .cz-qv,#lw-home .cz-qv__box{animation:none!important}}
+
+/* 8. 사이즈 가이드 3D 강아지 (initSize3D) */
+#lw-home .cz-size__art{position:relative;overflow:hidden}
+#lw-home .cz-size__3d{position:absolute;inset:0;opacity:0;transition:opacity .7s ease;touch-action:pan-y}
+#lw-home .cz-size__3d canvas{display:block;width:100%;height:100%;cursor:grab}
+#lw-home .cz-size__art.is-grab .cz-size__3d canvas{cursor:grabbing}
+#lw-home .cz-size__art.is-3d .cz-size__3d{opacity:1}
+#lw-home .cz-size__art.is-3d .cz-size__dog{visibility:hidden}
+#lw-home .cz-size__pin{position:absolute;left:0;top:0;z-index:2;display:none;place-items:center;width:30px;height:30px;margin:-15px 0 0 -15px;border:3px solid #fff9f3;border-radius:50%;background:var(--cz-coral);color:#fff;font:italic 600 15px/1 var(--cz-serif);box-shadow:0 8px 16px -8px rgba(40,32,26,.5);cursor:pointer;transition:scale .25s var(--cz-ease),background .25s}
+#lw-home .cz-size__pin.is-on{scale:1.3;background:var(--cz-accent)}
+#lw-home .cz-size__art.is-3d .cz-size__pin{display:grid}
+#lw-home .cz-size__hint{position:absolute;left:50%;bottom:14px;z-index:2;display:none;margin:0;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.78);font-size:12px;font-weight:600;color:var(--cz-muted);transform:translateX(-50%);transition:opacity .4s;pointer-events:none}
+#lw-home .cz-size__art.is-3d .cz-size__hint{display:block}
+#lw-home .cz-size__art.is-played .cz-size__hint{opacity:0}
+#lw-home .cz-size__steps li{transition:background .25s,box-shadow .25s}
+#lw-home .cz-size__steps li.is-on{background:#fff;box-shadow:inset 0 0 0 2px var(--cz-coral)}

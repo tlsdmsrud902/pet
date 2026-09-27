@@ -155,8 +155,8 @@ html.st-sale-on #contents .sl-cp__cards.is-stage-2:not(.is-ready) .sl-cp__card{o
   html.st-sale-on #contents .sl-hero > p,html.st-sale-on #contents .sl-hero > h3{position:relative;z-index:1;margin-left:22px!important;margin-right:22px!important}
   html.st-sale-on #contents .sl-hero__title{--sl-display:'Fraunces',Georgia,serif;font-family:'Fraunces',Georgia,serif!important;font-size:40px!important;font-weight:500!important;line-height:1.05!important;letter-spacing:-.02em!important;text-transform:none!important;color:var(--cz-ink,#43372f)!important}
   html.st-sale-on #contents .sl-hero__up{--sl-display:'Fraunces',Georgia,serif;font-family:'Fraunces',Georgia,serif!important;font-size:26px!important;font-weight:600!important;text-transform:none!important;color:var(--cz-accent,#a5553a)!important}
-  html.st-sale-on #contents .sl-cp__card{width:38%!important}
-  html.st-sale-on #contents .sl-cp__card:nth-child(n+2){margin-left:-12%!important}
-  html.st-sale-on #contents .sl-cp__card:nth-child(1){--sx:68%!important}
-  html.st-sale-on #contents .sl-cp__card:nth-child(3){--sx:-68%!important}
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card{width:42%!important}
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(n+2){margin-left:-15%!important}
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(1){--sx:64%!important}
+  html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(3){--sx:-64%!important}
 }

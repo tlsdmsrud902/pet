@@ -236,8 +236,8 @@
 
   <!-- 8. 사이즈 가이드 -->
   <section class="cz-size cz-wrap" aria-labelledby="cz-size-title">
-    <div class="cz-size__art" aria-hidden="true">
-      <svg viewBox="74 40 308 250" class="cz-size__dog">
+    <div class="cz-size__art">
+      <svg viewBox="74 40 308 250" class="cz-size__dog" aria-hidden="true">
         <ellipse cx="232" cy="274" rx="140" ry="11" class="s-shadow"/>
         <path class="s-tail" d="M326 166c28-6 42-32 34-60"/><path class="s-tail-in" d="M326 166c28-6 42-32 34-60"/>
         <rect x="190" y="196" width="28" height="72" rx="14" class="s-leg s-leg--back"/>
@@ -259,6 +259,10 @@
         <g class="s-pin"><circle cx="204" cy="186" r="14"/><text x="204" y="191">2</text></g>
         <g class="s-pin"><circle cx="267" cy="104" r="14"/><text x="267" y="109">3</text></g>
       </svg>
+      <!-- 3D 강아지 (pet-cozy-home.js initSize3D) : 준비되면 위 SVG 대신 보인다 -->
+      <div class="cz-size__3d" data-size-3d></div>
+      <span class="cz-size__pin" data-pin="1">1</span><span class="cz-size__pin" data-pin="2">2</span><span class="cz-size__pin" data-pin="3">3</span>
+      <p class="cz-size__hint">끌어서 돌려 보세요</p>
     </div>
     <div class="cz-size__copy">
       <p class="cz-kicker">Size, made easy</p>
