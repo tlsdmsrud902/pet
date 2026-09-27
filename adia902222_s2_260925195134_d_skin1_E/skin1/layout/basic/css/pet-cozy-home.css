@@ -708,3 +708,8 @@ html.cz-qv-open{overflow:hidden}
 #lw-home div.cz-journal > *{width:auto!important;min-width:0!important;flex:none!important}
 #lw-home div.cz-journal img{aspect-ratio:16/10!important;height:auto!important;object-fit:cover}
 }
+
+/* 고정(sticky) 섹션은 헤더 아래 끝(--cz-head, pet-cozy-home.js initHeadLine 이 실제 값으로 갱신)에 멈춘다.
+   띠배너를 닫으면 그만큼 올라붙어 빈 공간이 생기지 않는다 */
+#lw-home .pe-hero{top:var(--cz-head,98px);height:calc(100svh - var(--cz-head,98px))}
+@media (max-width:767px){#lw-home .pe-hero{top:var(--cz-head,90px);height:calc(100svh - var(--cz-head,90px))}}

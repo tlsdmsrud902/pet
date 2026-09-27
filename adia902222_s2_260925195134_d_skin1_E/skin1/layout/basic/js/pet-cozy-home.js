@@ -142,6 +142,7 @@
     // 아이폰 주소창이 접히며 생기는 세로 크기 변화는 무시하고, 폭이 바뀔 때만 다시 잰다
     window.addEventListener('resize', function () { if (window.innerWidth !== lastW) { lastW = window.innerWidth; remeasure(); } else kick(); });
     window.addEventListener('load', remeasure);
+    window.addEventListener('cz:head', remeasure);   // 띠배너를 닫아 헤더 위치가 바뀌면 다시 잰다
     return { kick: kick, remeasure: remeasure, jump: function (v) { cur = v; draw(v); } };
   }
 
@@ -413,7 +414,7 @@
       items = Array.from(track.children);
       m.dist = Math.max(0, track.scrollWidth - track.clientWidth);
       if (m.dist < 8) { section.classList.remove('is-pinned'); pin.style.height = ''; m.dist = 0; return; }
-      var head = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cz-head')) || 90;
+      var hd = document.getElementById('header'), head = hd ? Math.round(hd.getBoundingClientRect().bottom) : 90;
       var vh = document.documentElement.clientHeight;
       var top = Math.max(head, Math.round(head + (vh - head - stage.offsetHeight) / 2));
       section.style.setProperty('--cz-stage-top', top + 'px');
@@ -750,9 +751,33 @@
     });
   }
 
+  // 헤더 아래 끝(띠배너 + 헤더)을 --cz-head 로 넘긴다. 고정(sticky) 섹션들이 이 선에 멈춘다.
+  // 띠배너를 닫거나 화면 폭이 바뀌어 헤더 높이가 달라지면 바로 갱신해 빈 공간이 생기지 않게 한다.
+  function initHeadLine() {
+    var header = document.getElementById('header'), last = -1;
+    if (!header) return;
+    function sync() {
+      var h = Math.max(0, Math.round(header.getBoundingClientRect().bottom));
+      if (h === last) return;
+      last = h;
+      document.documentElement.style.setProperty('--cz-head', h + 'px');
+      window.dispatchEvent(new Event('cz:head'));
+    }
+    sync();
+    window.addEventListener('resize', sync);
+    window.addEventListener('load', sync);
+    if ('ResizeObserver' in window) new ResizeObserver(sync).observe(header);
+    if ('MutationObserver' in window) {
+      var mo = new MutationObserver(function () { requestAnimationFrame(sync); });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'style'] });
+      mo.observe(header, { attributes: true, attributeFilter: ['class', 'style'] });
+    }
+  }
+
   function init() {
     var root = document.querySelector('.pet-cozy');
     if (!root) return;
+    initHeadLine();
     initWorldHero(root);
     initWorld(root);
     initPopup();

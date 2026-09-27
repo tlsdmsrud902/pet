@@ -216,7 +216,132 @@
 <!--@import(/layout/basic/footer.html)-->
 <!--#ez="1/1"-->
 <!-- DO NOT EDIT - DESIGN SYSTEM : 본문이 모두 그려진 직후 store-content.js 의 값을 채운다(첫 화면 깜빡임 방지) -->
-<script>try{if(window.STORE_CONTENT_APPLY){window.STORE_CONTENT_APPLY();}}catch(e){}</script>
+<script>/* DO NOT EDIT - DESIGN SYSTEM : store-content.js 의 값을 본문 직후 바로 채운다(첫 화면에 예전 문구·사진이 보였다 바뀌는 깜빡임 방지).
+   seraphin.js 의 initStoreConfig 와 같은 코드다. seraphin.js 는 카페24 번들로 이보다 늦게 실행되므로 여기서 먼저 채운다(같은 요소는 두 번 채우지 않음). */
+try{(function(){var doc=document;var IS_MOBILE=window.matchMedia("(max-width:1024px)").matches;
+	function initStoreConfig() {
+		var content = window.STORE_CONTENT;
+		if (!content) { return; }
+		var brand = content.brand || {};
+		var brandName = typeof brand.name === 'string' ? brand.name : '';
+
+		function get(path) {
+			var value = content;
+			var parts = String(path || '').split('.');
+			for (var i = 0; i < parts.length; i++) {
+				if (value === null || value === undefined) { return undefined; }
+				value = value[parts[i]];
+			}
+			return value;
+		}
+		function fill(value) { return typeof value === 'string' ? value.replace(/\{brand\}/g, brandName) : value; }
+		function usable(value) { return typeof value === 'string' && value !== ''; }
+		function each(selector, fn) { Array.prototype.forEach.call(doc.querySelectorAll(selector), fn); }
+		// 같은 요소를 두 번 채우지 않는다 (본문 끝 즉시 적용 + 부팅 시 재적용).
+		function once(el, kind) {
+			var done = el.__stDone || (el.__stDone = {});
+			if (done[kind]) { return false; }
+			done[kind] = true;
+			return true;
+		}
+		function pairs(el, name, fn) {
+			el.getAttribute(name).split(';').forEach(function (pair) {
+				var cut = pair.indexOf(':');
+				if (cut < 1) { return; }
+				fn(pair.slice(0, cut).replace(/^\s+|\s+$/g, ''), fill(get(pair.slice(cut + 1).replace(/^\s+|\s+$/g, ''))));
+			});
+		}
+
+		each('[data-st-logo]', function (logo) {
+			if (!once(logo, 'logo')) { return; }
+			if (usable(brand.logo)) { logo.setAttribute('src', brand.logo); }
+			if (usable(brandName)) { logo.setAttribute('alt', brandName); }
+		});
+		each('[data-st-text]', function (el) {
+			if (!once(el, 'text')) { return; }
+			var value = fill(get(el.getAttribute('data-st-text')));
+			if (typeof value !== 'string') { return; }
+			if (value === '') { el.style.display = 'none'; } else { el.textContent = value; }
+		});
+		each('[data-st-html]', function (el) {
+			if (!once(el, 'html')) { return; }
+			var value = fill(get(el.getAttribute('data-st-html')));
+			if (typeof value !== 'string') { return; }
+			if (value === '') { el.style.display = 'none'; } else { el.innerHTML = value; }
+		});
+		each('[data-st-lead]', function (el) {
+			if (!once(el, 'lead')) { return; }
+			var value = fill(get(el.getAttribute('data-st-lead')));
+			if (typeof value !== 'string') { return; }
+			var node = el.firstChild;
+			while (node && node.nodeType !== 3) { node = node.nextSibling; }
+			if (node) { node.nodeValue = value; } else { el.insertBefore(doc.createTextNode(value), el.firstChild); }
+		});
+		each('[data-st-href]', function (el) {
+			if (!once(el, 'href')) { return; }
+			var value = fill(get(el.getAttribute('data-st-href')));
+			if (usable(value)) { el.setAttribute('href', value); }
+		});
+		each('[data-st-src]', function (el) {
+			if (!once(el, 'src')) { return; }
+			var value = get(el.getAttribute('data-st-src'));
+			var mobilePath = el.getAttribute('data-st-src-mobile');
+			if (IS_MOBILE && mobilePath && usable(get(mobilePath))) { value = get(mobilePath); }
+			if (usable(value) && el.getAttribute('src') !== value) { el.setAttribute('src', value); }
+		});
+		each('[data-st-srcset]', function (el) {
+			if (!once(el, 'srcset')) { return; }
+			var value = get(el.getAttribute('data-st-srcset'));
+			if (usable(value)) { el.setAttribute('srcset', value); }
+		});
+		each('[data-st-attr]', function (el) {
+			if (!once(el, 'attr')) { return; }
+			pairs(el, 'data-st-attr', function (name, value) { if (usable(value)) { el.setAttribute(name, value); } });
+		});
+		each('[data-st-media]', function (el) {
+			if (!once(el, 'media')) { return; }
+			pairs(el, 'data-st-media', function (name, value) {
+				if (typeof value !== 'string') { return; }
+				if (value === '') { el.removeAttribute(name); } else { el.setAttribute(name, value); }
+			});
+		});
+		each('video[data-st-video]', function (video) {
+			if (!once(video, 'video')) { return; }
+			var value = get(video.getAttribute('data-st-video'));
+			if (typeof value !== 'string') { return; }
+			if (value === '') { video.parentNode.removeChild(video); return; }
+			video.setAttribute('data-src', value);
+			video.removeAttribute('src');
+		});
+
+		// ON STORE 배너의 마우스오버 두 번째 컷 (CSS 변수 --st-hover-N 으로 전달)
+		var hover = get('onStore.hoverImages');
+		var gallery = doc.querySelector('.main_image_text_gallery .main_3dan_banner');
+		if (gallery && hover && hover.length && once(gallery, 'hover')) {
+			for (var i = 0; i < hover.length; i++) {
+				if (typeof hover[i] !== 'string') { continue; }
+				gallery.style.setProperty('--st-hover-' + (i + 1), hover[i] ? 'url("' + hover[i].replace(/["\\\n]/g, '') + '")' : 'none');
+			}
+		}
+
+		// SPECIAL EVENT 의 큰 글자 모양(브랜드 워드마크). 비어 있으면 CSS 의 기본 모양(SERAPHIN)을 쓴다.
+		var mask = get('specialEvent.mask');
+		var maskWidth = mask ? Number(mask.width) : 0;
+		var maskHeight = mask ? Number(mask.height) : 0;
+		if (mask && usable(mask.path) && maskWidth > 0 && maskHeight > 0) {
+			var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + maskWidth + "' height='" + maskHeight + "' viewBox='0 0 " + maskWidth + ' ' + maskHeight + "'><path fill='#fff' d='" + mask.path.replace(/'/g, '') + "'/></svg>";
+			var image = 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '"), linear-gradient(#fff, #fff)';
+			each('.st-type__mask', function (el) {
+				if (!once(el, 'mask')) { return; }
+				el.style.setProperty('-webkit-mask-image', image);
+				el.style.setProperty('mask-image', image);
+				el.setAttribute('data-st-mask-w', maskWidth);
+				el.setAttribute('data-st-mask-h', maskHeight);
+			});
+		}
+	}
+
+initStoreConfig();}());}catch(e){}</script>
 <!-- 우측 플로팅 버튼 — 주소는 store-content.js 의 social.instagram / floating.kakao -->
 <div class="s9-float" id="s9Float" aria-label="바로가기">
 	<a class="s9-float__btn s9-float__btn--insta" data-s9="instagram" href="#none" target="_blank" rel="noopener" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.3" cy="6.7" r=".8" fill="currentColor"></circle></svg><span class="displaynone">인스타그램</span></a>
