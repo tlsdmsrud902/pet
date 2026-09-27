@@ -6,7 +6,7 @@
    한 번 읽은 결과는 10분 동안 sessionStorage 에 저장해 페이지마다 다시 요청하지 않는다. */
 (function () {
   'use strict';
-  var BOARD = 4, PAGES = 2, MAX_DETAIL = 24, POOL = 3, CACHE_KEY = 'petpia-reviews-v2', TTL = 10 * 60 * 1000;
+  var BOARD = 4, PAGES = 4, MAX_DETAIL = 40, POOL = 3, CACHE_KEY = 'petpia-reviews-v3', TTL = 30 * 60 * 1000;
   var NOTE = /※\s*PETPIA가 만든[^\n]*교체됩니다\.?/;
 
   function trim(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
