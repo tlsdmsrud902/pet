@@ -183,3 +183,10 @@ html.st-sale-on #contents .sl-hero__up{color:#ffd2bd!important;-webkit-text-fill
 
 /* 최상단 띠배너를 X 로 닫으면(layout.html 스크립트가 html 에 pet-topbanner-off 를 붙임) 오늘 자정까지 숨긴다 */
 html.pet-topbanner-off .main_top_banner{display:none!important}
+
+/* 세일 페이지 모바일 3단 배너 : 옆으로 잘리지 않게 세로로 쌓아 3장 모두 보이게 */
+@media (max-width:767px){
+html.st-sale-on #contents .sl-tiles{display:grid!important;grid-template-columns:1fr!important;gap:2px!important;overflow:visible!important;padding:0!important}
+html.st-sale-on #contents .sl-tiles > li{width:auto!important;min-width:0!important;flex:none!important;margin:0!important}
+html.st-sale-on #contents .sl-tile{aspect-ratio:16/10!important;height:auto!important}
+}
