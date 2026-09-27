@@ -180,3 +180,6 @@ html.st-sale-on #contents .sl-hero::after{content:''!important;display:block!imp
 html.st-sale-on #contents .sl-hero > p,html.st-sale-on #contents .sl-hero > h3{position:relative!important;z-index:1!important;margin-left:0!important;margin-right:0!important;color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important;text-shadow:0 1px 14px rgba(24,18,14,.35)}
 html.st-sale-on #contents .sl-hero__up{color:#ffd2bd!important;-webkit-text-fill-color:#ffd2bd!important}
 }
+
+/* 최상단 띠배너를 X 로 닫으면(layout.html 스크립트가 html 에 pet-topbanner-off 를 붙임) 오늘 자정까지 숨긴다 */
+html.pet-topbanner-off .main_top_banner{display:none!important}

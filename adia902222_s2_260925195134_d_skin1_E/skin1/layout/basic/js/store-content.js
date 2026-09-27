@@ -50,8 +50,8 @@ window.STORE_CONTENT = {
 	community: {
 		label: '커뮤니티',             // 상단 메뉴에 뜨는 글자 (마우스를 올리면 아래 게시판들이 펼쳐짐)
 		items: [
-			{ label: '공지사항',     link: '/board/free/list.html?board_no=1' },
-			{ label: '자주묻는질문', link: '/board/free/list.html?board_no=3' },
+			{ label: '공지사항',     link: '/board/product/list.html?board_no=1' },
+			{ label: '자주묻는질문', link: '/board/product/list.html?board_no=3' },
 			{ label: '상품문의',     link: '/board/product/list.html?board_no=6' }
 		]
 	},
@@ -142,7 +142,7 @@ window.STORE_CONTENT = {
 		{ label: 'Shop',   link: '/product/list.html?cate_no=42' },
 		{ label: 'Order',  link: '/myshop/order/list.html' },
 		{ label: 'Q&A',    link: '/board/product/list.html?board_no=6' },
-		{ label: 'Notice', link: '/board/free/list.html?board_no=1' }
+		{ label: 'Notice', link: '/board/product/list.html?board_no=1' }
 	],
 
 	/* ---------------------------------------------------------------------
