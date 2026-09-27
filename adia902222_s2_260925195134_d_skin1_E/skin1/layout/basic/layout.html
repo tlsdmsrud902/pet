@@ -446,5 +446,26 @@ try{(function(){
   setTimeout(function(){stock();review();hideDraw()},1500);setTimeout(hideDraw,3500);setTimeout(hideDraw,7000);   /* 후기 영역이 늦게 그려지는 경우 */
 }catch(e){}})();
 </script>
+<script>
+/* 최상단 띠배너 X : 누르면 닫고, 오늘 자정까지 다시 띄우지 않는다 (카페24 Easy 띠배너의 기본 닫기가 동작하지 않아 직접 처리) */
+(function(){
+  var KEY='petpia-topbanner-hide';
+  function hide(b){ b.style.setProperty('display','none','important'); document.documentElement.classList.add('pet-topbanner-off'); }
+  function init(){
+    var b=document.querySelector('.main_top_banner'); if(!b) return;
+    try{ if(Number(localStorage.getItem(KEY))>Date.now()){ hide(b); return; } }catch(e){}
+    var x=b.querySelector('.top_banner_close .icoClose, .top_banner_close, .btnClose'); if(!x) return;
+    x.style.cursor='pointer';
+    x.addEventListener('click',function(e){
+      if(e.target && e.target.matches && e.target.matches('input,label')) return;   // 체크박스·문구는 그대로 둔다
+      e.preventDefault(); e.stopPropagation();
+      var end=new Date(); end.setHours(24,0,0,0);
+      try{ localStorage.setItem(KEY,String(end.getTime())); }catch(err){}
+      hide(b);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+}());
+</script>
 </body>
 </html>

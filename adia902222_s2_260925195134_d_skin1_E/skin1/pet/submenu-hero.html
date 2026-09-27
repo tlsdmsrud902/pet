@@ -15,23 +15,28 @@
  var params=new URLSearchParams(location.search),word=params.get('keyword')||'',path=location.pathname,board=path.indexOf('/board/')===0;
  var catm=path.match(/\/category\/[^\/]+\/(\d+)/),cate=String(params.get('cate_no')||(catm&&catm[1])||'');
  var list=/\/product\/list\.html$/.test(path)||!!catm;
- if(board&&params.get('board_no')!=='4'){hero.remove();return;}
+ // 게시판 : 리뷰(4) · 공지사항(1) · 자주묻는질문(3) · 상품문의(6) 은 같은 배너를 쓴다
+ var boardKey={'4':'review','1':'notice','3':'faq','6':'qna'}[params.get('board_no')];
+ if(board&&!boardKey){hero.remove();return;}
  // SALE(27)은 전용 세일 화면이 따로 있다
  if(list&&cate==='27'){hero.remove();return;}
  // 상품분류 번호 : 24 강아지 · 25 고양이 · 26 산책/외출 (관리자 대분류)
  var byCate={'42':'all','24':'dog','25':'cat','26':'walk'};
- var key=board?'review':list?(byCate[cate]||'all'):/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
+ var key=board?boardKey:list?(byCate[cate]||'all'):/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
  var data={
   all:['shop-hero.png','세이지와 크림 컬러의 반려생활 용품','THE EVERYDAY COLLECTION','Good things.<br>For your best friend.','함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.'],
   dog:['submenu-dog.png','쿠션에서 쉬는 강아지와 놀이 용품','THE DOG COLLECTION','For happy dogs.<br>And their people.','신나는 놀이부터 포근한 잠자리까지.<br>강아지의 하루를 채우는 다정한 선택.'],
   cat:['submenu-cat.png','스크래처 곁에서 쉬는 고양이','THE CAT COLLECTION','Their own world.<br>A little softer.','긁고, 숨고, 느긋하게 쉬는 시간.<br>고양이만의 취향을 존중하는 일상.'],
   walk:['submenu-walk.png','세이지 하네스를 입고 산책하는 코커 스패니얼','THE OUTDOOR COLLECTION','Small steps.<br>Big adventures.','익숙한 골목도 함께라면 새로운 여행.<br>가볍고 편안한 외출을 준비해보세요.'],
-  review:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','LIFE, SHARED','Real moments.<br>Shared with love.','함께 써본 경험이 더 좋은 선택으로.<br>반려가족의 일상과 사용 후기를 만나보세요.']
+  review:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','LIFE, SHARED','Real moments.<br>Shared with love.','함께 써본 경험이 더 좋은 선택으로.<br>반려가족의 일상과 사용 후기를 만나보세요.'],
+  notice:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','NEWS & NOTICE','Little news.<br>From PETPIA.','펫피아의 새로운 소식과<br>꼭 알아 두실 안내를 전해 드려요.'],
+  faq:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','GOOD TO KNOW','Questions?<br>We have answers.','주문 · 배송 · 교환 · 반품에 대해<br>자주 묻는 질문을 모았어요.'],
+  qna:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','ASK US','Ask anything.<br>We are here to help.','상품에 대해 궁금한 점을 남겨 주세요.<br>꼼꼼히 확인하고 답변드릴게요.']
  }[key],img=hero.querySelector('img');
  hero.dataset.collection=key;img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
  function reveal(){hero.classList.add('is-ready')}
  img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src='/SkinImg/pet/'+data[0];if(img.complete&&img.naturalWidth)reveal();
- hero.querySelector('[data-pet-menu="'+key+'"]').setAttribute('aria-current','page');
+ var cur=hero.querySelector('[data-pet-menu="'+key+'"]');if(cur)cur.setAttribute('aria-current','page');
  var form=document.querySelector('.pet-list-search');if(form&&list)form.hidden=false;
 }());
 </script>

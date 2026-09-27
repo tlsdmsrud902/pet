@@ -171,3 +171,12 @@ html.st-sale-on #contents .sl-cp__face{border-radius:clamp(14px,1.6vw,26px)!impo
   html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card{width:36%!important}
   html.st-sale-on #contents .sl-cp__cards > .sl-cp__card.sl-cp__card:nth-child(n+2){margin-left:-12.8%!important}
 }
+
+/* 세일 페이지 모바일 히어로 : 글자를 사진 안(아래쪽)에 얹는다 (위 모바일 규칙을 덮어씀) */
+@media (max-width:767px){
+html.st-sale-on #contents .sl-hero{position:relative!important;justify-content:flex-end!important;height:min(132vw,600px)!important;min-height:0!important;padding:0 22px 30px!important;background:#2b2520!important;overflow:hidden!important}
+html.st-sale-on #contents .sl-hero__img{position:absolute!important;inset:0!important;z-index:0!important;width:100%!important;height:100%!important;aspect-ratio:auto!important;object-fit:cover!important;object-position:72% 50%!important;margin:0!important}
+html.st-sale-on #contents .sl-hero::after{content:''!important;display:block!important;position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none;background:linear-gradient(180deg,rgba(24,18,14,0) 30%,rgba(24,18,14,.35) 55%,rgba(24,18,14,.8) 100%)!important}
+html.st-sale-on #contents .sl-hero > p,html.st-sale-on #contents .sl-hero > h3{position:relative!important;z-index:1!important;margin-left:0!important;margin-right:0!important;color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important;text-shadow:0 1px 14px rgba(24,18,14,.35)}
+html.st-sale-on #contents .sl-hero__up{color:#ffd2bd!important;-webkit-text-fill-color:#ffd2bd!important}
+}

@@ -655,3 +655,31 @@ html.cz-qv-open{overflow:hidden}
 .cz-pop__timer.is-ended .cz-pop__tval{font-size:13px}
 @keyframes czPopBlink{50%{opacity:.35}}
 @media (prefers-reduced-motion:reduce){.cz-pop__tlab i{animation:none}}
+
+/* 사이즈 가이드 : 3D 를 쓸 수 있으면 처음부터 SVG 강아지를 숨긴다 (3D 가 준비되면 서서히 나타남) */
+#lw-home .cz-size__art.is-3d-wait .cz-size__dog{visibility:hidden}
+
+/* Shop the look + 버튼 : 밝은 사진 위에서도 잘 보이게 진한 바탕 · 흰 테두리 · 흰 물결 */
+#lw-home .cz-hotspot{background:var(--cz-ink,#43372f);color:#fff9f3;border:2.5px solid #fff9f3;box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 0 rgba(255,249,243,.75);animation:cz-hot-ring 2.2s infinite}
+#lw-home .cz-hotspot span{font-weight:500}
+#lw-home .cz-hotspot:hover{background:var(--cz-accent,#a5553a)}
+#lw-home .cz-hotspot[aria-expanded=true]{background:#fff9f3;color:var(--cz-ink,#43372f);border-color:var(--cz-ink,#43372f)}
+@keyframes cz-hot-ring{0%{box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 0 rgba(255,249,243,.8)}70%{box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 14px rgba(255,249,243,0)}100%{box-shadow:0 6px 18px -4px rgba(24,18,14,.55),0 0 0 0 rgba(255,249,243,0)}}
+@media (prefers-reduced-motion:reduce){#lw-home .cz-hotspot{animation:none}}
+
+/* 이벤트 팝업 타이머는 사진 위쪽에. 배지와 점은 그 아래로 */
+.cz-pop__timer{top:0;bottom:auto}
+.cz-pop__slide--timer .cz-pop__badge{top:58px}
+#cz-pop:has(.cz-pop__slide--timer) .cz-pop__dots{top:62px}
+
+/* 모바일 메인 히어로 : 영상·사진을 화면 가득 깔고 글자를 그 위(아래쪽)에 얹는다. 01·02·03 장면 모두 같음 */
+@media (max-width:767px){
+#lw-home .pe-hero .pe-hero__visual{top:0!important;bottom:0!important;height:auto!important;z-index:0!important}
+#lw-home .pe-hero .pe-hero__visual .pe-world-image{top:0!important;left:0!important;width:100%!important;height:100%!important;object-fit:cover}
+#lw-home .pe-hero .pe-hero__visual::after{content:''!important;position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(24,18,14,.28) 0%,rgba(24,18,14,0) 24%,rgba(24,18,14,.28) 46%,rgba(24,18,14,.82) 100%)!important}
+#lw-home .pe-hero .pe-hero__copy{top:auto!important;bottom:0!important;height:auto!important;justify-content:flex-end!important;padding:24px 22px 70px!important;z-index:2!important}
+#lw-home .pe-hero .pe-hero__copy :is(.pe-eyebrow,.pe-display,h1,h2,.pe-description),#lw-home .pe-hero .pe-hero__copy :is(.pe-eyebrow,.pe-display,h1,h2,.pe-description) *{color:#fff9f3!important;-webkit-text-fill-color:#fff9f3!important;background-image:none!important;text-shadow:0 1px 14px rgba(24,18,14,.35)}
+#lw-home .pe-hero .pe-hero__copy .pe-display em,#lw-home .pe-hero .pe-hero__copy .pe-display em *{color:#ffd2bd!important;-webkit-text-fill-color:#ffd2bd!important}
+#lw-home .pe-hero .pe-hero__copy .pe-button{background:#fff9f3!important}
+#lw-home .pe-hero .pe-hero__copy .pe-button,#lw-home .pe-hero .pe-hero__copy .pe-button *{color:#43372f!important;-webkit-text-fill-color:#43372f!important}
+}

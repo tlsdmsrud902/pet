@@ -543,24 +543,30 @@
     var steps = Array.from(root.querySelectorAll('.cz-size__steps li'));
     var pins = Array.from(art.querySelectorAll('[data-pin]'));
     var started = false;
+    // WebGL 이 되면 처음부터 SVG 그림을 숨기고(is-3d-wait) 3D 강아지만 보이게 한다. 못 불러오면 SVG 로 되돌린다.
+    var probe = document.createElement('canvas');
+    if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return;
+    art.classList.add('is-3d-wait');
+    function fail() { art.classList.remove('is-3d-wait'); }
     function start() {
       if (started) return;
       started = true;
-      var probe = document.createElement('canvas');
-      if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return;
       // 동적 import 를 문자열로 감싸 카페24 스크립트 압축기가 문법을 건드리지 않게 한다 (+esm : 같은 three 를 함께 쓰는 판)
       var load = new Function('u', 'return import(u)');
       Promise.all([
         load('https://cdn.jsdelivr.net/npm/three@0.160.0/+esm'),
         load('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/GLTFLoader.js/+esm')
       ]).then(function (mods) {
-        new mods[1].GLTFLoader().load(MODEL, function (gltf) { build(mods[0], gltf.scene); }, undefined, function () {});
-      }).catch(function () {});
+        new mods[1].GLTFLoader().load(MODEL, function (gltf) { try { build(mods[0], gltf.scene); } catch (e) { fail(); } }, undefined, fail);
+      }).catch(fail);
     }
+    // 스크롤로 닿기 훨씬 전에 미리 받아 둔다 : 페이지가 다 열린 뒤 쉬는 틈, 또는 섹션이 2 화면 앞에 오면
     if ('IntersectionObserver' in window) {
-      var sio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { sio.disconnect(); start(); } }, { rootMargin: '600px 0px' });
+      var sio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { sio.disconnect(); start(); } }, { rootMargin: '2000px 0px' });
       sio.observe(art);
-    } else start();
+    }
+    var idle = window.requestIdleCallback || function (cb) { return setTimeout(cb, 1500); };
+    if (document.readyState === 'complete') idle(start); else window.addEventListener('load', function () { idle(start); });
 
     function build(THREE, model) {
       var V = function (x, y, z) { return new THREE.Vector3(x, y, z); };

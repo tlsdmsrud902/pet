@@ -36,6 +36,7 @@ window.STORE_CONTENT = {
 	   기본값 1 = 최상위 분류(최대 6개). 특정 분류의 하위만 보이려면 그 분류 번호를 넣으세요. */
 	menu: {
 		parentCateNo: 1,
+		saleBadge: '50%',  // 상단 메뉴 SALE 위 말풍선 글자 (비우면 50%)
 		editorial: false   // true 면 코드에 적어 둔 고정 메뉴, false 면 관리자 대분류로 메뉴를 만든다
 	},
 
@@ -47,12 +48,11 @@ window.STORE_CONTENT = {
 	   게시판을 새로 만들거나 지우면 board_no 가 달라지니, 그때는 관리자에서 다시 확인해서 바꾸세요.
 	   항목을 지우면(배열을 비우면) COMMUNITY 메뉴 자체가 나오지 않습니다. */
 	community: {
-		label: 'COMMUNITY',           // 상단 메뉴에 뜨는 글자
+		label: '커뮤니티',             // 상단 메뉴에 뜨는 글자 (마우스를 올리면 아래 게시판들이 펼쳐짐)
 		items: [
 			{ label: '공지사항',     link: '/board/free/list.html?board_no=1' },
-			{ label: '포토리뷰',     link: '/board/product/list.html?board_no=4' },
-			{ label: '상품문의',     link: '/board/product/list.html?board_no=6' },
-			{ label: '자유게시판',   link: '/board/free/list.html?board_no=5' }
+			{ label: '자주묻는질문', link: '/board/free/list.html?board_no=3' },
+			{ label: '상품문의',     link: '/board/product/list.html?board_no=6' }
 		]
 	},
 
