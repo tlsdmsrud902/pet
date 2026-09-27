@@ -503,7 +503,7 @@
   function initSize3D(root) {
     var art = root.querySelector('.cz-size__art'), mount = art && art.querySelector('[data-size-3d]');
     if (!mount) return;
-    var MODEL = 'https://cdn.jsdelivr.net/gh/tlsdmsrud902/pet@a6e041c/cafe24-assets/dog3d/dog-3d.glb';
+    var MODEL = 'https://cdn.jsdelivr.net/gh/tlsdmsrud902/pet@90a51e1/cafe24-assets/dog3d/dog-3d-v2.glb';
     var steps = Array.from(root.querySelectorAll('.cz-size__steps li'));
     var pins = Array.from(art.querySelectorAll('[data-pin]'));
     var started = false;
@@ -535,7 +535,7 @@
       mount.appendChild(renderer.domElement);
       var scene = new THREE.Scene();
       var camera = new THREE.PerspectiveCamera(28, 1.3, 0.1, 100);
-      scene.add(new THREE.HemisphereLight(0xfffaf2, 0xd8c6b2, 2.1));
+      scene.add(new THREE.HemisphereLight(0xfffaf2, 0xe2d2c0, 2.5));
       var sun = new THREE.DirectionalLight(0xffffff, 1.3); sun.position.set(-3, 5, 5); scene.add(sun);
       var rim = new THREE.DirectionalLight(0xffe6d6, 0.7); rim.position.set(4, 2.5, -4); scene.add(rim);
 
