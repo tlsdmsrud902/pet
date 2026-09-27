@@ -48,6 +48,7 @@ body #wrap,body #container{background:transparent}
 .st-totop svg,.s9-float .s9-float__btn svg{width:20px;height:20px}
 .st-totop:hover,.st-totop:focus-visible,.s9-float .s9-float__btn:hover,.s9-float .s9-float__btn:focus-visible{background:var(--cz-ink)!important;border-color:var(--cz-ink)!important;color:#fff9f3!important;outline:0}
 .s9-float .s9-float__btn--kakao{background:#fee500!important;border-color:#fee500!important;color:#3a1d1d!important}
+@media (max-width:767px){html body:has(#lw-home) #s9Float.s9-float{display:flex!important}}
 
 /* 검색 레이어 : 카페24가 클래스를 붙이기 전(미리보기 등)에도 숨김 */
 [module="Layout_SearchHeader"]:not(.xans-layout-searchheader){position:fixed;left:0;right:0;top:0;opacity:0;visibility:hidden;pointer-events:none}
