@@ -1,0 +1,880 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>PETPIA 스킨 수정 설명서</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>@page { size: A4; margin: 0; }
+:root { --ink: #1f2430; --sub: #5b6573; --line: #e3e6ec; --paper: #ffffff; --soft: #f5f7fa; --red: #e5383b; --c: #3b6fd8; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #d9dde3; }
+body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; color: var(--ink); font-size: 11pt; line-height: 1.55; word-break: keep-all; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+a { color: var(--c); text-decoration: none; font-weight: 600; }
+code { font-family: 'D2Coding', 'Consolas', 'Pretendard', monospace; font-size: .92em; background: #eef1f5; color: #b3261e; padding: .05em .35em; border-radius: 4px; word-break: break-all; }
+small { color: var(--sub); }
+
+.page { width: 210mm; height: 297mm; padding: 11mm 13mm 12mm; background: var(--paper); position: relative; overflow: hidden; page-break-after: always; break-after: page; display: flex; flex-direction: column; margin: 0 auto; }
+@media screen { .page { margin: 8mm auto; box-shadow: 0 2px 12px rgba(0,0,0,.12); } }
+.pg-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5mm; }
+.chip { display: inline-block; background: var(--c); color: #fff; font-weight: 700; font-size: 8.6pt; padding: 1.2mm 3.2mm; border-radius: 99px; letter-spacing: .02em; }
+.to-toc { font-size: 8.6pt; color: var(--sub); border: 1px solid var(--line); padding: 1mm 3mm; border-radius: 99px; }
+.pg-title { font-size: 19pt; line-height: 1.25; margin: 0 0 3.5mm; font-weight: 800; letter-spacing: -.02em; padding-bottom: 2.5mm; border-bottom: 2.5px solid var(--c); }
+.pg-body { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 2.6mm; }
+.pg-foot { position: absolute; left: 13mm; right: 13mm; bottom: 5mm; display: flex; justify-content: space-between; font-size: 7.6pt; color: #9aa3ad; }
+
+.lead { font-size: 11pt; margin: 0; }
+h3 { font-size: 11.5pt; margin: 1mm 0 0; font-weight: 800; }
+p { margin: 0; }
+
+/* 그림 */
+.fig { margin: 0; width: 100%; }
+.fig-center { margin: 0 auto; }
+.shotwrap { position: relative; width: 100%; }
+.shot { position: absolute; inset: 0; overflow: hidden; border-radius: 6px; background: #f3f4f6; box-shadow: 0 1px 4px rgba(20,30,50,.08); }
+.shot::after { content: ''; position: absolute; inset: 0; border: 1px solid #cfd5dd; border-radius: 6px; pointer-events: none; z-index: 4; }
+.shot img { position: absolute; display: block; max-width: none; height: auto; }
+figcaption { font-size: 8.4pt; color: var(--sub); margin-top: 1mm; text-align: center; }
+.mk { position: absolute; width: 6.2mm; height: 6.2mm; border-radius: 50%; background: var(--red); color: #fff; font-weight: 800; font-size: 9.6pt; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); z-index: 3; font-style: normal; transform: translate(-50%, -50%); }
+.mk.d-l { transform: translate(calc(-100% - .8mm), -50%); }
+.mk.d-r { transform: translate(.8mm, -50%); }
+.mk.d-t { transform: translate(-50%, calc(-100% - .8mm)); }
+.mk.d-b { transform: translate(-50%, .8mm); }
+.pg-body > * { flex-shrink: 0; }
+.num-plain { background: #cfd5dd; color: #3b4452; }
+.bx { position: absolute; border: 2.4px solid var(--red); border-radius: 4px; box-shadow: 0 0 0 2px rgba(255,255,255,.7); z-index: 2; }
+.mk-static, .bx-static { position: relative; transform: none; display: inline-flex; vertical-align: middle; }
+.bx-static { width: 14mm; height: 6mm; display: inline-block; }
+
+/* 단계 */
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.5mm; }
+.steps li { display: flex; gap: 2.6mm; align-items: flex-start; }
+.num { flex: none; width: 6.2mm; height: 6.2mm; border-radius: 50%; background: var(--red); color: #fff; font-size: 9pt; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: .3mm; }
+.steps li > div { flex: 1; }
+
+/* 상자 */
+.tip, .warn { display: flex; gap: 3mm; padding: 2.6mm 3.4mm; border-radius: 6px; font-size: 9.6pt; }
+.tip { background: #fff8db; border: 1px solid #f1dc8a; }
+.warn { background: #fdecec; border: 1px solid #f2b8b8; }
+.tip > b, .warn > b { flex: none; }
+.note { background: var(--soft); border-left: 4px solid var(--c); padding: 2.2mm 3.4mm; border-radius: 0 6px 6px 0; font-size: 9.6pt; }
+.code { border-radius: 6px; overflow: hidden; border: 1px solid #2d3340; }
+.code-lab { display: block; background: #2d3340; color: #cfd6e1; font-size: 8.4pt; font-weight: 700; padding: 1.2mm 3mm; }
+.code pre { margin: 0; background: #1e222b; color: #e7ebf2; font-family: 'D2Coding', Consolas, monospace; font-size: 8.4pt; line-height: 1.6; padding: 2.4mm 3mm; white-space: pre-wrap; word-break: break-all; }
+.code mark { background: #ffd84d; color: #1e222b; border-radius: 2px; padding: 0 .15em; }
+.swap { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2mm; align-items: stretch; background: #eaf7ef; border: 1.5px solid #7cc79a; border-radius: 7px; padding: 2.4mm 3mm; }
+.sw-col { display: flex; flex-direction: column; gap: 1mm; min-width: 0; }
+.sw-lab { font-size: 8pt; font-weight: 800; color: #2f7d50; }
+.swap code { background: #fff; color: #173b27; font-size: 9pt; padding: 1.2mm 2mm; border: 1px solid #b9e0c7; }
+.sw-arrow { align-self: center; font-size: 15pt; font-weight: 800; color: #2f9a6a; }
+.sw-file { grid-column: 1 / -1; font-size: 8.4pt; color: #2f7d50; }
+.swap-mini { display: inline-block; background: #eaf7ef; border: 1.5px solid #7cc79a; border-radius: 5px; padding: .6mm 2mm; font-weight: 700; color: #2f7d50; }
+.demo { background: var(--soft); border-radius: 6px; padding: 3mm; font-size: 9.6pt; height: 100%; }
+
+/* 표 */
+.tbl { width: 100%; border-collapse: collapse; font-size: 9.8pt; }
+.tbl th { background: #f0f2f6; text-align: left; font-weight: 800; padding: 1.6mm 2.4mm; border-bottom: 1.5px solid #cfd5dd; }
+.tbl td { padding: 1.5mm 2.4mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl-map td, .tbl-map th { padding: 1.05mm 2.2mm; }
+.tbl-small { font-size: 8.5pt; }
+.tbl-small td { padding: 1.1mm 2mm; }
+.tag { display: inline-block; font-size: 7.8pt; font-weight: 800; padding: .3mm 2mm; border-radius: 99px; margin: .2mm .6mm .2mm 0; white-space: nowrap; }
+.t-easy { background: #e3ecff; color: #2451b3; }
+.t-sde { background: #ffeede; color: #b35a14; }
+.t-up { background: #e5f6ec; color: #227049; }
+.t-adm { background: #f0e6fb; color: #6b37a8; }
+.t-auto { background: #eceff3; color: #4b5563; }
+.two { display: grid; gap: 3mm; align-items: start; }
+
+/* 흐름도 */
+.flow { display: flex; flex-direction: column; gap: 2mm; }
+.fl-row { display: grid; grid-template-columns: 58mm 8mm 1fr; align-items: center; }
+.fl-a { background: #f0e6fb; border: 1.5px solid #c9a9ee; border-radius: 7px; padding: 2.4mm 3mm; font-size: 9.6pt; }
+.fl-arrow { text-align: center; font-size: 15pt; font-weight: 800; color: #8a55c9; }
+.fl-b { background: var(--soft); border: 1px solid var(--line); border-radius: 7px; padding: 2.4mm 3mm; font-size: 9.4pt; }
+
+/* 목차 */
+.toc { padding-top: 10mm; }
+.cover { background: linear-gradient(135deg, #2b3a55, #3b6fd8); color: #fff; border-radius: 10px; padding: 6mm 7mm 5.5mm; margin-bottom: 4mm; }
+.cover-badge { display: inline-block; font-size: 8.4pt; font-weight: 700; background: rgba(255,255,255,.18); padding: .8mm 3mm; border-radius: 99px; }
+.cover h1 { margin: 2mm 0 1.5mm; font-size: 21pt; line-height: 1.2; letter-spacing: -.02em; }
+.cover h1 span { color: #ffd84d; }
+.cover p { font-size: 9.6pt; opacity: .92; }
+.toc-grid { column-count: 2; column-gap: 7mm; flex: 1; min-height: 0; overflow: hidden; }
+.toc-ch { break-inside: avoid; margin-bottom: 2.6mm; }
+.toc-chname { font-weight: 800; font-size: 10.2pt; color: var(--c); display: flex; align-items: center; gap: 2mm; margin-bottom: .8mm; }
+.toc-chname span { background: var(--c); color: #fff; font-size: 7.8pt; padding: .3mm 2mm; border-radius: 99px; }
+.toc-item { display: flex; align-items: baseline; gap: 1.5mm; color: var(--ink); font-weight: 500; font-size: 9pt; padding: .45mm 0 .45mm 1mm; }
+.toc-item span { flex: none; max-width: 76mm; }
+.toc-item i { flex: 1; border-bottom: 1px dotted #b8c0ca; transform: translateY(-1mm); }
+.toc-item b { flex: none; color: var(--sub); font-weight: 700; font-size: 8.6pt; }
+.endcard { margin-top: auto; text-align: center; background: linear-gradient(135deg, #fff6d6, #ffe3e3); border-radius: 10px; padding: 5mm; font-size: 11pt; }
+
+/* 가는 길 */
+.path { display: flex; flex-wrap: wrap; align-items: center; gap: 1mm 1.2mm; background: #eef4ff; border: 1.5px solid #9bb8f0; border-radius: 7px; padding: 1.8mm 2.6mm; font-size: 9pt; }
+.path-lab { color: #2451b3; margin-right: 1mm; font-size: 9.2pt; }
+.path-step { background: #fff; border: 1px solid #c8d6f3; border-radius: 4px; padding: .3mm 1.8mm; white-space: nowrap; }
+.path-step.last { background: #2451b3; color: #fff; border-color: #2451b3; font-weight: 700; }
+.path-arr { font-style: normal; color: #6b86c4; font-weight: 800; }
+.tbl .path { padding: 1mm 1.6mm; font-size: 8pt; }
+/* 소제목 */
+.sub-h { font-size: 9.6pt; font-weight: 700; color: #3b4452; border-bottom: 1px dashed #cfd5dd; padding-bottom: .8mm; }
+/* 코드 그림 */
+.cfig .shotwrap .shot { background: #fff; }
+.cfig-cap { font-size: 8.4pt; color: #5b6573; margin-top: .8mm; }
+.cfig-cap b { color: #b35a14; }
+/* 사진 카드 */
+.pcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(56mm, 1fr)); gap: 2mm; }
+.pcard { display: flex; gap: 2mm; align-items: center; background: #fff; border: 1px solid #e3e6ec; border-radius: 6px; padding: 1.4mm; position: relative; }
+.pcard img { width: 15mm; height: 15mm; object-fit: cover; border-radius: 4px; flex: none; }
+.pcard .num { position: absolute; left: -1.6mm; top: -1.6mm; width: 5mm; height: 5mm; font-size: 8pt; }
+.pc-t { display: flex; flex-direction: column; gap: .4mm; min-width: 0; }
+.pc-t small { font-size: 7.6pt; line-height: 1.3; }
+.pc-name { font-size: 8.2pt; font-weight: 700; word-break: break-all; }
+/* 큰 단계 */
+.bigstep { display: flex; gap: 3mm; align-items: flex-start; background: #fff8f0; border: 1.5px solid #f4c9a0; border-radius: 8px; padding: 2.4mm 3mm; font-size: 11.2pt; }
+.bigstep .num { width: 8mm; height: 8mm; font-size: 12pt; }
+.figcap { font-size: 8.4pt; color: var(--sub); text-align: center; margin-top: -1.4mm; }
+/* 알림 창 */
+.dlg { border: 1px solid #c9ced6; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,.15); padding: 3mm 3.6mm; background: #fff; font-size: 9.6pt; }
+.dlg-h { font-weight: 700; margin-bottom: 1.4mm; }
+.dlg-m { margin-bottom: 2.4mm; }
+.dlg-b { display: flex; justify-content: flex-end; gap: 1.6mm; }
+.dlg-b span { border: 1px solid #c9ced6; border-radius: 99px; padding: .6mm 4mm; font-size: 9pt; }
+.dlg-b span.on { background: #1a73e8; color: #fff; border-color: #1a73e8; outline: 2.4px solid var(--red); outline-offset: 1px; }
+/* 윈도우 열기 창 */
+.winopen { border: 1px solid #b9bec7; border-radius: 6px; overflow: hidden; font-size: 9pt; width: 130mm; margin: 0 auto; box-shadow: 0 3px 10px rgba(0,0,0,.12); }
+.wo-h { background: #f0f3f7; padding: 1.4mm 3mm; font-weight: 700; border-bottom: 1px solid #dde1e7; }
+.wo-b { display: grid; grid-template-columns: 34mm 1fr; min-height: 22mm; }
+.wo-side { background: #fafbfc; border-right: 1px solid #e3e6ec; padding: 2mm 3mm; line-height: 1.8; }
+.wo-files { display: flex; gap: 3mm; padding: 3mm; align-items: flex-start; flex-wrap: wrap; }
+.wo-files span { padding: 1.4mm 2.4mm; border-radius: 4px; }
+.wo-files .sel { background: #cce4ff; outline: 2.4px solid var(--red); }
+.wo-f { border-top: 1px solid #e3e6ec; padding: 2mm 3mm; display: flex; align-items: center; gap: 2mm; }
+.wo-f u { flex: 1; text-decoration: none; border: 1px solid #c9ced6; padding: .6mm 2mm; border-radius: 3px; }
+.wo-btn { background: #1a73e8; color: #fff; padding: .8mm 4mm; border-radius: 4px; outline: 2.4px solid var(--red); outline-offset: 1px; }
+.wo-btn2 { border: 1px solid #c9ced6; padding: .8mm 4mm; border-radius: 4px; }
+</style></head><body><section class="page toc" id="toc">
+  <header class="cover">
+    <div class="cover-badge">PETPIA 스킨 · 카페24</div>
+    <h1>내 쇼핑몰로 바꾸는<br><span>쉬운 수정 설명서</span></h1>
+    <p>사진과 글자를 바꾸는 방법을 그림으로 차근차근 알려 드려요. 아래 제목을 누르면 그 쪽으로 바로 가요.</p>
+  </header>
+  <div class="toc-grid"><div class="toc-ch"><div class="toc-chname" style="--c:#3b6fd8"><span>0장</span>시작하기</div>
+  <a class="toc-item" href="#how"><span>이 설명서를 읽는 법</span><i></i><b>2</b></a><a class="toc-item" href="#login"><span>관리자에 들어가기</span><i></i><b>3</b></a><a class="toc-item" href="#open-sde"><span>편집창(스마트디자인) 여는 법</span><i></i><b>4</b></a><a class="toc-item" href="#open-file"><span>메인화면 말고 다른 파일 열기</span><i></i><b>5</b></a></div><div class="toc-ch"><div class="toc-chname" style="--c:#e0782f"><span>1장</span>기본 기술</div>
+  <a class="toc-item" href="#w1"><span>사진 바꾸기 따라하기 ① 사진 올리는 곳 열기</span><i></i><b>6</b></a><a class="toc-item" href="#w2"><span>사진 바꾸기 따라하기 ② 내 사진 올리기</span><i></i><b>7</b></a><a class="toc-item" href="#w3"><span>사진 바꾸기 따라하기 ③ 올라간 사진 확인</span><i></i><b>8</b></a><a class="toc-item" href="#w4"><span>사진 바꾸기 따라하기 ④ 편집창에서 이름 바꾸기</span><i></i><b>9</b></a><a class="toc-item" href="#w5"><span>사진 바꾸기 따라하기 ⑤ 저장하고 확인하기</span><i></i><b>10</b></a><a class="toc-item" href="#skill-text"><span>글자 바꾸기 — 사진과 똑같아요</span><i></i><b>11</b></a><a class="toc-item" href="#undo"><span>확인하기 · 실수했을 때 되돌리기</span><i></i><b>12</b></a></div><div class="toc-ch"><div class="toc-chname" style="--c:#2f9a6a"><span>2장</span>메인 페이지</div>
+  <a class="toc-item" href="#home-map"><span>메인 페이지 한눈에 보기</span><i></i><b>13</b></a><a class="toc-item" href="#h-popup"><span>① 이벤트 팝업 — 화면</span><i></i><b>14</b></a><a class="toc-item" href="#h-popup2"><span>① 이벤트 팝업 — 편집창에서 고치기</span><i></i><b>15</b></a><a class="toc-item" href="#h-top"><span>② 맨 위 띠배너</span><i></i><b>16</b></a><a class="toc-item" href="#h-logo"><span>③ 로고 · 상단 메뉴</span><i></i><b>17</b></a><a class="toc-item" href="#h-hero"><span>④ 첫 화면 큰 영상 · 사진 — 글자</span><i></i><b>18</b></a><a class="toc-item" href="#h-hero2"><span>④ 첫 화면 큰 영상 · 사진 — 사진과 영상</span><i></i><b>19</b></a><a class="toc-item" href="#h-pets"><span>⑤ 이용 안내 4칸 · 누구와 함께하나요</span><i></i><b>20</b></a><a class="toc-item" href="#h-cats"><span>⑥ 오늘은 무엇이 필요하세요? (동그라미 8개)</span><i></i><b>21</b></a><a class="toc-item" href="#h-picks"><span>⑦ 추천상품 · 신상품 · 인기 상품</span><i></i><b>22</b></a><a class="toc-item" href="#h-new"><span>⑦ 신상품 · 인기 상품 — 제목 바꾸기</span><i></i><b>23</b></a><a class="toc-item" href="#h-finder"><span>⑧ 우리 아이는 어떤 취향일까요?</span><i></i><b>24</b></a><a class="toc-item" href="#h-size"><span>⑨ 사이즈, 어렵지 않아요</span><i></i><b>25</b></a><a class="toc-item" href="#h-looks"><span>⑩ 장면 속 그 상품 — 사진과 글자</span><i></i><b>26</b></a><a class="toc-item" href="#h-looks2"><span>⑩ 장면 속 그 상품 — 내 상품 연결하기</span><i></i><b>27</b></a><a class="toc-item" href="#h-duo"><span>⑪ 기획전 2칸</span><i></i><b>28</b></a><a class="toc-item" href="#h-starter"><span>⑫ 처음 함께하는 날 체크리스트</span><i></i><b>29</b></a><a class="toc-item" href="#h-reviews"><span>⑬ 포토리뷰 · 함께 지내는 법</span><i></i><b>30</b></a><a class="toc-item" href="#h-help"><span>⑭ 회원 안내 · 자주 묻는 질문</span><i></i><b>31</b></a><a class="toc-item" href="#h-brand"><span>⑭ PETPIA 큰 글씨 그림</span><i></i><b>32</b></a><a class="toc-item" href="#h-footer"><span>⑮ 푸터 — 회사 정보 · 메뉴</span><i></i><b>33</b></a></div><div class="toc-ch"><div class="toc-chname" style="--c:#8a55c9"><span>3장</span>상품 · 분류 · 진열</div>
+  <a class="toc-item" href="#p-map"><span>관리자와 화면은 이렇게 연결돼요</span><i></i><b>34</b></a><a class="toc-item" href="#p-cate"><span>상품 분류(메뉴) 만들기</span><i></i><b>35</b></a><a class="toc-item" href="#p-cateno"><span>분류 번호(cate_no) 확인하고 연결하기</span><i></i><b>36</b></a><a class="toc-item" href="#p-reg"><span>상품 등록 ① 진열 · 분류 · 메인 진열</span><i></i><b>37</b></a><a class="toc-item" href="#p-reg2"><span>상품 등록 ② 이름 · 설명 · 가격</span><i></i><b>38</b></a><a class="toc-item" href="#p-reg3"><span>상품 등록 ③ 사진 · 등록 · 수정</span><i></i><b>39</b></a><a class="toc-item" href="#p-main"><span>메인 진열 — 메인 3칸에 상품 고르기</span><i></i><b>40</b></a><a class="toc-item" href="#p-list"><span>상품 목록 · 분류 위 큰 배너</span><i></i><b>41</b></a></div><div class="toc-ch"><div class="toc-chname" style="--c:#c2477a"><span>4장</span>게시판</div>
+  <a class="toc-item" href="#b-list"><span>게시판 목록과 게시판 번호</span><i></i><b>42</b></a><a class="toc-item" href="#b-add"><span>게시판 새로 만들기</span><i></i><b>43</b></a><a class="toc-item" href="#b-menu"><span>게시판을 메뉴에 연결하기</span><i></i><b>44</b></a><a class="toc-item" href="#b-hero"><span>게시판 위 배너 · 포토리뷰 연결</span><i></i><b>45</b></a></div><div class="toc-ch"><div class="toc-chname" style="--c:#d24a3a"><span>5장</span>세일 페이지</div>
+  <a class="toc-item" href="#s-map"><span>세일 페이지 한눈에 보기</span><i></i><b>46</b></a><a class="toc-item" href="#s-important"><span>세일 페이지 고치기 전에 꼭 알 것</span><i></i><b>47</b></a><a class="toc-item" href="#s-top"><span>타이머 · 큰 제목 · 큰 사진</span><i></i><b>48</b></a><a class="toc-item" href="#s-tiles"><span>정보 띠 · 카테고리 3칸</span><i></i><b>49</b></a><a class="toc-item" href="#s-coupon"><span>랜덤 쿠폰 뽑기 ① 글자와 카드</span><i></i><b>50</b></a><a class="toc-item" href="#s-coupon2"><span>랜덤 쿠폰 뽑기 ② 관리자 쿠폰 연결</span><i></i><b>51</b></a><a class="toc-item" href="#s-items"><span>세일 상품 목록 · 맨 아래 안내</span><i></i><b>52</b></a></div><div class="toc-ch"><div class="toc-chname" style="--c:#5b6573"><span>부록</span>부록</div>
+  <a class="toc-item" href="#sizes"><span>사진 이름 · 크기 한눈에 보기</span><i></i><b>53</b></a><a class="toc-item" href="#faq"><span>자주 묻는 문제</span><i></i><b>54</b></a></div></div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>1 / 54</span></footer>
+</section>
+<section class="page" id="how" style="--c:#3b6fd8">
+  <div class="pg-top"><span class="chip">0장 · 시작하기</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">이 설명서를 읽는 법</h2>
+  <div class="pg-body">
+<p class="lead">이 설명서는 <b>PETPIA 디자인을 산 사장님</b>이 사진과 글자를 <b>내 쇼핑몰 것으로 바꾸는 방법</b>을 알려 줘요.
+어려운 코딩은 없어요. <b>"사진 올리기 → 이름 찾아 바꾸기 → 저장"</b>이면 끝나요.</p>
+<h3>모든 쪽은 이렇게 생겼어요</h3>
+<table class="tbl "><thead><tr><th>표시</th><th>뜻</th></tr></thead><tbody><tr><td><div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인</span><i class="path-arr">›</i><span class="path-step last">…</span></div></td><td><b>가는 길</b> — 이 순서대로 누르면 고칠 곳이 나와요.</td></tr><tr><td><b class="mk mk-static">1</b></td><td>화면 그림 번호 = 설명 번호 = 코드 그림 번호. <b>세 곳의 번호가 같아요.</b></td></tr><tr><td><i class="bx bx-static"></i></td><td>빨간 네모 = 누를 곳, 또는 바꿀 글자</td></tr><tr><td>📄 편집창 코드</td><td>편집창에서 실제로 보이는 모습과 <b>몇 번째 줄</b>인지</td></tr><tr><td>🖼️ 사진 카드</td><td>화면의 사진과 그 <b>파일 이름</b>. 이 이름을 찾아 내 사진 이름으로 바꾸면 사진이 바뀌어요.</td></tr><tr><td><span class="swap-mini">찾을 내용 → 바꿀 내용</span></td><td>그대로 따라 쓰면 되는 글자</td></tr></tbody></table>
+<h3>고치는 도구</h3>
+<table class="tbl "><thead><tr><th>표시</th><th>이렇게 해요</th></tr></thead><tbody><tr><td><span class="tag t-easy">Easy 편집</span></td><td>관리자에서 <b>클릭하고 글자를 쓰면</b> 바로 바뀌어요. (자동 저장)</td></tr><tr><td><span class="tag t-sde">스마트디자인 편집창</span></td><td>편집창에서 <b>옛 글자를 찾아 새 글자로 바꿔요.</b> 마지막에 [저장].</td></tr><tr><td><span class="tag t-up">파일업로더</span></td><td>내 사진을 쇼핑몰에 <b>올리는 곳</b>이에요.</td></tr><tr><td><span class="tag t-adm">관리자 메뉴</span></td><td>상품·분류·게시판처럼 <b>관리자 메뉴에서 설정</b>하면 화면이 바뀌어요.</td></tr><tr><td><span class="tag t-auto">자동</span></td><td>고칠 필요 없어요. 상품이나 후기가 생기면 <b>저절로</b> 채워져요.</td></tr></tbody></table>
+<div class="tip"><b>💡 꿀팁</b><div>처음이라면 <b>1장 "사진 바꾸기 따라하기"</b>(14단계)를 그대로 한 번 따라 해 보세요. 그다음부터는 모든 사진이 같은 방법이에요.</div></div>
+<div class="warn"><b>⚠️ 조심</b><div>처음 고치기 전에 꼭 <b>백업</b>을 해 두세요. (디자인 → 예약/백업/복구 → 백업) → <a href="#undo">되돌리기</a></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>2 / 54</span></footer>
+</section>
+<section class="page" id="login" style="--c:#3b6fd8">
+  <div class="pg-top"><span class="chip">0장 · 시작하기</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">관리자에 들어가기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">내쇼핑몰아이디.cafe24.com/admin</span><i class="path-arr">›</i><span class="path-step last">아이디·비밀번호 넣고 로그인</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1000/560"><div class="shot"><img src="shots/adm-dashboard.jpg" style="width:144.000%;left:0.000%;top:0.000%"><i class="bx" style="left:1.600%;top:53.036%;width:24.000%;height:7.143%"></i><i class="bx" style="left:1.600%;top:24.464%;width:24.000%;height:7.143%"></i><i class="bx" style="left:1.600%;top:45.893%;width:24.000%;height:7.143%"></i></div><b class="mk d-r" style="left:25.600%;top:56.607%">1</b><b class="mk d-r" style="left:25.600%;top:28.036%">2</b><b class="mk d-r" style="left:25.600%;top:49.464%">3</b></div><figcaption>카페24 관리자 첫 화면 (왼쪽 메뉴)</figcaption></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>디자인(PC/모바일)</b> — 사진·글자를 바꾸는 곳. 이 설명서에서 가장 많이 써요.</div></li><li><b class="num">2</b><div><b>상품</b> — 상품 등록, 상품 분류(메뉴), 메인 진열</div></li><li><b class="num">3</b><div><b>게시판</b> — 공지사항, 후기, 문의 게시판</div></li></ol>
+<div class="tip"><b>💡 꿀팁</b><div>아이디와 비밀번호는 사장님이 직접 넣어 주세요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>3 / 54</span></footer>
+</section>
+<section class="page" id="open-sde" style="--c:#3b6fd8">
+  <div class="pg-top"><span class="chip">0장 · 시작하기</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">편집창(스마트디자인) 여는 법</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step last">[HTML 수정]</span></div>
+<div class="two" style="grid-template-columns:1fr 0.42fr"><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:760/530"><div class="shot"><img src="shots/adm-design-dash.jpg" style="width:189.474%;left:0.000%;top:-10.566%"><i class="bx" style="left:75.526%;top:88.868%;width:17.895%;height:6.792%"></i><i class="bx" style="left:8.158%;top:7.736%;width:25.526%;height:7.547%"></i></div><b class="mk d-r" style="left:33.684%;top:11.509%">1</b><b class="mk d-l" style="left:75.526%;top:92.264%">2</b></div><figcaption>디자인 대시보드</figcaption></figure></div><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:450/830"><div class="shot"><img src="shots/easy-home.jpg" style="width:320.000%;left:0.000%;top:-7.229%"><i class="bx" style="left:33.333%;top:94.217%;width:33.333%;height:3.855%"></i></div><b class="mk d-t" style="left:50.000%;top:94.217%">3</b></div><figcaption>Easy 화면(새 창)</figcaption></figure></div></div>
+<ol class="steps"><li><b class="num">1</b><div>왼쪽 <b>디자인(PC/모바일)</b> → <b>디자인 대시보드</b></div></li><li><b class="num">2</b><div><b>[디자인 편집]</b> → <b>Easy 화면</b>이 새 창으로 열려요.</div></li><li><b class="num">3</b><div>Easy 화면 왼쪽 맨 아래 <b>&lt;/&gt; HTML 수정</b> → <b>편집창</b>이 열려요.</div></li></ol>
+<figure class="fig fig-center" style="max-width:115mm;"><div class="shotwrap" style="aspect-ratio:1440/900"><div class="shot"><img src="shots/sde-1.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:16.111%;top:4.778%;width:3.472%;height:2.667%"></i><i class="bx" style="left:78.750%;top:0.222%;width:8.611%;height:2.667%"></i><i class="bx" style="left:0.486%;top:37.333%;width:13.542%;height:31.111%"></i></div><b class="mk d-r" style="left:14.028%;top:52.889%">4</b><b class="mk d-l" style="left:78.750%;top:1.556%">5</b><b class="mk d-b" style="left:17.847%;top:7.444%">6</b></div><figcaption>편집창</figcaption></figure>
+<ol class="steps"><li><b class="num">4</b><div>왼쪽 목록의 <b>메인화면</b> = 첫 페이지 파일 (처음부터 열려 있어요)</div></li><li><b class="num">5</b><div><b>[소스 찾기/바꾸기]</b> — 글자·사진 이름을 바꾸는 도구</div></li><li><b class="num">6</b><div><b>[저장]</b> — 고친 뒤 꼭 눌러야 쇼핑몰에 반영돼요.</div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>4 / 54</span></footer>
+</section>
+<section class="page" id="open-file" style="--c:#3b6fd8">
+  <div class="pg-top"><span class="chip">0장 · 시작하기</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">메인화면 말고 다른 파일 열기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 아래 <b>화면명 검색</b></span><i class="path-arr">›</i><span class="path-step">체크</span><i class="path-arr">›</i><span class="path-step last">[선택파일 열기]</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:960/460"><div class="shot"><img src="shots/sde-search-result.jpg" style="width:150.000%;left:0.000%;top:-54.348%"><i class="bx" style="left:0.521%;top:91.304%;width:21.042%;height:5.652%"></i><i class="bx" style="left:53.021%;top:21.304%;width:37.708%;height:5.435%"></i><i class="bx" style="left:54.167%;top:39.783%;width:2.083%;height:4.348%"></i><i class="bx" style="left:66.875%;top:53.478%;width:10.833%;height:5.217%"></i></div><b class="mk d-t" style="left:11.042%;top:91.304%">1</b><b class="mk d-l" style="left:53.021%;top:24.022%">2</b><b class="mk d-l" style="left:54.167%;top:41.957%">3</b><b class="mk d-l" style="left:66.875%;top:56.087%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>왼쪽 아래 <b>화면명 검색</b> 칸에 파일 이름을 쓰고 돋보기 (예: <code>store-content</code>)</div></li><li><b class="num">2</b><div><b>화면명 검색</b> 창에 찾은 파일이 나와요.</div></li><li><b class="num">3</b><div>파일 앞 <b>네모 칸에 체크</b></div></li><li><b class="num">4</b><div><b>[선택파일 열기]</b> → 위쪽에 새 탭으로 열려요.</div></li></ol>
+<h3>이 설명서에 나오는 파일은 딱 7개예요</h3>
+<table class="tbl "><thead><tr><th>화면명 검색에 쓸 이름</th><th>고를 파일</th><th>이 파일에 있는 것</th></tr></thead><tbody><tr><td>(검색 안 해도 돼요)</td><td><b>메인화면</b></td><td>첫 페이지 사진과 글자 <b>거의 전부</b></td></tr><tr><td><code>store-content</code></td><td>/layout/basic/js/store-content.js</td><td>팝업, 세일 페이지, 커뮤니티·푸터 메뉴</td></tr><tr><td><code>header</code></td><td>/layout/basic/header.html</td><td>맨 위 로고</td></tr><tr><td><code>footer</code></td><td>/layout/basic/footer.html</td><td>맨 아래 로고</td></tr><tr><td><code>submenu-hero</code></td><td>/pet/submenu-hero.html</td><td>상품 목록·게시판 위 큰 배너</td></tr><tr><td><code>pet-cozy-home.js</code></td><td>/layout/basic/js/pet-cozy-home.js</td><td>첫 페이지 체크리스트 항목</td></tr><tr><td><code>list.html</code></td><td>/product/list.html</td><td>세일 페이지 맨 아래 안내</td></tr></tbody></table>
+<div class="tip"><b>💡 꿀팁</b><div>검색 결과가 여러 개면 <b>경로(/layout/basic/…)까지 똑같은 것</b>을 골라요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>5 / 54</span></footer>
+</section>
+<section class="page" id="w1" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">사진 바꾸기 따라하기 ① 사진 올리는 곳 열기</h2>
+  <div class="pg-body">
+<p class="lead">예시로 첫 페이지 <b>강아지 사진</b>(<code>coupon-dog.png</code>)을 내 사진 <code>my-dog.jpg</code>로 바꿔 볼게요. <b>모든 사진이 이 방법 그대로</b>예요.</p>
+<div class="pcards"><div class="pcard"><img src="thumbs/coupon-dog.jpg"><div class="pc-t"><small>바꿀 사진 (첫 페이지 "누구와 함께하나요")</small><code class="pc-name">coupon-dog.png</code><small>추천 1086 × 1448 (세로형)</small></div></div></div>
+<div class="bigstep"><b class="num">1</b><div>관리자 왼쪽 메뉴에서 <b>디자인(PC/모바일)</b>을 눌러요.</div></div>
+<figure class="fig fig-center" style="max-width:118mm;"><div class="shotwrap" style="aspect-ratio:700/380"><div class="shot"><img src="shots/adm-dashboard.jpg" style="width:205.714%;left:0.000%;top:-14.737%"><i class="bx" style="left:2.286%;top:63.421%;width:34.286%;height:10.526%"></i></div><b class="mk d-r" style="left:36.571%;top:68.684%">1</b></div></figure>
+<div class="bigstep"><b class="num">2</b><div>펼쳐진 메뉴에서 <b>파일업로더</b>를 눌러요. (새 창이 열려요)</div></div>
+<figure class="fig fig-center" style="max-width:118mm;"><div class="shotwrap" style="aspect-ratio:700/400"><div class="shot"><img src="shots/adm-design-dash.jpg" style="width:205.714%;left:0.000%;top:-14.000%"><i class="bx" style="left:8.857%;top:81.000%;width:27.714%;height:9.000%"></i></div><b class="mk d-r" style="left:36.571%;top:85.500%">2</b></div></figure>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>6 / 54</span></footer>
+</section>
+<section class="page" id="w2" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">사진 바꾸기 따라하기 ② 내 사진 올리기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">파일업로더</span><i class="path-arr">›</i><span class="path-step"><b>pet</b> 폴더</span><i class="path-arr">›</i><span class="path-step last">[Add Files]</span></div>
+<div class="bigstep"><b class="num">3</b><div>왼쪽의 <b>pet</b> 폴더를 눌러요. 이 디자인의 사진은 모두 여기 있어요.</div></div>
+<div class="bigstep"><b class="num">4</b><div><b>[Add Files]</b>를 눌러요. (또는 내 사진을 회색 네모 칸에 <b>끌어다 놓아도</b> 돼요)</div></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/380"><div class="shot"><img src="shots/walk-uploader-list.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:1.389%;top:38.947%;width:15.694%;height:5.789%"></i><i class="bx" style="left:18.333%;top:15.789%;width:6.250%;height:8.947%"></i><i class="bx" style="left:18.333%;top:28.947%;width:80.556%;height:66.842%"></i></div><b class="mk d-b" style="left:9.236%;top:44.737%">3</b><b class="mk d-r" style="left:24.583%;top:20.263%">4</b><b class="mk d-c" style="left:58.611%;top:84.211%">4</b></div></figure>
+<div class="bigstep"><b class="num">5</b><div>내 컴퓨터 창이 열리면, 올릴 사진을 누르고 <b>[열기]</b>를 눌러요.</div></div>
+<div class="winopen">
+  <div class="wo-h">열기</div>
+  <div class="wo-b"><div class="wo-side">📁 바탕 화면<br>📁 다운로드<br><b>📁 사진</b></div>
+  <div class="wo-files"><span>🖼️ cat.jpg</span><span class="sel">🖼️ my-dog.jpg</span><span>🖼️ bag.jpg</span></div></div>
+  <div class="wo-f">파일 이름: <u>my-dog.jpg</u> <span class="wo-btn">열기</span><span class="wo-btn2">취소</span></div>
+</div>
+<p class="figcap">그림: 윈도우 "열기" 창 (컴퓨터마다 모양이 조금 달라요)</p>
+<div class="tip"><b>💡 꿀팁</b><div>사진 이름은 <b>영어 소문자·숫자·빼기(-)</b>로만 지어 주세요. <code>my-dog.jpg</code> ⭕ &nbsp; <code>우리 강아지.JPG</code> ❌ — 한글·띄어쓰기가 있으면 사진이 안 나올 수 있어요. 한 장은 10MB 이하.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>7 / 54</span></footer>
+</section>
+<section class="page" id="w3" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">사진 바꾸기 따라하기 ③ 올라간 사진 확인</h2>
+  <div class="pg-body">
+<div class="bigstep"><b class="num">6</b><div>아래 목록에 방금 올린 사진이 <b>이름과 함께</b> 생겨요. 이 이름(<code>my-dog.jpg</code>)을 기억해요.</div></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1176/460"><div class="shot"><img src="shots/walk-uploader-list.jpg" style="width:122.449%;left:-22.449%;top:-82.609%"><i class="bx" style="left:0.000%;top:57.826%;width:97.874%;height:13.261%"></i></div><b class="mk d-l" style="left:0.000%;top:64.457%">6</b></div><figcaption>파일 목록 (그림은 원래 있던 coupon-dog.png 줄이에요. 내 사진도 이렇게 한 줄로 보여요)</figcaption></figure>
+<div class="note"><b>사진을 올렸다고 바로 화면이 바뀌지는 않아요.</b> 쇼핑몰 코드 안의 사진 이름을 내 사진 이름으로 바꿔야 해요. 그게 다음 단계예요.</div>
+<div class="bigstep"><b class="num">7</b><div>바꾸고 싶은 사진의 <b>지금 이름</b>을 알아내요. 이 설명서 2장~5장 각 쪽의 <b>🖼️ 사진 카드</b>를 보면 돼요.</div></div>
+<div class="pcards"><div class="pcard"><img src="thumbs/coupon-dog.jpg"><div class="pc-t"><small>강아지 카드 사진</small><code class="pc-name">coupon-dog.png</code><small>추천 1086 × 1448</small></div></div><div class="pcard"><img src="thumbs/coupon-cat.jpg"><div class="pc-t"><small>고양이 카드 사진</small><code class="pc-name">coupon-cat.png</code><small>추천 1086 × 1448</small></div></div><div class="pcard"><img src="thumbs/hero-home.jpg"><div class="pc-t"><small>포근한 휴식 장면</small><code class="pc-name">hero-home.png</code><small>추천 1672 × 941</small></div></div></div>
+<p class="figcap">↑ 사진 카드 예시 — <code>빨간 글자</code>가 "찾을 내용"에 쓸 이름이에요.</p>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>8 / 54</span></footer>
+</section>
+<section class="page" id="w4" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">사진 바꾸기 따라하기 ④ 편집창에서 이름 바꾸기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="bigstep"><b class="num">8</b><div><a href="#open-sde">편집창</a>을 열고, 오른쪽 위 <b>[소스 찾기/바꾸기]</b>를 눌러요.</div></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1220/110"><div class="shot"><img src="shots/sde-1.jpg" style="width:118.033%;left:-18.033%;top:0.000%"><i class="bx" style="left:74.918%;top:1.818%;width:10.164%;height:21.818%"></i></div><b class="mk d-l" style="left:74.918%;top:12.727%">8</b></div></figure>
+<div class="bigstep"><b class="num">9</b><div><b>왼쪽 칸(찾을 내용)</b>에 지금 사진 이름 <code>coupon-dog.png</code>,<br><b>오른쪽 칸(바꿀 내용)</b>에 내 사진 이름 <code>my-dog.jpg</code> 를 써요.</div></div>
+<div class="bigstep"><b class="num">10</b><div><b>[일괄변경]</b>을 눌러요.</div></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1060/40"><div class="shot"><img src="shots/sde-find-img.jpg" style="width:135.849%;left:-20.755%;top:-175.000%"><i class="bx" style="left:1.132%;top:22.500%;width:23.396%;height:60.000%"></i><i class="bx" style="left:25.566%;top:22.500%;width:23.396%;height:60.000%"></i><i class="bx" style="left:50.094%;top:22.500%;width:5.472%;height:60.000%"></i></div><b class="mk d-b" style="left:12.830%;top:82.500%">9</b><b class="mk d-b" style="left:37.264%;top:82.500%">9</b><b class="mk d-b" style="left:52.830%;top:82.500%">10</b></div></figure>
+<div class="swap"><div class="sw-col"><span class="sw-lab">찾을 내용</span><code>coupon-dog.png</code></div><span class="sw-arrow">→</span><div class="sw-col"><span class="sw-lab">바꿀 내용</span><code>my-dog.jpg</code></div><div class="sw-file">열 파일 : <b>메인화면</b></div></div>
+<div class="bigstep"><b class="num">11</b><div>알림 창이 2번 떠요. 둘 다 <b>[확인]</b>을 눌러요.</div></div>
+<div class="two" style="grid-template-columns:1fr 1fr"><div><div class="dlg"><div class="dlg-h">petpia902.cafe24.com 내용:</div><div class="dlg-m">일괄변경 하시겠습니까?</div><div class="dlg-b"><span class="on">확인</span><span class="">취소</span></div></div></div><div><div class="dlg"><div class="dlg-h">petpia902.cafe24.com 내용:</div><div class="dlg-m">2건 일괄변경이 완료되었습니다.<br>저장하셔야 변경내용이 반영됩니다.</div><div class="dlg-b"><span class="on">확인</span></div></div></div></div>
+<p class="figcap">"2건" = 이 사진이 첫 페이지에 두 번 쓰여서 두 곳이 다 바뀌었다는 뜻이에요.</p>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>9 / 54</span></footer>
+</section>
+<section class="page" id="w5" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">사진 바꾸기 따라하기 ⑤ 저장하고 확인하기</h2>
+  <div class="pg-body">
+<div class="bigstep"><b class="num">12</b><div>코드 속 사진 이름이 <code>my-dog.jpg</code>로 바뀌었어요. 탭 이름 앞 <b>*</b> 표시는 "아직 저장 안 함"이라는 뜻이에요.</div></div>
+<div class="bigstep"><b class="num">13</b><div>왼쪽 위 <b>[저장]</b>을 눌러요. 저장하면 * 표시가 사라져요.</div></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1220/800"><div class="shot"><img src="shots/walk-replaced.jpg" style="width:118.033%;left:-18.033%;top:0.000%"><i class="bx" style="left:6.557%;top:0.625%;width:15.574%;height:3.750%"></i><i class="bx" style="left:0.984%;top:5.375%;width:4.098%;height:3.000%"></i><i class="bx" style="left:55.164%;top:96.000%;width:6.557%;height:2.125%"></i></div><b class="mk d-r" style="left:22.131%;top:2.500%">12</b><b class="mk d-b" style="left:3.033%;top:8.375%">13</b><b class="mk d-r" style="left:61.721%;top:97.063%">12</b></div></figure>
+<div class="bigstep"><b class="num">14</b><div>쇼핑몰 첫 페이지를 열고 <b>Ctrl + F5</b>를 눌러 새로고침하면 강아지 사진이 내 사진으로 바뀌어 있어요. 🎉</div></div>
+<div class="tip"><b>💡 꿀팁</b><div>안 바뀌어 보이면 관리자 맨 위 <b>[사이트캐시 삭제]</b>를 누르고 1~2분 뒤 다시 보세요. → <a href="#undo">확인·되돌리기</a></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>10 / 54</span></footer>
+</section>
+<section class="page" id="skill-text" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">글자 바꾸기 — 사진과 똑같아요</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<p class="lead">글자도 <b>[소스 찾기/바꾸기]</b>로 바꿔요. 찾을 내용에 <b>화면에 보이는 글자</b>를 그대로 써요.</p>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1060/540"><div class="shot"><img src="shots/sde-find-filled.jpg" style="width:135.849%;left:-20.755%;top:0.000%"><i class="bx" style="left:86.226%;top:0.370%;width:11.698%;height:4.444%"></i><i class="bx" style="left:1.132%;top:14.630%;width:23.396%;height:4.444%"></i><i class="bx" style="left:25.566%;top:14.630%;width:23.396%;height:4.444%"></i><i class="bx" style="left:50.094%;top:14.630%;width:5.472%;height:4.444%"></i><i class="bx" style="left:1.132%;top:7.963%;width:4.717%;height:4.444%"></i><i class="bx" style="left:5.849%;top:88.519%;width:13.208%;height:5.556%"></i></div><b class="mk d-l" style="left:86.226%;top:2.593%">1</b><b class="mk d-b" style="left:12.830%;top:19.074%">2</b><b class="mk d-b" style="left:37.264%;top:19.074%">3</b><b class="mk d-b" style="left:52.830%;top:19.074%">4</b><b class="mk d-r" style="left:5.849%;top:10.185%">5</b><b class="mk d-r" style="left:19.057%;top:91.296%">6</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>[소스 찾기/바꾸기]</b></div></li><li><b class="num">2</b><div><b>찾을 내용</b>: 지금 화면 글자 — 예) <code>좋은 취향 하나.</code></div></li><li><b class="num">3</b><div><b>바꿀 내용</b>: 새 글자 — 예) <code>우리 아이를 위한 선택.</code></div></li><li><b class="num">4</b><div><b>[일괄변경]</b> → 알림 창 2번 [확인]</div></li><li><b class="num">5</b><div><b>[저장]</b></div></li><li><b class="num">6</b><div>미리보기와 쇼핑몰(Ctrl + F5)에서 확인</div></li></ol>
+<div class="tip"><b>💡 꿀팁</b><div>두 줄로 보이는 글자는 <b>한 줄씩</b> 찾으세요. 줄이 바뀌는 곳에는 코드에 <code>&lt;br&gt;</code>가 숨어 있어요.</div></div>
+<div class="warn"><b>⚠️ 조심</b><div><code>&lt; &gt;</code> 꺾쇠 안쪽, 따옴표 <code>" '</code>, 쉼표 <code>,</code>는 지우지 마세요. 화면이 깨질 수 있어요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>11 / 54</span></footer>
+</section>
+<section class="page" id="undo" style="--c:#e0782f">
+  <div class="pg-top"><span class="chip">1장 · 기본 기술</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">확인하기 · 실수했을 때 되돌리기</h2>
+  <div class="pg-body">
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:700/110"><div class="shot"><img src="shots/sde-1.jpg" style="width:205.714%;left:-31.429%;top:0.000%"><i class="bx" style="left:1.714%;top:39.091%;width:7.143%;height:21.818%"></i><i class="bx" style="left:59.000%;top:39.091%;width:9.429%;height:21.818%"></i><i class="bx" style="left:68.429%;top:39.091%;width:9.429%;height:21.818%"></i></div><b class="mk d-b" style="left:5.286%;top:60.909%">1</b><b class="mk d-b" style="left:63.714%;top:60.909%">2</b><b class="mk d-b" style="left:73.143%;top:60.909%">3</b></div></figure>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:700/56"><div class="shot"><img src="shots/adm-dashboard.jpg" style="width:205.714%;left:-38.571%;top:0.000%"><i class="bx" style="left:41.429%;top:21.429%;width:14.286%;height:57.143%"></i></div><b class="mk d-r" style="left:55.714%;top:50.000%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>[저장]</b> — 저장해야 진짜 쇼핑몰에 반영돼요.</div></li><li><b class="num">2</b><div><b>[최신소스]</b> — 저장 전이라면, 고치던 것을 버리고 마지막 저장 상태로 돌아가요.</div></li><li><b class="num">3</b><div><b>[히스토리]</b> — 예전 저장 날짜 목록. 잘 되던 날짜로 되돌려요.</div></li><li><b class="num">4</b><div>관리자 맨 위 <b>[사이트캐시 삭제]</b> — 저장했는데 안 바뀌어 보이면 눌러요.</div></li></ol>
+<h3>바뀐 게 안 보여요!</h3>
+<table class="tbl "><thead><tr><th>이렇게 해 보세요</th><th>왜요?</th></tr></thead><tbody><tr><td>쇼핑몰 화면에서 <b>Ctrl + F5</b> (맥은 Cmd + Shift + R)</td><td>인터넷 창이 예전 화면을 기억하고 있어서</td></tr><tr><td>관리자 <b>[사이트캐시 삭제]</b></td><td>카페24가 예전 화면을 잠깐 기억하고 있어서</td></tr><tr><td><b>[저장]</b>을 눌렀는지 (탭 이름 앞 * 표시)</td><td>일괄변경만 하고 저장 안 하면 반영이 안 돼요.</td></tr><tr><td>찾을 내용의 <b>띄어쓰기·마침표</b>까지 똑같은지</td><td>한 글자라도 다르면 못 찾아요.</td></tr></tbody></table>
+<div class="warn"><b>⚠️ 조심</b><div>크게 망가졌다면: 관리자 → 디자인 → <b>예약/백업/복구</b> → 복구에서 백업 파일로 통째로 되돌려요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>12 / 54</span></footer>
+</section>
+<section class="page" id="home-map" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">메인 페이지 한눈에 보기</h2>
+  <div class="pg-body">
+<p class="lead">첫 페이지를 위에서 아래로 차례대로 설명해요. 사진·글자는 거의 모두 <b>편집창 → 메인화면</b>에 있어요.</p>
+<table class="tbl tbl-map"><thead><tr><th>순서</th><th>화면 부분</th><th>고치는 곳</th><th>쪽</th></tr></thead><tbody><tr><td>1</td><td>이벤트 팝업</td><td><span class="tag t-sde">스마트디자인 편집창</span> store-content</td><td><a href="#h-popup">→</a></td></tr><tr><td>2</td><td>맨 위 띠배너</td><td><span class="tag t-easy">Easy 편집</span> 띠 배너</td><td><a href="#h-top">→</a></td></tr><tr><td>3</td><td>로고 · 상단 메뉴</td><td><span class="tag t-sde">스마트디자인 편집창</span> header · footer</td><td><a href="#h-logo">→</a></td></tr><tr><td>4</td><td>첫 화면 큰 영상·사진</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-hero">→</a></td></tr><tr><td>5</td><td>이용 안내 4칸 · 누구와 함께하나요</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-pets">→</a></td></tr><tr><td>6</td><td>오늘은 무엇이 필요하세요? (동그라미 8개)</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-cats">→</a></td></tr><tr><td>7</td><td>추천상품 · 신상품 · 인기 상품</td><td><span class="tag t-adm">관리자 메뉴</span> 메인 진열</td><td><a href="#h-picks">→</a></td></tr><tr><td>8</td><td>우리 아이는 어떤 취향일까요?</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-finder">→</a></td></tr><tr><td>9</td><td>사이즈, 어렵지 않아요</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-size">→</a></td></tr><tr><td>10</td><td>장면 속 그 상품</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-looks">→</a></td></tr><tr><td>11</td><td>기획전 2칸</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-duo">→</a></td></tr><tr><td>12</td><td>처음 함께하는 날 체크리스트</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-starter">→</a></td></tr><tr><td>13</td><td>포토리뷰 · 함께 지내는 법</td><td><span class="tag t-auto">자동</span><span class="tag t-sde">스마트디자인 편집창</span></td><td><a href="#h-reviews">→</a></td></tr><tr><td>14</td><td>회원 안내 · 자주 묻는 질문 · PETPIA 그림</td><td><span class="tag t-sde">스마트디자인 편집창</span> 메인화면</td><td><a href="#h-help">→</a></td></tr><tr><td>15</td><td>푸터 (회사 정보 · 메뉴)</td><td><span class="tag t-easy">Easy 편집</span><span class="tag t-sde">스마트디자인 편집창</span></td><td><a href="#h-footer">→</a></td></tr></tbody></table>
+<div class="tip"><b>💡 꿀팁</b><div><b>상품</b>(사진·이름·가격)은 스킨이 아니라 <b>관리자 → 상품</b>에서 바꿔요. → 3장</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>13 / 54</span></footer>
+</section>
+<section class="page" id="h-popup" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">① 이벤트 팝업 — 화면</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:108mm;"><div class="shotwrap" style="aspect-ratio:700/645"><div class="shot"><img src="shots/sde-1.jpg" style="width:205.714%;left:-67.143%;top:-10.853%"><i class="bx" style="left:21.571%;top:1.240%;width:57.143%;height:5.891%"></i><i class="bx" style="left:24.714%;top:81.860%;width:20.286%;height:5.271%"></i></div><b class="mk d-l" style="left:24.286%;top:11.318%">1</b><b class="mk d-l" style="left:21.571%;top:4.186%">2</b><b class="mk d-c" style="left:32.857%;top:40.310%">3</b><b class="mk d-l" style="left:24.714%;top:67.132%">4</b><b class="mk d-l" style="left:24.714%;top:72.403%">5</b><b class="mk d-l" style="left:24.714%;top:78.295%">6</b><b class="mk d-l" style="left:24.714%;top:84.496%">7</b><b class="mk d-l" style="left:24.286%;top:94.264%">8</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>badge</b> — 사진 위 작은 딱지 (SALE EVENT)</div></li><li><b class="num">2</b><div><b>timerLabel · endAt</b> — "이벤트 마감까지"와 끝나는 시간</div></li><li><b class="num">3</b><div><b>image</b> — 팝업 사진</div></li><li><b class="num">4</b><div><b>kicker</b> 작은 글자 · [5] <b>title</b> 큰 제목 · [6] <b>text</b> 설명</div></li><li><b class="num">7</b><div><b>button · link</b> — 버튼 글자와 눌렀을 때 갈 주소</div></li><li><b class="num">8</b><div>오늘 하루 닫기 / 닫기 — 저절로 동작해요.</div></li></ol>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">3</b><img src="thumbs/sale-hero.jpg"><div class="pc-t"><small>팝업 1 사진</small><code class="pc-name">sale-hero.png</code><small>추천 1672 × 941</small></div></div><div class="pcard"><img src="thumbs/hero-home.jpg"><div class="pc-t"><small>팝업 2 사진</small><code class="pc-name">hero-home.png</code><small>추천 1672 × 941</small></div></div></div>
+<div class="note">팝업 사진은 편집창 <b>store-content</b> 파일에서 바꿔요. 이 파일에서 [일괄변경]하면 <b>세일 페이지의 같은 사진도 같이</b> 바뀌어요. 팝업만 바꾸려면 다음 쪽 그림 2번 줄을 직접 눌러 고쳐요.</div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>14 / 54</span></footer>
+</section>
+<section class="page" id="h-popup2" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">① 이벤트 팝업 — 편집창에서 고치기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/750"><div class="shot"><img src="shots/code-popup.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:13.421%;top:8.000%;width:16.228%;height:4.933%"></i><i class="bx" style="left:22.281%;top:48.533%;width:31.404%;height:4.933%"></i><i class="bx" style="left:22.281%;top:62.000%;width:42.807%;height:4.933%"></i><i class="bx" style="left:73.158%;top:70.800%;width:16.228%;height:5.067%"></i><i class="bx" style="left:22.281%;top:89.067%;width:11.842%;height:4.933%"></i></div><b class="mk d-l" style="left:13.421%;top:10.467%">1</b><b class="mk d-l" style="left:22.281%;top:51.000%">3</b><b class="mk d-l" style="left:22.281%;top:64.467%">4</b><b class="mk d-l" style="left:73.158%;top:73.333%">2</b><b class="mk d-l" style="left:22.281%;top:91.533%">5</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 246~262번째 줄</div></div>
+<ol class="steps"><li><b class="num">1</b><div><code>enabled: true</code> 를 <code>false</code> 로 바꾸면 <b>팝업이 안 떠요.</b></div></li><li><b class="num">2</b><div><b>image</b> — 팝업 사진. 끝의 <code>sale-hero.png</code> 만 내 사진 이름으로.</div></li><li><b class="num">3</b><div><b>title</b> — 따옴표 <code>' '</code> 안 글자만 바꿔요. badge·kicker·text·button 도 같아요.</div></li><li><b class="num">4</b><div><b>link</b> — 버튼을 누르면 갈 주소</div></li><li><b class="num">5</b><div><b>endAt</b> — 타이머 끝나는 시간. <code>'2026-12-24 23:59'</code> 처럼. 비우면 세일 타이머 시간을 따라가요.</div></li></ol>
+<div class="warn"><b>⚠️ 조심</b><div><code>최대 50% 쿠폰 뽑기</code>는 세일 페이지에도 있어서 [일괄변경]하면 두 곳이 같이 바뀌어요. 팝업만 바꾸려면 위 그림 3번 줄을 <b>마우스로 직접 눌러</b> 글자를 고치고 [저장]하세요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>15 / 54</span></footer>
+</section>
+<section class="page" id="h-top" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">② 맨 위 띠배너</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step last">왼쪽 <b>띠 배너</b></span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/790"><div class="shot"><img src="shots/easy-topbanner.jpg" style="width:100.000%;left:0.000%;top:-7.595%"><i class="bx" style="left:2.847%;top:26.962%;width:25.417%;height:19.620%"></i><i class="bx" style="left:2.847%;top:70.759%;width:25.417%;height:4.557%"></i><i class="bx" style="left:33.056%;top:3.291%;width:66.667%;height:3.797%"></i><i class="bx" style="left:22.917%;top:9.873%;width:6.528%;height:3.038%"></i><i class="bx" style="left:22.917%;top:89.367%;width:5.556%;height:3.038%"></i></div><b class="mk d-l" style="left:22.917%;top:11.392%">1</b><b class="mk d-c" style="left:15.556%;top:40.506%">2</b><b class="mk d-r" style="left:28.264%;top:73.038%">3</b><b class="mk d-l" style="left:22.917%;top:90.886%">4</b><b class="mk d-b" style="left:66.389%;top:7.089%">5</b></div></figure>
+<ol class="steps"><li><b class="num">›</b><div>Easy 화면 왼쪽에서 <b>띠 배너</b>를 눌러요. (편집창이 아니라 Easy 화면이에요)</div></li><li><b class="num">1</b><div><b>사용 여부</b> — 끄면 띠배너가 사라져요.</div></li><li><b class="num">2</b><div><b>내용</b> — 새 글자를 쓰면 오른쪽이 바로 바뀌어요. <b>B</b> 굵게, <b>A</b> 글자색</div></li><li><b class="num">3</b><div><b>링크</b> — 눌렀을 때 갈 주소. [편집]을 눌러 바꿔요.</div></li><li><b class="num">4</b><div><b>닫기 버튼</b> — 손님이 X를 누르면 "오늘 하루"/"일주일" 동안 안 보여요.</div></li><li><b class="num">5</b><div>바로 확인! <b>Easy는 자동 저장</b>이라 [저장] 버튼이 없어요.</div></li></ol>
+<div class="tip"><b>💡 꿀팁</b><div>기간이 정해진 문구(예: 추석 배송 안내)는 store-content 의 <code>banners</code> 칸에 시작·종료 시간을 적으면 그 기간에만 바뀌어요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>16 / 54</span></footer>
+</section>
+<section class="page" id="h-logo" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">③ 로고 · 상단 메뉴</h2>
+  <div class="pg-body">
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1100/72"><div class="shot"><img src="shots/home-hero.jpg" style="width:130.909%;left:0.000%;top:-41.667%"><i class="bx" style="left:3.636%;top:11.111%;width:11.273%;height:69.444%"></i><i class="bx" style="left:37.727%;top:20.833%;width:48.182%;height:58.333%"></i></div><b class="mk d-r" style="left:14.909%;top:45.833%">1</b><b class="mk d-l" style="left:37.727%;top:50.000%">2</b><b class="mk d-r" style="left:90.909%;top:50.000%">3</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>로고</b> — 내 로고를 <a href="#w2">파일업로더 pet 폴더에 올린 뒤</a>, 아래 <b>두 파일 모두</b>에서 <code>logo-petpia.webp</code> 를 내 로고 이름으로 바꿔요.</div></li><li><b class="num">2</b><div><b>상단 메뉴</b> 이름 = <b>관리자 → 상품 → 상품 분류 관리</b>의 분류 이름 → <a href="#p-cate">분류 만들기</a></div></li><li><b class="num">3</b><div><b>커뮤니티</b> = 게시판 메뉴 → <a href="#b-menu">게시판을 메뉴에 연결</a></div></li></ol>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>header</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/141"><div class="shot"><img src="shots/code-logo-h.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:77.544%;top:42.553%;width:19.561%;height:26.241%"></i></div><b class="mk d-l" style="left:77.544%;top:55.674%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>header.html</b> · 69번째 줄 · 맨 위 로고</div></div>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>footer</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/143"><div class="shot"><img src="shots/code-logo-f.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:77.544%;top:41.958%;width:19.561%;height:25.874%"></i></div><b class="mk d-l" style="left:77.544%;top:54.895%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>footer.html</b> · 80번째 줄 · 맨 아래 로고</div></div>
+<div class="swap"><div class="sw-col"><span class="sw-lab">찾을 내용</span><code>logo-petpia.webp</code></div><span class="sw-arrow">→</span><div class="sw-col"><span class="sw-lab">바꿀 내용</span><code>my-logo.png</code></div><div class="sw-file">열 파일 : <b>header 와 footer (둘 다)</b></div></div>
+<div class="pcards"><div class="pcard"><b class="num">1</b><img src="thumbs/logo-petpia.jpg"><div class="pc-t"><small>로고 (가로형, 배경 투명 PNG)</small><code class="pc-name">logo-petpia.webp</code><small>추천 547 × 200</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>17 / 54</span></footer>
+</section>
+<section class="page" id="h-hero" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">④ 첫 화면 큰 영상 · 사진 — 글자</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:118mm;"><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/home-hero.jpg" style="width:100.000%;left:0.000%;top:-12.500%"><i class="bx" style="left:5.208%;top:68.750%;width:14.931%;height:6.875%"></i><i class="bx" style="left:77.986%;top:82.500%;width:16.944%;height:10.250%"></i></div><b class="mk d-l" style="left:5.278%;top:16.375%">1</b><b class="mk d-l" style="left:5.278%;top:25.000%">2</b><b class="mk d-l" style="left:5.278%;top:50.625%">3</b><b class="mk d-l" style="left:5.278%;top:61.875%">4</b><b class="mk d-r" style="left:20.139%;top:72.188%">5</b><b class="mk d-l" style="left:5.278%;top:89.875%">6</b><b class="mk d-l" style="left:77.986%;top:87.625%">7</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>작은 영어 글자 · [2] 큰 영어 글자 · [3] 한글 제목 · [4] 설명 · [5] 버튼 · [6] 장면 이름 · [7] 오른쪽 아래 카드</div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/377"><div class="shot"><img src="shots/code-hero.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:73.158%;top:15.915%;width:25.702%;height:18.833%"></i><i class="bx" style="left:56.579%;top:33.952%;width:18.509%;height:9.549%"></i><i class="bx" style="left:31.140%;top:51.724%;width:20.351%;height:9.814%"></i><i class="bx" style="left:40.000%;top:60.743%;width:23.596%;height:9.549%"></i><i class="bx" style="left:52.105%;top:78.515%;width:23.509%;height:9.549%"></i></div><b class="mk d-l" style="left:73.158%;top:25.332%">1</b><b class="mk d-l" style="left:56.579%;top:38.727%">2</b><b class="mk d-l" style="left:31.140%;top:56.631%">3</b><b class="mk d-l" style="left:40.000%;top:65.517%">4</b><b class="mk d-l" style="left:52.105%;top:83.289%">5</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 20~24번째 줄</div></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/282"><div class="shot"><img src="shots/code-hero-b.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:58.772%;top:10.638%;width:13.947%;height:13.121%"></i><i class="bx" style="left:13.421%;top:70.567%;width:27.895%;height:13.475%"></i></div><b class="mk d-l" style="left:58.772%;top:17.199%">6</b><b class="mk d-l" style="left:13.421%;top:77.305%">7</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 34~35번째 줄</div></div>
+<div class="swap"><div class="sw-col"><span class="sw-lab">찾을 내용</span><code>좋은 취향 하나.</code></div><span class="sw-arrow">→</span><div class="sw-col"><span class="sw-lab">바꿀 내용</span><code>우리 아이를 위한 선택.</code></div><div class="sw-file">열 파일 : <b>메인화면</b></div></div>
+<div class="note">스크롤하면 장면이 3개로 바뀌어요. 2·3번째 장면 글자(<code>가벼운 발걸음,</code> <code>하루의 끝은,</code>)도 같은 방법으로 찾아 바꿔요.</div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>18 / 54</span></footer>
+</section>
+<section class="page" id="h-hero2" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">④ 첫 화면 큰 영상 · 사진 — 사진과 영상</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">2</b><img src="thumbs/banner-picnic.jpg"><div class="pc-t"><small>두 번째 장면</small><code class="pc-name">banner-picnic.png</code><small>추천 1672 × 941</small></div></div><div class="pcard"><b class="num">3</b><img src="thumbs/hero-home.jpg"><div class="pc-t"><small>세 번째 장면 (여러 곳에서 씀)</small><code class="pc-name">hero-home.png" alt="부드러운</code><small>추천 1672 × 941</small></div></div></div>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/411"><div class="shot"><img src="shots/code-hero-img.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:37.719%;top:14.599%;width:25.088%;height:9.002%"></i><i class="bx" style="left:77.544%;top:47.445%;width:21.228%;height:17.275%"></i><i class="bx" style="left:77.544%;top:80.292%;width:16.228%;height:9.002%"></i></div><b class="mk d-l" style="left:37.719%;top:19.100%">1</b><b class="mk d-l" style="left:77.544%;top:56.083%">2</b><b class="mk d-l" style="left:77.544%;top:84.793%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 27~29번째 줄</div></div>
+<div class="note"><b>3번</b>은 다른 곳에도 쓰여요. 여기만 바꾸려면 찾을 내용을 카드처럼 <code>hero-home.png" alt="부드러운</code>, 바꿀 내용은 <code>my-hero.jpg" alt="부드러운</code> 으로 뒤를 똑같이 붙여요.</div>
+<h3>1번 영상 바꾸기</h3>
+<ol class="steps"><li><b class="num">A</b><div><b>영상 대신 사진 쓰기 (쉬워요)</b> — 아래처럼 찾아 바꿔요.</div></li></ol>
+<div class="swap"><div class="sw-col"><span class="sw-lab">찾을 내용</span><code>&lt;video class="pe-world-image pe-world-video"</code></div><span class="sw-arrow">→</span><div class="sw-col"><span class="sw-lab">바꿀 내용</span><code>&lt;img class="pe-world-image"</code></div></div>
+<div class="note">이어서 1번 줄의 <code>src="…hero-petpia-start.mp4"</code> 따옴표 안 주소 전체를, 파일업로더에서 내 사진 줄 <b>[복사]</b>로 복사한 주소로 바꾸고 [저장]하세요.</div>
+<ol class="steps"><li><b class="num">B</b><div><b>내 영상 쓰기</b> — 파일업로더는 영상(mp4)을 못 올려요. 영상 저장소(GitHub + jsDelivr 등)에 올린 주소로 <code>src="…"</code> 따옴표 안을 바꿔요.</div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>19 / 54</span></footer>
+</section>
+<section class="page" id="h-pets" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑤ 이용 안내 4칸 · 누구와 함께하나요</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:128mm;"><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/home-perks-pets.jpg" style="width:100.000%;left:0.000%;top:-12.500%"><i class="bx" style="left:3.889%;top:2.500%;width:22.083%;height:12.875%"></i><i class="bx" style="left:9.583%;top:8.000%;width:7.500%;height:2.500%"></i><i class="bx" style="left:7.292%;top:74.750%;width:17.778%;height:11.250%"></i></div><b class="mk d-l" style="left:3.889%;top:8.938%">1</b><b class="mk d-b" style="left:13.333%;top:10.500%">2</b><b class="mk d-l" style="left:3.889%;top:38.750%">3</b><b class="mk d-l" style="left:7.292%;top:60.875%">4</b><b class="mk d-l" style="left:7.292%;top:80.375%">5</b><b class="mk d-c" style="left:38.889%;top:82.500%">6</b><b class="mk d-c" style="left:82.639%;top:82.500%">7</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>이용 안내 제목·설명 · [2] 무료배송 금액 · [3] 섹션 제목 · [4] 카드 제목·설명 · [5] 작은 버튼(누르면 그 말로 상품 검색)</div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/176"><div class="shot"><img src="shots/code-perks.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:56.579%;top:34.091%;width:11.667%;height:21.023%"></i><i class="bx" style="left:15.702%;top:53.409%;width:22.456%;height:21.023%"></i></div><b class="mk d-l" style="left:56.579%;top:44.602%">1</b><b class="mk d-l" style="left:15.702%;top:63.920%">2</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 42번째 줄</div></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/447"><div class="shot"><img src="shots/code-pets.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:13.423%;width:21.404%;height:8.277%"></i><i class="bx" style="left:20.088%;top:59.060%;width:15.965%;height:8.277%"></i><i class="bx" style="left:55.439%;top:81.655%;width:22.632%;height:8.277%"></i></div><b class="mk d-l" style="left:17.895%;top:17.562%">3</b><b class="mk d-l" style="left:20.088%;top:63.199%">4</b><b class="mk d-l" style="left:55.439%;top:85.794%">5</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 51~59번째 줄</div></div>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">6</b><img src="thumbs/coupon-dog.jpg"><div class="pc-t"><small>강아지 사진 (세일 쿠폰에도 씀)</small><code class="pc-name">coupon-dog.png</code><small>추천 1086 × 1448</small></div></div><div class="pcard"><b class="num">7</b><img src="thumbs/coupon-cat.jpg"><div class="pc-t"><small>고양이 사진 (세일 쿠폰에도 씀)</small><code class="pc-name">coupon-cat.png</code><small>추천 1086 × 1448</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>20 / 54</span></footer>
+</section>
+<section class="page" id="h-cats" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑥ 오늘은 무엇이 필요하세요? (동그라미 8개)</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/300"><div class="shot"><img src="shots/home-cats.jpg" style="width:100.000%;left:0.000%;top:-33.333%"><i class="bx" style="left:3.889%;top:32.000%;width:10.278%;height:50.000%"></i><i class="bx" style="left:86.111%;top:7.333%;width:9.722%;height:10.000%"></i></div><b class="mk d-l" style="left:3.889%;top:10.000%">1</b><b class="mk d-l" style="left:3.889%;top:57.000%">2</b><b class="mk d-b" style="left:9.028%;top:89.333%">3</b><b class="mk d-l" style="left:86.111%;top:12.333%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>제목 · [2] 동그라미 사진 · [3] 동그라미 이름 · [4] 전체 상품 보기 링크</div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/447"><div class="shot"><img src="shots/code-cats.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:13.423%;width:28.947%;height:8.277%"></i><i class="bx" style="left:45.526%;top:21.029%;width:17.018%;height:8.277%"></i><i class="bx" style="left:77.544%;top:58.837%;width:21.228%;height:15.884%"></i><i class="bx" style="left:84.211%;top:73.826%;width:14.649%;height:16.107%"></i></div><b class="mk d-l" style="left:17.895%;top:17.562%">1</b><b class="mk d-l" style="left:45.526%;top:25.168%">4</b><b class="mk d-l" style="left:77.544%;top:66.779%">2</b><b class="mk d-l" style="left:84.211%;top:81.879%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 90~92번째 줄 · 동그라미 1개 = 한 줄 (8줄)</div></div>
+<table class="tbl "><thead><tr><th>한 줄 안에서 바꿀 곳</th><th>뜻</th></tr></thead><tbody><tr><td><code>keyword=사료</code></td><td>누르면 "사료"로 상품 검색. 분류로 보내려면 <code>/product/list.html?cate_no=분류번호</code></td></tr><tr><td><code>--ox:70%;--oy:26%;--z:2.1</code></td><td>사진의 어느 부분을 얼마나 크게 보일지. 내 사진이면 <code>--ox:50%;--oy:50%;--z:1</code></td></tr></tbody></table>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">2</b><img src="thumbs/products-flatlay.jpg"><div class="pc-t"><small>사료·간식·미용</small><code class="pc-name">products-flatlay.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-toy.jpg"><div class="pc-t"><small>장난감</small><code class="pc-name">product-toy.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-bed.jpg"><div class="pc-t"><small>침대·쿠션</small><code class="pc-name">product-bed.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-walk-kit.jpg"><div class="pc-t"><small>산책</small><code class="pc-name">product-walk-kit.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-bowl.jpg"><div class="pc-t"><small>식기</small><code class="pc-name">product-bowl.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/coupon-gifts.jpg"><div class="pc-t"><small>선물</small><code class="pc-name">coupon-gifts.png</code><small>추천 1086 × 1448</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>21 / 54</span></footer>
+</section>
+<section class="page" id="h-picks" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑦ 추천상품 · 신상품 · 인기 상품</h2>
+  <div class="pg-body">
+<figure class="fig fig-center" style="max-width:145mm;"><div class="shotwrap" style="aspect-ratio:1440/560"><div class="shot"><img src="shots/home-picks.jpg" style="width:100.000%;left:0.000%;top:-17.857%"><i class="bx" style="left:86.458%;top:8.929%;width:9.028%;height:5.714%"></i><i class="bx" style="left:3.889%;top:21.964%;width:17.153%;height:44.107%"></i></div><b class="mk d-l" style="left:3.889%;top:10.357%">1</b><b class="mk d-l" style="left:86.458%;top:11.786%">2</b><b class="mk d-c" style="left:12.500%;top:42.857%">3</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>제목·작은 글자 · [2] 더 보기 링크 — 편집창 메인화면</div></li><li><b class="num">3</b><div>상품은 스킨이 아니라 <b>관리자 → 상품 → 메인 진열</b>에서 골라요. → <a href="#p-main">메인 진열</a></div></li></ol>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/278"><div class="shot"><img src="shots/code-picks.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:64.298%;top:21.583%;width:18.509%;height:12.950%"></i><i class="bx" style="left:45.526%;top:45.324%;width:20.351%;height:13.309%"></i><i class="bx" style="left:23.421%;top:70.144%;width:21.754%;height:13.309%"></i></div><b class="mk d-l" style="left:64.298%;top:28.058%">1</b><b class="mk d-l" style="left:45.526%;top:51.978%">2</b><b class="mk d-l" style="left:23.421%;top:76.799%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 105~106번째 줄 · 3번 product_listmain_1 = 메인 진열 "추천상품"</div></div>
+<table class="tbl "><thead><tr><th>메인 화면 칸</th><th>코드</th><th>관리자 메인 진열에서 고를 이름</th></tr></thead><tbody><tr><td>이번 주, 곁에 두고 싶은 것들</td><td><code>product_listmain_1</code></td><td><b>추천상품</b></td></tr><tr><td>새로 들어왔어요</td><td><code>product_listmain_2</code></td><td><b>신상품</b></td></tr><tr><td>반려가족이 자꾸 찾는 인기 상품</td><td><code>product_listmain_3</code></td><td><b>추가카테고리1</b></td></tr></tbody></table>
+<div class="warn"><b>⚠️ 조심</b><div><code>product_listmain_1</code> 같은 코드는 <b>지우거나 바꾸지 마세요.</b> 상품이 안 나와요. 제목 글자만 바꿔요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>22 / 54</span></footer>
+</section>
+<section class="page" id="h-new" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑦ 신상품 · 인기 상품 — 제목 바꾸기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/620"><div class="shot"><img src="shots/home-new.jpg" style="width:100.000%;left:0.000%;top:-29.032%"><i class="bx" style="left:86.806%;top:10.161%;width:8.681%;height:9.355%"></i></div><b class="mk d-l" style="left:3.889%;top:14.839%">1</b><b class="mk d-l" style="left:86.806%;top:14.839%">2</b><b class="mk d-c" style="left:48.611%;top:48.387%">3</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/447"><div class="shot"><img src="shots/code-new.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:16.754%;top:13.423%;width:18.070%;height:8.501%"></i><i class="bx" style="left:23.421%;top:81.655%;width:21.754%;height:8.277%"></i></div><b class="mk d-l" style="left:16.754%;top:17.673%">1</b><b class="mk d-l" style="left:23.421%;top:85.794%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 149~153번째 줄</div></div>
+<ol class="steps"><li><b class="num">1</b><div>제목 <code>새로 들어왔어요</code> · [2] 화살표·숫자(저절로) · [3] 상품 = <b>메인 진열 → 신상품</b> (최대 10개)</div></li></ol>
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/460"><div class="shot"><img src="shots/home-best.jpg" style="width:100.000%;left:0.000%;top:-21.739%"><i class="bx" style="left:3.889%;top:19.565%;width:17.153%;height:53.696%"></i></div><b class="mk d-l" style="left:3.889%;top:6.087%">4</b><b class="mk d-c" style="left:12.500%;top:43.478%">5</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/245"><div class="shot"><img src="shots/code-best.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:25.614%;top:24.490%;width:34.386%;height:15.102%"></i><i class="bx" style="left:23.421%;top:66.122%;width:21.754%;height:15.102%"></i></div><b class="mk d-l" style="left:25.614%;top:32.041%">4</b><b class="mk d-l" style="left:23.421%;top:73.673%">5</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 321~322번째 줄</div></div>
+<ol class="steps"><li><b class="num">4</b><div>제목 <code>반려가족이 자꾸 찾는 인기 상품</code> · [5] 상품 = <b>메인 진열 → 추가카테고리1</b> (순위 숫자는 저절로)</div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>23 / 54</span></footer>
+</section>
+<section class="page" id="h-finder" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑧ 우리 아이는 어떤 취향일까요?</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:112mm;"><div class="shotwrap" style="aspect-ratio:1440/740"><div class="shot"><img src="shots/home-finder.jpg" style="width:100.000%;left:0.000%;top:-13.514%"><i class="bx" style="left:39.583%;top:9.189%;width:51.111%;height:34.054%"></i><i class="bx" style="left:39.583%;top:51.081%;width:51.111%;height:30.000%"></i><i class="bx" style="left:76.667%;top:90.811%;width:13.194%;height:4.865%"></i></div><b class="mk d-l" style="left:8.333%;top:47.568%">1</b><b class="mk d-l" style="left:39.583%;top:26.216%">2</b><b class="mk d-l" style="left:39.583%;top:66.081%">3</b><b class="mk d-l" style="left:40.972%;top:93.243%">4</b><b class="mk d-b" style="left:83.264%;top:95.676%">5</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>제목·설명 · [2] 강아지/고양이 사진 · [3] 순간 사진 · [4] 결과 문장(저절로) · [5] 버튼(고른 말로 상품 검색)</div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/141"><div class="shot"><img src="shots/code-finder.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:55.175%;top:42.553%;width:19.211%;height:26.241%"></i></div><b class="mk d-l" style="left:55.175%;top:55.674%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 122번째 줄</div></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/518"><div class="shot"><img src="shots/code-finder-b.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:88.596%;top:5.792%;width:10.175%;height:13.707%"></i><i class="bx" style="left:77.544%;top:83.977%;width:18.509%;height:7.143%"></i></div><b class="mk d-l" style="left:88.596%;top:12.645%">2</b><b class="mk d-l" style="left:77.544%;top:87.548%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 128~132번째 줄</div></div>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">2</b><img src="thumbs/coupon-dog.jpg"><div class="pc-t"><small>강아지 (고양이 coupon-cat.png)</small><code class="pc-name">coupon-dog.png</code><small>추천 1086 × 1448</small></div></div><div class="pcard"><b class="num">3</b><img src="thumbs/product-bed.jpg"><div class="pc-t"><small>포근한 휴식</small><code class="pc-name">product-bed.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-toy.jpg"><div class="pc-t"><small>즐거운 놀이</small><code class="pc-name">product-toy.png</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-bowl.jpg"><div class="pc-t"><small>맛있는 한 끼</small><code class="pc-name">product-bowl.png</code><small>추천 1254 × 1254</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>24 / 54</span></footer>
+</section>
+<section class="page" id="h-size" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑨ 사이즈, 어렵지 않아요</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/620"><div class="shot"><img src="shots/home-size.jpg" style="width:100.000%;left:0.000%;top:-16.129%"><i class="bx" style="left:49.583%;top:29.677%;width:41.111%;height:43.871%"></i><i class="bx" style="left:49.722%;top:79.032%;width:12.500%;height:5.806%"></i></div><b class="mk d-l" style="left:49.722%;top:11.290%">1</b><b class="mk d-l" style="left:49.583%;top:51.613%">2</b><b class="mk d-c" style="left:26.389%;top:45.161%">3</b><b class="mk d-l" style="left:49.722%;top:81.935%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>제목과 설명 · [2] 재는 곳 3개(<code>목둘레</code> <code>가슴둘레</code> <code>등길이</code>)와 설명</div></li><li><b class="num">3</b><div>강아지 3D 모형 — 손님이 돌려 볼 수 있어요. 모형은 바꿀 수 없어요.</div></li><li><b class="num">4</b><div>버튼 <code>산책 준비 가이드</code></div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/518"><div class="shot"><img src="shots/code-size.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:36.667%;top:6.178%;width:24.649%;height:7.143%"></i><i class="bx" style="left:41.053%;top:32.239%;width:8.333%;height:6.950%"></i><i class="bx" style="left:35.526%;top:83.977%;width:19.211%;height:7.143%"></i></div><b class="mk d-l" style="left:36.667%;top:9.749%">1</b><b class="mk d-l" style="left:41.053%;top:35.714%">2</b><b class="mk d-l" style="left:35.526%;top:87.548%">4</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 199~206번째 줄</div></div>
+<div class="tip"><b>💡 꿀팁</b><div>상품마다 사이즈 표를 보여 주려면, 상품 등록의 <b>상품 상세설명</b>에 사이즈 표 사진을 넣는 게 가장 쉬워요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>25 / 54</span></footer>
+</section>
+<section class="page" id="h-looks" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑩ 장면 속 그 상품 — 사진과 글자</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:140mm;"><div class="shotwrap" style="aspect-ratio:1440/660"><div class="shot"><img src="shots/home-looks.jpg" style="width:100.000%;left:0.000%;top:-15.152%"><i class="bx" style="left:3.889%;top:90.909%;width:13.194%;height:7.273%"></i><i class="bx" style="left:28.333%;top:27.879%;width:66.667%;height:81.818%"></i></div><b class="mk d-l" style="left:3.889%;top:56.970%">2</b><b class="mk d-l" style="left:3.889%;top:74.242%">3</b><b class="mk d-l" style="left:3.889%;top:94.545%">4</b><b class="mk d-c" style="left:90.278%;top:34.848%">5</b><b class="mk d-r" style="left:57.639%;top:53.030%">6</b></div></figure>
+<ol class="steps"><li><b class="num">2</b><div>장면 제목·설명 · [3] 상품 이름·가격 · [4] 버튼 · [5] 장면 사진 · [6] 사진 위 <b>＋</b> 점(누르면 구매 창)</div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/653"><div class="shot"><img src="shots/code-looks.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:4.900%;width:14.912%;height:5.666%"></i><i class="bx" style="left:65.439%;top:20.521%;width:33.421%;height:10.873%"></i><i class="bx" style="left:88.596%;top:46.248%;width:10.175%;height:10.873%"></i><i class="bx" style="left:77.544%;top:71.975%;width:21.228%;height:10.873%"></i><i class="bx" style="left:30.000%;top:87.596%;width:16.228%;height:5.513%"></i></div><b class="mk d-l" style="left:17.895%;top:7.734%">2</b><b class="mk d-l" style="left:65.439%;top:25.957%">3</b><b class="mk d-l" style="left:88.596%;top:51.685%">4</b><b class="mk d-l" style="left:77.544%;top:77.412%">5</b><b class="mk d-l" style="left:30.000%;top:90.352%">6</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 221~231번째 줄 · 첫 번째 장면 (4장면이 차례대로 있어요)</div></div>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">5</b><img src="thumbs/story-outdoor.jpg"><div class="pc-t"><small>장면 1 산책</small><code class="pc-name">story-outdoor.png</code><small>추천 1672 × 941</small></div></div><div class="pcard"><img src="thumbs/hero-home.jpg"><div class="pc-t"><small>장면 2 휴식</small><code class="pc-name">hero-home.png" alt="부클</code><small>추천 1672 × 941</small></div></div><div class="pcard"><img src="thumbs/guide-play.jpg"><div class="pc-t"><small>장면 3 놀이</small><code class="pc-name">guide-play.png" alt="노즈워크</code><small>추천 1448 × 1086</small></div></div><div class="pcard"><img src="thumbs/starter-home.jpg"><div class="pc-t"><small>장면 4 첫날</small><code class="pc-name">starter-home.png" alt="린넨</code><small>추천 1122 × 1402</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>26 / 54</span></footer>
+</section>
+<section class="page" id="h-looks2" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑩ 장면 속 그 상품 — 내 상품 연결하기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<p class="lead">사진 위 <b>＋</b>를 누르면 뜨는 구매 창에 <b>내 상품</b>이 나오게 해요. 상품 번호 하나로 세 곳이 연결돼요.</p>
+<div class="code"><span class="code-lab">① 사진 위 ＋ 점 (앞 쪽 코드 그림 6번 줄)</span><pre>&lt;button class="cz-look__spot" type="button" data-prd="<mark>29</mark>" style="--x:<mark>56%</mark>;--y:<mark>55%</mark>" …&gt;</pre></div>
+<div class="code"><span class="code-lab">② 왼쪽 상품 목록 (앞 쪽 코드 그림 3번 줄)</span><pre>&lt;li&gt;&lt;button type="button" data-prd="<mark>29</mark>"&gt;&lt;span&gt;<mark>세이지 워킹 하네스</mark>&lt;/span&gt;&lt;b&gt;<mark>31,000원</mark>&lt;/b&gt;…</pre></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/78"><div class="shot"><img src="shots/code-looks-data.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:9.035%;top:-2.564%;width:8.509%;height:46.154%"></i></div><b class="mk d-l" style="left:9.035%;top:20.513%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 307번째 줄 · ③ 구매 창 정보 (cz-looks-data)</div></div>
+<div class="code"><span class="code-lab">③ 구매 창 정보</span><pre>"<mark>29</mark>":{"name":"<mark>세이지 워킹 하네스</mark>","cat":"<mark>WALK · 산책/외출</mark>","img":"p19","price":<mark>31000</mark>,"desc":"<mark>가슴과 등을 넓게…</mark>"},</pre></div>
+<table class="tbl "><thead><tr><th>바꿀 곳</th><th>뜻</th></tr></thead><tbody><tr><td><code>29</code></td><td><b>상품 번호</b>. 관리자에서 상품을 열면 주소 끝 <code>product_no=29</code>. ①②③ <b>세 곳이 같아야</b> 해요.</td></tr><tr><td><code>--x</code> <code>--y</code></td><td>＋ 점 위치. x = 왼쪽에서(0~100%), y = 위에서(0~100%)</td></tr><tr><td><code>"img":"p19"</code></td><td>구매 창 사진. 내 상품이면 파일업로더 [복사] 주소 전체</td></tr></tbody></table>
+<div class="warn"><b>⚠️ 조심</b><div>③은 따옴표 <code>"</code>, 쉼표 <code>,</code>, 중괄호 <code>{ }</code> 하나만 틀려도 창이 안 열려요. 기존 줄을 <b>통째로 복사해 붙인 뒤</b> 글자만 바꾸세요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>27 / 54</span></footer>
+</section>
+<section class="page" id="h-duo" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑪ 기획전 2칸</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/390"><div class="shot"><img src="shots/home-duo.jpg" style="width:100.000%;left:0.000%;top:-25.641%"><i class="bx" style="left:6.944%;top:70.769%;width:10.417%;height:10.256%"></i></div><b class="mk d-l" style="left:6.944%;top:23.077%">1</b><b class="mk d-c" style="left:38.889%;top:51.282%">2</b><b class="mk d-l" style="left:53.472%;top:23.077%">3</b><b class="mk d-c" style="left:90.278%;top:56.410%">4</b><b class="mk d-r" style="left:17.361%;top:75.897%">5</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>왼쪽 제목·설명 · [2] 왼쪽 사진 · [3] 오른쪽 제목·설명 · [4] 오른쪽 사진 · [5] 버튼 글자</div></li></ol>
+<div class="sub-h">🔍 편집창에서는 여기 있어요 — 빨간 네모 안 글자만 바꿔요</div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/614"><div class="shot"><img src="shots/code-duo.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:68.684%;top:9.772%;width:14.912%;height:5.863%"></i><i class="bx" style="left:89.737%;top:31.759%;width:9.123%;height:11.238%"></i><i class="bx" style="left:64.298%;top:64.821%;width:12.719%;height:5.863%"></i><i class="bx" style="left:89.737%;top:81.270%;width:9.123%;height:11.238%"></i><i class="bx" style="left:35.526%;top:20.521%;width:13.772%;height:6.026%"></i></div><b class="mk d-l" style="left:68.684%;top:12.704%">1</b><b class="mk d-l" style="left:89.737%;top:37.378%">2</b><b class="mk d-l" style="left:64.298%;top:67.752%">3</b><b class="mk d-l" style="left:89.737%;top:86.889%">4</b><b class="mk d-l" style="left:35.526%;top:23.534%">5</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 337~342번째 줄 · 줄 앞 href="…" = 카드를 눌렀을 때 갈 주소</div></div>
+<div class="sub-h">🖼️ 이 화면의 사진 — <b>찾을 내용</b>에 빨간 이름을, <b>바꿀 내용</b>에 내 사진 이름을 써요 (<a href="#w1">사진 바꾸기 따라하기</a>)</div>
+<div class="pcards"><div class="pcard"><b class="num">2</b><img src="thumbs/event-birthday.jpg"><div class="pc-t"><small>왼쪽 사진</small><code class="pc-name">event-birthday.png</code><small>추천 1536 × 1024</small></div></div><div class="pcard"><b class="num">4</b><img src="thumbs/sale-hero.jpg"><div class="pc-t"><small>오른쪽 사진 (세일 페이지·팝업에도 씀)</small><code class="pc-name">sale-hero.png" alt="선물</code><small>추천 1672 × 941</small></div></div></div>
+<div class="tip"><b>💡 꿀팁</b><div>기획전을 상품분류로 만들었다면 카드 줄의 <code>href="…"</code> 를 <code>/product/list.html?cate_no=분류번호</code> 로. → <a href="#p-cateno">분류 번호</a></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>28 / 54</span></footer>
+</section>
+<section class="page" id="h-starter" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑫ 처음 함께하는 날 체크리스트</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/640"><div class="shot"><img src="shots/home-starter.jpg" style="width:100.000%;left:0.000%;top:-15.625%"><i class="bx" style="left:47.639%;top:40.000%;width:13.611%;height:5.625%"></i><i class="bx" style="left:47.500%;top:53.750%;width:43.611%;height:26.563%"></i></div><b class="mk d-c" style="left:22.917%;top:56.250%">1</b><b class="mk d-l" style="left:47.500%;top:17.500%">2</b><b class="mk d-l" style="left:47.639%;top:42.813%">3</b><b class="mk d-l" style="left:47.500%;top:67.031%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>사진·스티커 · [2] 제목·설명 · [3] 강아지/고양이 버튼(저절로) · [4] 체크 항목 — 이것만 <b>pet-cozy-home.js</b> 파일</div></li></ol>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/345"><div class="shot"><img src="shots/code-starter.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:77.544%;top:17.391%;width:19.561%;height:10.725%"></i><i class="bx" style="left:40.000%;top:76.522%;width:20.351%;height:10.725%"></i></div><b class="mk d-l" style="left:77.544%;top:22.754%">1</b><b class="mk d-l" style="left:40.000%;top:81.884%">2</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 348~351번째 줄</div></div>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>pet-cozy-home.js</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/140"><div class="shot"><img src="shots/code-starter-js.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:73.333%;top:42.857%;width:12.719%;height:25.714%"></i></div><b class="mk d-l" style="left:73.333%;top:55.714%">4</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>pet-cozy-home.js</b> · 74번째 줄 · 위 줄 강아지, 아래 줄 고양이</div></div>
+<div class="swap"><div class="sw-col"><span class="sw-lab">찾을 내용</span><code>'배변패드'</code></div><span class="sw-arrow">→</span><div class="sw-col"><span class="sw-lab">바꿀 내용</span><code>'배변봉투'</code></div><div class="sw-file">열 파일 : <b>pet-cozy-home.js</b></div></div>
+<div class="pcards"><div class="pcard"><b class="num">1</b><img src="thumbs/starter-home.jpg"><div class="pc-t"><small>체크리스트 사진 (장면 속 상품에도 씀)</small><code class="pc-name">starter-home.png" alt="첫날</code><small>추천 1122 × 1402</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>29 / 54</span></footer>
+</section>
+<section class="page" id="h-reviews" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑬ 포토리뷰 · 함께 지내는 법</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:125mm;"><div class="shotwrap" style="aspect-ratio:1440/470"><div class="shot"><img src="shots/home-reviews.jpg" style="width:100.000%;left:0.000%;top:-21.277%"><i class="bx" style="left:3.889%;top:19.149%;width:93.750%;height:70.213%"></i></div><b class="mk d-l" style="left:3.889%;top:5.532%">1</b><b class="mk d-l" style="left:3.889%;top:54.255%">2</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/143"><div class="shot"><img src="shots/code-live.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:41.958%;width:22.456%;height:26.573%"></i></div><b class="mk d-l" style="left:17.895%;top:55.245%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 364번째 줄</div></div>
+<ol class="steps"><li><b class="num">1</b><div>제목 · [2] 사진 후기 8개는 <b>상품 사용후기 게시판</b>의 사진 후기가 <b>저절로</b> 나와요.</div></li></ol>
+<figure class="fig fig-center" style="max-width:125mm;"><div class="shotwrap" style="aspect-ratio:1440/620"><div class="shot"><img src="shots/home-journal.jpg" style="width:100.000%;left:0.000%;top:-16.129%"><i class="bx" style="left:4.722%;top:20.645%;width:27.778%;height:48.387%"></i></div><b class="mk d-l" style="left:3.889%;top:8.065%">4</b><b class="mk d-l" style="left:4.722%;top:44.839%">5</b><b class="mk d-l" style="left:5.556%;top:81.290%">6</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/378"><div class="shot"><img src="shots/code-journal.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:21.228%;top:15.873%;width:17.018%;height:9.788%"></i><i class="bx" style="left:77.544%;top:51.587%;width:17.368%;height:9.788%"></i><i class="bx" style="left:22.281%;top:78.307%;width:7.368%;height:9.788%"></i></div><b class="mk d-l" style="left:21.228%;top:20.767%">4</b><b class="mk d-l" style="left:77.544%;top:56.481%">5</b><b class="mk d-l" style="left:22.281%;top:83.201%">6</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 373~375번째 줄 · 카드 3장이 차례대로 있어요</div></div>
+<ol class="steps"><li><b class="num">4</b><div>제목 · [5] 카드 사진 · [6] 카드 제목(<code>&lt;h3&gt;</code> 뒤)과 설명</div></li></ol>
+<div class="pcards"><div class="pcard"><b class="num">5</b><img src="thumbs/guide-walk.jpg"><div class="pc-t"><small>카드 1</small><code class="pc-name">guide-walk.png</code><small>추천 1448 × 1086</small></div></div><div class="pcard"><img src="thumbs/guide-rest.jpg"><div class="pc-t"><small>카드 2</small><code class="pc-name">guide-rest.png</code><small>추천 1448 × 1086</small></div></div><div class="pcard"><img src="thumbs/guide-play.jpg"><div class="pc-t"><small>카드 3</small><code class="pc-name">guide-play.png" alt="장난감</code><small>추천 1448 × 1086</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>30 / 54</span></footer>
+</section>
+<section class="page" id="h-help" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑭ 회원 안내 · 자주 묻는 질문</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:115mm;"><div class="shotwrap" style="aspect-ratio:1440/640"><div class="shot"><img src="shots/home-help.jpg" style="width:100.000%;left:0.000%;top:-15.625%"><i class="bx" style="left:7.500%;top:81.250%;width:13.194%;height:6.875%"></i><i class="bx" style="left:51.806%;top:23.438%;width:39.583%;height:42.188%"></i></div><b class="mk d-l" style="left:7.500%;top:20.938%">1</b><b class="mk d-c" style="left:38.889%;top:50.000%">2</b><b class="mk d-l" style="left:7.500%;top:84.688%">3</b><b class="mk d-l" style="left:51.806%;top:17.188%">4</b><b class="mk d-l" style="left:51.806%;top:44.531%">5</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/815"><div class="shot"><img src="shots/code-help.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:38.860%;top:7.362%;width:14.912%;height:4.540%"></i><i class="bx" style="left:66.491%;top:73.620%;width:18.246%;height:4.417%"></i><i class="bx" style="left:77.544%;top:90.061%;width:16.228%;height:4.540%"></i></div><b class="mk d-l" style="left:38.860%;top:9.632%">1</b><b class="mk d-l" style="left:66.491%;top:75.828%">3</b><b class="mk d-l" style="left:77.544%;top:92.331%">2</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 386~395번째 줄</div></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/113"><div class="shot"><img src="shots/code-help-b.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:15.702%;top:-1.770%;width:17.018%;height:32.743%"></i><i class="bx" style="left:21.228%;top:28.319%;width:12.895%;height:31.858%"></i></div><b class="mk d-l" style="left:15.702%;top:14.602%">4</b><b class="mk d-l" style="left:21.228%;top:44.248%">5</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 399~400번째 줄 · 질문은 &lt;summary&gt; 뒤, 답은 &lt;p&gt; 뒤</div></div>
+<ol class="steps"><li><b class="num">1</b><div>제목·설명 · [2] 사진 · [3] 회원가입 버튼 · [4] 자주 묻는 질문 제목 · [5] 질문과 답 (늘리려면 <code>&lt;details&gt;…&lt;/details&gt;</code> 한 줄 복사)</div></li></ol>
+<div class="pcards"><div class="pcard"><b class="num">2</b><img src="thumbs/hero-home.jpg"><div class="pc-t"><small>회원 안내 사진</small><code class="pc-name">hero-home.png" alt="포근한</code><small>추천 1672 × 941</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>31 / 54</span></footer>
+</section>
+<section class="page" id="h-brand" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑭ PETPIA 큰 글씨 그림</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">왼쪽 목록 <b>메인화면</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1440/700"><div class="shot"><img src="shots/home-brand.jpg" style="width:100.000%;left:0.000%;top:-14.286%"><i class="bx" style="left:81.944%;top:9.714%;width:13.056%;height:5.714%"></i></div><b class="mk d-l" style="left:3.889%;top:5.429%">6</b><b class="mk d-c" style="left:48.611%;top:54.286%">7</b><b class="mk d-l" style="left:81.944%;top:12.571%">8</b></div></figure>
+<ol class="steps"><li><b class="num">6</b><div>문장 <code>사료부터 산책 용품까지,</code> · [7] 큰 글씨 그림 · [8] 버튼 <code>PETPIA 둘러보기</code></div></li></ol>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/444"><div class="shot"><img src="shots/code-brand.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:46.579%;top:13.514%;width:26.754%;height:8.108%"></i><i class="bx" style="left:86.404%;top:36.261%;width:12.368%;height:15.991%"></i><i class="bx" style="left:77.544%;top:74.099%;width:21.228%;height:15.991%"></i></div><b class="mk d-l" style="left:46.579%;top:17.568%">6</b><b class="mk d-l" style="left:86.404%;top:44.257%">8</b><b class="mk d-l" style="left:77.544%;top:82.095%">7</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>메인화면</b> · 411~415번째 줄</div></div>
+<div class="pcards"><div class="pcard"><b class="num">7</b><img src="thumbs/wordmark-petpia.jpg"><div class="pc-t"><small>PETPIA 큰 글씨 그림 (배경 투명 PNG·WEBP)</small><code class="pc-name">wordmark-petpia.webp</code><small>추천 2146 × 724</small></div></div></div>
+<div class="tip"><b>💡 꿀팁</b><div>내 브랜드 글씨 그림은 <b>배경이 투명한</b> PNG로 만들어 올리고, 찾을 내용 <code>wordmark-petpia.webp</code> → 바꿀 내용 <code>my-brand.png</code></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>32 / 54</span></footer>
+</section>
+<section class="page" id="h-footer" style="--c:#2f9a6a">
+  <div class="pg-top"><span class="chip">2장 · 메인 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">⑮ 푸터 — 회사 정보 · 메뉴</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step last">왼쪽 <b>푸터</b></span></div>
+<figure class="fig fig-center" style="max-width:145mm;"><div class="shotwrap" style="aspect-ratio:1440/830"><div class="shot"><img src="shots/easy-footer.jpg" style="width:100.000%;left:0.000%;top:-7.229%"><i class="bx" style="left:1.736%;top:35.783%;width:27.083%;height:6.627%"></i><i class="bx" style="left:1.736%;top:42.410%;width:27.083%;height:6.627%"></i><i class="bx" style="left:1.736%;top:62.289%;width:27.083%;height:6.627%"></i><i class="bx" style="left:33.056%;top:52.410%;width:66.667%;height:46.988%"></i></div><b class="mk d-r" style="left:28.819%;top:39.096%">1</b><b class="mk d-r" style="left:28.819%;top:45.723%">2</b><b class="mk d-r" style="left:28.819%;top:65.602%">3</b><b class="mk d-t" style="left:66.389%;top:52.410%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>쇼핑몰 기본 정보</b> · [2] <b>고객센터 정보</b> · [3] <b>SNS</b> 주소</div></li><li><b class="num">4</b><div>미리보기에서 바로 확인 (자동 저장). 관리자 → 쇼핑몰 설정 → 기본 설정 → 내 쇼핑몰 정보와 같은 정보예요.</div></li></ol>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/243"><div class="shot"><img src="shots/code-footermenu.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:15.702%;top:24.691%;width:16.228%;height:15.226%"></i><i class="bx" style="left:15.702%;top:66.255%;width:18.509%;height:15.226%"></i></div><b class="mk d-l" style="left:15.702%;top:32.305%">1</b><b class="mk d-l" style="left:15.702%;top:73.868%">2</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 142~145번째 줄 · 푸터 Shop menu 4개</div></div>
+<ol class="steps"><li><b class="num">›</b><div><code>label</code> = 보이는 이름, <code>link</code> = 누르면 갈 주소. 따옴표 안만 바꿔요.</div></li></ol>
+<div class="tip"><b>💡 꿀팁</b><div>푸터 로고는 <b>footer</b> 파일에서 바꿔요. → <a href="#h-logo">로고</a></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>33 / 54</span></footer>
+</section>
+<section class="page" id="p-map" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">관리자와 화면은 이렇게 연결돼요</h2>
+  <div class="pg-body">
+<p class="lead">상품은 스킨 파일이 아니라 <b>관리자</b>에서 넣어요. 한 번 넣으면 화면 여러 곳에 저절로 나와요.</p>
+<div class="flow">
+  <div class="fl-row"><div class="fl-a">상품 → <b>상품 분류 관리</b></div><div class="fl-arrow">→</div><div class="fl-b">맨 위 메뉴 (전체 상품 · 강아지 · 고양이 · SALE…)<br>분류를 누르면 나오는 상품 목록</div></div>
+  <div class="fl-row"><div class="fl-a">상품 → <b>상품 등록</b></div><div class="fl-arrow">→</div><div class="fl-b">상품 사진 · 이름 · 가격 · 상세 페이지</div></div>
+  <div class="fl-row"><div class="fl-a">상품 → 상품 진열 → <b>메인 진열</b></div><div class="fl-arrow">→</div><div class="fl-b">메인의 추천상품 · 신상품 · 인기 상품 3칸</div></div>
+  <div class="fl-row"><div class="fl-a">분류 <b>SALE</b> 에 상품 넣기</div><div class="fl-arrow">→</div><div class="fl-b">세일 페이지의 상품 목록</div></div>
+  <div class="fl-row"><div class="fl-a">게시판 → <b>상품 사용후기</b></div><div class="fl-arrow">→</div><div class="fl-b">메인 포토리뷰 · 상품 카드의 별점과 후기</div></div>
+</div>
+<figure class="fig fig-center" style="max-width:140mm;"><div class="shotwrap" style="aspect-ratio:760/260"><div class="shot"><img src="shots/menu-community2.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:3.947%;top:6.923%;width:57.895%;height:15.385%"></i><i class="bx" style="left:73.026%;top:26.923%;width:24.211%;height:53.462%"></i></div><b class="mk d-b" style="left:32.895%;top:22.308%">1</b><b class="mk d-l" style="left:73.026%;top:53.654%">2</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>맨 위 메뉴는 <b>대분류</b> 이름이 순서대로 나와요 (최대 6개). SALE 을 누르면 <b>세일 화면</b>. → <a href="#s-map">5장</a></div></li><li><b class="num">2</b><div><b>커뮤니티</b>에 마우스를 올리면 게시판 목록이 펼쳐져요. → <a href="#b-menu">4장</a></div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>34 / 54</span></footer>
+</section>
+<section class="page" id="p-cate" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">상품 분류(메뉴) 만들기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">상품</span><i class="path-arr">›</i><span class="path-step">분류 관리</span><i class="path-arr">›</i><span class="path-step last">상품 분류 관리</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/540"><div class="shot"><img src="shots/adm-category.jpg" style="width:121.795%;left:-21.880%;top:-10.370%"><i class="bx" style="left:2.991%;top:25.185%;width:6.410%;height:5.185%"></i><i class="bx" style="left:20.855%;top:25.185%;width:7.436%;height:5.185%"></i><i class="bx" style="left:5.470%;top:66.111%;width:16.752%;height:5.185%"></i><i class="bx" style="left:44.359%;top:37.778%;width:17.094%;height:5.556%"></i><i class="bx" style="left:43.932%;top:54.074%;width:12.821%;height:4.444%"></i></div><b class="mk d-b" style="left:6.197%;top:30.370%">1</b><b class="mk d-r" style="left:22.222%;top:68.704%">2</b><b class="mk d-r" style="left:61.453%;top:40.556%">3</b><b class="mk d-r" style="left:56.752%;top:56.296%">4</b><b class="mk d-b" style="left:24.573%;top:30.370%">5</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>[대분류추가]</b> — 새 분류 = 맨 위 메뉴 한 칸</div></li><li><b class="num">2</b><div>분류를 누르면 오른쪽에 정보가 나와요.</div></li><li><b class="num">3</b><div><b>분류명</b> — 메뉴에 보일 이름 (예: 간식)</div></li><li><b class="num">4</b><div><b>표시상태 → 표시함</b>이어야 메뉴에 보여요.</div></li><li><b class="num">5</b><div>분류를 끌어 순서를 바꾼 뒤 <b>[분류이동저장]</b></div></li></ol>
+<div class="tip"><b>💡 꿀팁</b><div>작은 분류(중분류)는 분류 오른쪽 <b>＋</b>. 정보를 고친 뒤에는 오른쪽 아래 <b>[확인]</b>을 눌러야 저장돼요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>35 / 54</span></footer>
+</section>
+<section class="page" id="p-cateno" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">분류 번호(cate_no) 확인하고 연결하기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">상품</span><i class="path-arr">›</i><span class="path-step">분류 관리</span><i class="path-arr">›</i><span class="path-step">상품 분류 관리</span><i class="path-arr">›</i><span class="path-step">분류 누르기</span><i class="path-arr">›</i><span class="path-step last">분류URL</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1184/330"><div class="shot"><img src="shots/adm-category-sale.jpg" style="width:100.000%;left:0.000%;top:-24.242%"><i class="bx" style="left:5.405%;top:84.848%;width:18.750%;height:8.485%"></i><i class="bx" style="left:43.243%;top:26.667%;width:27.872%;height:7.273%"></i></div><b class="mk d-r" style="left:24.155%;top:89.091%">1</b><b class="mk d-r" style="left:71.115%;top:30.303%">2</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>분류를 눌러요. (예: SALE)</div></li><li><b class="num">2</b><div><b>분류URL</b> 맨 끝 숫자 = <b>분류 번호</b>. <code>cate_no=27</code> → SALE 은 27</div></li></ol>
+<h3>분류 번호가 쓰이는 곳</h3>
+<table class="tbl "><thead><tr><th>어디에</th><th>무엇을</th><th>파일</th></tr></thead><tbody><tr><td>버튼·링크 주소</td><td><code>/product/list.html?cate_no=번호</code> → 그 분류 상품 목록</td><td>메인화면 등</td></tr><tr><td>세일 화면</td><td><code>categoryNo: 27,</code> → 이 번호 분류에서 세일 화면</td><td>store-content</td></tr><tr><td>분류 위 큰 배너</td><td><code>var byCate={'42':'all','24':'dog',…}</code></td><td>submenu-hero</td></tr></tbody></table>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/113"><div class="shot"><img src="shots/code-sale-cate.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:13.421%;top:28.319%;width:17.368%;height:31.858%"></i></div><b class="mk d-l" style="left:13.421%;top:44.248%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 357번째 줄 · 세일 화면 분류 번호</div></div>
+<div class="warn"><b>⚠️ 조심</b><div>새 쇼핑몰에 설치하면 분류 번호가 <b>다를 수 있어요.</b> 내 번호로 [소스 찾기/바꾸기]. 예) <code>cate_no=27</code> → <code>cate_no=45</code> (범위: <b>열려진모든파일</b>)</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>36 / 54</span></footer>
+</section>
+<section class="page" id="p-reg" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">상품 등록 ① 진열 · 분류 · 메인 진열</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">상품</span><i class="path-arr">›</i><span class="path-step">상품등록</span><i class="path-arr">›</i><span class="path-step last">일반 등록</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/700"><div class="shot"><img src="shots/adm-prodreg.jpg" style="width:121.795%;left:-21.880%;top:-25.714%"><i class="bx" style="left:19.487%;top:4.571%;width:15.385%;height:4.000%"></i><i class="bx" style="left:19.487%;top:9.714%;width:15.385%;height:4.000%"></i><i class="bx" style="left:19.487%;top:15.429%;width:76.923%;height:41.429%"></i><i class="bx" style="left:19.487%;top:76.000%;width:76.239%;height:16.857%"></i></div><b class="mk d-r" style="left:34.872%;top:6.571%">1</b><b class="mk d-r" style="left:34.872%;top:11.714%">2</b><b class="mk d-l" style="left:19.487%;top:36.143%">3</b><b class="mk d-l" style="left:19.487%;top:84.429%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>진열상태 → 진열함</b> — 쇼핑몰에 보이게</div></li><li><b class="num">2</b><div><b>판매상태 → 판매함</b> — 살 수 있게</div></li><li><b class="num">3</b><div><b>상품분류 선택</b> — 분류를 골라 [추가]. <b>SALE</b>을 고르면 세일 페이지에 나와요.</div></li><li><b class="num">4</b><div><b>메인 진열</b> — 체크하면 메인 화면 그 칸에 나와요.</div></li></ol>
+<table class="tbl "><thead><tr><th>메인 진열 체크</th><th>메인 화면에 나오는 곳</th></tr></thead><tbody><tr><td>추천상품</td><td>이번 주, 곁에 두고 싶은 것들</td></tr><tr><td>신상품</td><td>새로 들어왔어요</td></tr><tr><td>추가카테고리1</td><td>반려가족이 자꾸 찾는 인기 상품</td></tr></tbody></table>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>37 / 54</span></footer>
+</section>
+<section class="page" id="p-reg2" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">상품 등록 ② 이름 · 설명 · 가격</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">상품</span><i class="path-arr">›</i><span class="path-step">상품등록</span><i class="path-arr">›</i><span class="path-step">일반 등록</span><i class="path-arr">›</i><span class="path-step last">기본 정보 · 판매 정보</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/545"><div class="shot"><img src="shots/adm-prodreg.jpg" style="width:121.795%;left:-21.880%;top:-181.651%"><i class="bx" style="left:19.487%;top:4.404%;width:75.214%;height:5.505%"></i><i class="bx" style="left:19.487%;top:75.229%;width:75.214%;height:5.872%"></i><i class="bx" style="left:19.487%;top:83.670%;width:75.214%;height:13.945%"></i></div><b class="mk d-l" style="left:19.487%;top:7.156%">1</b><b class="mk d-l" style="left:19.487%;top:78.165%">2</b><b class="mk d-l" style="left:19.487%;top:90.642%">3</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>상품명</b> — 상품 카드와 상세 페이지 제목</div></li><li><b class="num">2</b><div><b>상품 요약설명</b> — 짧은 소개. <b>타임세일</b>은 여기에 <code>#타임세일 2026-10-31 23:59</code> 처럼 끝나는 시간</div></li><li><b class="num">3</b><div><b>상품 간략설명</b> — 목록에 한 줄로 보여요.</div></li></ol>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/420"><div class="shot"><img src="shots/adm-prodreg.jpg" style="width:121.795%;left:-21.880%;top:-516.667%"><i class="bx" style="left:19.487%;top:4.762%;width:76.923%;height:21.429%"></i><i class="bx" style="left:19.487%;top:81.429%;width:42.735%;height:16.667%"></i></div><b class="mk d-l" style="left:19.487%;top:15.476%">4</b><b class="mk d-l" style="left:19.487%;top:89.762%">5</b></div></figure>
+<ol class="steps"><li><b class="num">4</b><div><b>소비자가</b> — 원래 가격</div></li><li><b class="num">5</b><div><b>판매가</b> — 손님이 내는 값. 소비자가보다 낮으면 할인율과 줄 그은 가격이 저절로</div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>38 / 54</span></footer>
+</section>
+<section class="page" id="p-reg3" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">상품 등록 ③ 사진 · 등록 · 수정</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">상품</span><i class="path-arr">›</i><span class="path-step">상품등록</span><i class="path-arr">›</i><span class="path-step">일반 등록</span><i class="path-arr">›</i><span class="path-step last">이미지 정보</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/590"><div class="shot"><img src="shots/adm-prodreg.jpg" style="width:121.795%;left:-21.880%;top:-644.068%"><i class="bx" style="left:19.402%;top:2.712%;width:10.684%;height:4.407%"></i><i class="bx" style="left:19.829%;top:8.475%;width:39.316%;height:34.746%"></i><i class="bx" style="left:19.487%;top:46.780%;width:76.923%;height:49.153%"></i></div><b class="mk d-r" style="left:30.085%;top:4.915%">1</b><b class="mk d-r" style="left:59.145%;top:25.847%">2</b><b class="mk d-l" style="left:19.487%;top:71.356%">3</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>대표이미지등록</b> — 사진 한 장으로 목록·상세 사진이 다 만들어져요.</div></li><li><b class="num">2</b><div>회색 네모를 눌러 <b>상품 사진</b>을 올려요. 정사각형(1000 × 1000)</div></li><li><b class="num">3</b><div><b>추가이미지</b> — 상세 페이지에서 넘겨 볼 사진</div></li></ol>
+<figure class="fig fig-center" style="max-width:110mm;"><div class="shotwrap" style="aspect-ratio:440/90"><div class="shot"><img src="shots/adm-prodreg.jpg" style="width:323.864%;left:-127.273%;top:-5883.333%"><i class="bx" style="left:39.318%;top:26.667%;width:23.182%;height:44.444%"></i></div><b class="mk d-r" style="left:62.500%;top:48.889%">4</b></div></figure>
+<ol class="steps"><li><b class="num">4</b><div>맨 아래 <b>[상품등록]</b> — 끝! 쇼핑몰에서 새로고침해서 확인</div></li><li><b class="num">›</b><div>다시 고칠 때: <b>상품 → 상품목록</b>에서 상품 이름을 눌러요. 주소창의 <code>product_no=29</code> 숫자 = <b>상품 번호</b></div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>39 / 54</span></footer>
+</section>
+<section class="page" id="p-main" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">메인 진열 — 메인 3칸에 상품 고르기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">상품</span><i class="path-arr">›</i><span class="path-step">상품 진열</span><i class="path-arr">›</i><span class="path-step last">메인 진열</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/820"><div class="shot"><img src="shots/adm-maindisplay.jpg" style="width:121.795%;left:-21.880%;top:-17.073%"><i class="bx" style="left:16.068%;top:3.902%;width:9.231%;height:3.415%"></i><i class="bx" style="left:90.085%;top:59.634%;width:6.154%;height:3.415%"></i><i class="bx" style="left:5.128%;top:70.976%;width:5.128%;height:28.780%"></i><i class="bx" style="left:2.735%;top:59.756%;width:7.863%;height:3.171%"></i></div><b class="mk d-b" style="left:20.684%;top:7.317%">1</b><b class="mk d-l" style="left:90.085%;top:61.341%">2</b><b class="mk d-r" style="left:10.256%;top:85.366%">3</b><b class="mk d-t" style="left:6.667%;top:59.756%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>메인분류</b>에서 칸을 골라요. 추천상품 / 신상품 / 추가카테고리1</div></li><li><b class="num">2</b><div><b>[상품추가]</b>로 상품을 넣어요.</div></li><li><b class="num">3</b><div><b>진열 순위</b> — 1번이 가장 앞(왼쪽)</div></li><li><b class="num">4</b><div>상품에 체크한 뒤 ▲▼ 로 순서를 바꿔요.</div></li></ol>
+<figure class="fig fig-center" style="max-width:120mm;"><div class="shotwrap" style="aspect-ratio:580/66"><div class="shot"><img src="shots/adm-maindisplay.jpg" style="width:245.690%;left:-96.552%;top:-1856.061%"><i class="bx" style="left:40.862%;top:19.697%;width:17.586%;height:60.606%"></i></div><b class="mk d-r" style="left:58.448%;top:50.000%">5</b></div></figure>
+<ol class="steps"><li><b class="num">5</b><div>맨 아래 <b>[확인]</b>으로 저장. 칸마다 최대 <b>10개</b>. 빼려면 체크 후 <b>[✕ 진열안함]</b></div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>40 / 54</span></footer>
+</section>
+<section class="page" id="p-list" style="--c:#8a55c9">
+  <div class="pg-top"><span class="chip">3장 · 상품 · 분류 · 진열</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">상품 목록 · 분류 위 큰 배너</h2>
+  <div class="pg-body">
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/740"><div class="shot"><img src="shots/cate-dog.jpg" style="width:100.000%;left:0.000%;top:-13.514%"><i class="bx" style="left:9.444%;top:46.486%;width:30.556%;height:5.405%"></i></div><b class="mk d-l" style="left:9.444%;top:24.865%">1</b><b class="mk d-c" style="left:77.778%;top:31.081%">2</b><b class="mk d-l" style="left:9.444%;top:49.189%">3</b><b class="mk d-l" style="left:3.333%;top:80.541%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>배너 글자 · [2] 배너 사진 · [3] 분류 버튼 · [4] 분류 이름(관리자 상품 분류 관리의 이름)</div></li></ol>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>submenu-hero</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/545"><div class="shot"><img src="shots/code-submenu.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:6.316%;top:11.009%;width:26.228%;height:6.606%"></i><i class="bx" style="left:6.316%;top:85.321%;width:39.474%;height:6.606%"></i></div><b class="mk d-l" style="left:6.316%;top:14.312%">1</b><b class="mk d-l" style="left:6.316%;top:88.624%">2</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>submenu-hero.html</b> · 28~32번째 줄 · 한 줄 = [사진, 사진 설명, 작은 제목, 큰 제목, 설명]</div></div>
+<div class="code"><span class="code-lab">강아지 분류 배너 한 줄 (1번 줄)</span><pre>dog:['<mark>submenu-dog.png</mark>','<mark>쿠션에서 쉬는 강아지와…</mark>','<mark>THE DOG COLLECTION</mark>','<mark>For happy dogs.&lt;br&gt;And their people.</mark>','<mark>신나는 놀이부터…</mark>'],</pre></div>
+<div class="pcards"><div class="pcard"><img src="thumbs/shop-hero.jpg"><div class="pc-t"><small>전체상품</small><code class="pc-name">shop-hero.png</code><small>추천 1600 × 900</small></div></div><div class="pcard"><b class="num">2</b><img src="thumbs/submenu-dog.jpg"><div class="pc-t"><small>강아지</small><code class="pc-name">submenu-dog.png</code><small>추천 1600 × 900</small></div></div><div class="pcard"><img src="thumbs/submenu-cat.jpg"><div class="pc-t"><small>고양이</small><code class="pc-name">submenu-cat.png</code><small>추천 1600 × 900</small></div></div><div class="pcard"><img src="thumbs/submenu-walk.jpg"><div class="pc-t"><small>산책/외출</small><code class="pc-name">submenu-walk.png</code><small>추천 1600 × 900</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>41 / 54</span></footer>
+</section>
+<section class="page" id="b-list" style="--c:#c2477a">
+  <div class="pg-top"><span class="chip">4장 · 게시판</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">게시판 목록과 게시판 번호</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">게시판</span><i class="path-arr">›</i><span class="path-step last">게시판 관리</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1170/770"><div class="shot"><img src="shots/adm-boards.jpg" style="width:121.795%;left:-21.880%;top:-19.481%"><i class="bx" style="left:20.513%;top:21.039%;width:19.658%;height:5.195%"></i><i class="bx" style="left:40.171%;top:13.377%;width:6.838%;height:85.714%"></i><i class="bx" style="left:67.949%;top:8.571%;width:9.658%;height:3.636%"></i><i class="bx" style="left:68.632%;top:21.818%;width:5.128%;height:3.636%"></i></div><b class="mk d-l" style="left:20.513%;top:23.636%">1</b><b class="mk d-t" style="left:43.590%;top:13.377%">2</b><b class="mk d-t" style="left:72.778%;top:8.571%">3</b><b class="mk d-l" style="left:68.632%;top:23.636%">4</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>게시판 제목</b> — 누르면 설정을 바꿀 수 있어요.</div></li><li><b class="num">2</b><div><b>게시판 ID</b> = 게시판 번호(board_no). 메뉴에 연결할 때 써요.</div></li><li><b class="num">3</b><div><b>[일반 게시판 등록]</b> — 새 게시판 만들기</div></li><li><b class="num">4</b><div><b>[글보기]</b> — 올라온 글 보기·관리</div></li></ol>
+<table class="tbl "><thead><tr><th>이 스킨에서 쓰는 게시판</th><th>번호</th><th>화면에 나오는 곳</th></tr></thead><tbody><tr><td>공지사항</td><td>1</td><td>커뮤니티 → 공지사항, 푸터 Notice</td></tr><tr><td>자주묻는질문</td><td>3</td><td>커뮤니티 → 자주묻는질문</td></tr><tr><td>상품 사용후기</td><td>4</td><td>메인 포토리뷰, 상단 메뉴 리뷰, 상품 별점</td></tr><tr><td>상품 Q&amp;A</td><td>6</td><td>커뮤니티 → 상품문의, 푸터 Q&amp;A</td></tr></tbody></table>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>42 / 54</span></footer>
+</section>
+<section class="page" id="b-add" style="--c:#c2477a">
+  <div class="pg-top"><span class="chip">4장 · 게시판</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">게시판 새로 만들기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">게시판</span><i class="path-arr">›</i><span class="path-step">게시판 관리</span><i class="path-arr">›</i><span class="path-step last">[일반 게시판 등록]</span></div>
+<figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1020/620"><div class="shot"><img src="shots/adm-board-add.jpg" style="width:139.706%;left:0.000%;top:0.000%"><i class="bx" style="left:23.333%;top:14.677%;width:19.608%;height:4.194%"></i><i class="bx" style="left:23.333%;top:27.742%;width:29.412%;height:4.194%"></i><i class="bx" style="left:23.333%;top:32.097%;width:45.098%;height:9.677%"></i></div><b class="mk d-r" style="left:42.941%;top:16.774%">1</b><b class="mk d-r" style="left:52.745%;top:29.839%">2</b><b class="mk d-r" style="left:68.431%;top:36.935%">3</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div><b>게시판 사용여부 → 사용</b></div></li><li><b class="num">2</b><div><b>게시판 제목</b> — 예) 이벤트 당첨자 발표</div></li><li><b class="num">3</b><div><b>게시판 안내글</b> — 게시판 위 안내 문장</div></li><li><b class="num">›</b><div>아래쪽에서 쓰기·읽기 권한(관리자/회원/비회원)을 골라요.</div></li></ol>
+<figure class="fig fig-center" style="max-width:110mm;"><div class="shotwrap" style="aspect-ratio:480/80"><div class="shot"><img src="shots/adm-board-add.jpg" style="width:296.875%;left:-62.500%;top:-3406.250%"><i class="bx" style="left:37.500%;top:28.750%;width:15.833%;height:42.500%"></i></div><b class="mk d-r" style="left:53.333%;top:50.000%">4</b></div></figure>
+<ol class="steps"><li><b class="num">4</b><div>맨 아래 <b>[저장]</b> → 목록에 새 게시판과 <b>게시판 ID(번호)</b>가 생겨요.</div></li></ol>
+<div class="note">게시판 개수에는 한도가 있어요. "사용 가능한 게시판을 모두 사용" 알림이 뜨면 안 쓰는 게시판을 먼저 정리하세요.</div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>43 / 54</span></footer>
+</section>
+<section class="page" id="b-menu" style="--c:#c2477a">
+  <div class="pg-top"><span class="chip">4장 · 게시판</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">게시판을 메뉴에 연결하기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/249"><div class="shot"><img src="shots/code-community.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:13.421%;top:-0.803%;width:20.439%;height:14.458%"></i><i class="bx" style="left:80.702%;top:39.759%;width:14.035%;height:14.859%"></i><i class="bx" style="left:80.702%;top:67.068%;width:14.035%;height:14.859%"></i></div><b class="mk d-l" style="left:13.421%;top:6.426%">1</b><b class="mk d-l" style="left:80.702%;top:47.189%">2</b><b class="mk d-l" style="left:80.702%;top:74.498%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 51~55번째 줄</div></div>
+<ol class="steps"><li><b class="num">1</b><div><b>label</b> — 맨 위 메뉴에 보일 이름 (커뮤니티)</div></li><li><b class="num">2</b><div>한 줄 = 펼쳐지는 게시판 한 칸. <code>board_no=숫자</code> 를 내 게시판 번호로 맞춰요.</div></li><li><b class="num">3</b><div>마지막 줄 — 새 게시판은 이 뒤에 붙여요.</div></li></ol>
+<div class="code"><span class="code-lab">새 게시판(번호 10) 추가 — 마지막 줄 뒤에 쉼표를 찍고 한 줄 붙이기</span><pre>  { label: '상품문의',     link: '/board/product/list.html?board_no=6' }<mark>,</mark>
+  <mark>{ label: '당첨자 발표', link: '/board/product/list.html?board_no=10' }</mark>
+]</pre></div>
+<figure class="fig fig-center" style="max-width:62mm;"><div class="shotwrap" style="aspect-ratio:320/230"><div class="shot"><img src="shots/menu-community2.jpg" style="width:237.500%;left:-137.500%;top:0.000%"><i class="bx" style="left:35.938%;top:30.435%;width:57.500%;height:60.435%"></i></div><b class="mk d-l" style="left:35.938%;top:60.652%">4</b></div></figure>
+<ol class="steps"><li><b class="num">4</b><div>[저장] 후 쇼핑몰에서 커뮤니티에 마우스를 올려 확인해요.</div></li></ol>
+<div class="warn"><b>⚠️ 조심</b><div>줄과 줄 사이에는 <b>쉼표(,)</b>가 꼭 있어야 해요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>44 / 54</span></footer>
+</section>
+<section class="page" id="b-hero" style="--c:#c2477a">
+  <div class="pg-top"><span class="chip">4장 · 게시판</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">게시판 위 배너 · 포토리뷰 연결</h2>
+  <div class="pg-body">
+<figure class="fig fig-center" style="max-width:118mm;"><div class="shotwrap" style="aspect-ratio:1440/740"><div class="shot"><img src="shots/board-notice.jpg" style="width:100.000%;left:0.000%;top:-13.514%"></div><b class="mk d-l" style="left:9.444%;top:20.270%">1</b><b class="mk d-c" style="left:76.389%;top:29.730%">2</b><b class="mk d-l" style="left:3.333%;top:92.703%">3</b></div></figure>
+<ol class="steps"><li><b class="num">1</b><div>배너 글자 · [2] 배너 사진 · [3] 게시판 이름(관리자 게시판 제목)</div></li></ol>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>submenu-hero</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/545"><div class="shot"><img src="shots/code-submenu.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:6.316%;top:11.009%;width:26.228%;height:6.606%"></i><i class="bx" style="left:6.316%;top:85.321%;width:39.474%;height:6.606%"></i></div><b class="mk d-l" style="left:6.316%;top:14.312%">1</b><b class="mk d-l" style="left:6.316%;top:88.624%">2</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>submenu-hero.html</b> · 28~32번째 줄 · 2번 notice 줄 = 공지사항 배너 (faq·qna·review 줄도 같아요)</div></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/141"><div class="shot"><img src="shots/code-submenu-board.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:5.175%;top:42.553%;width:15.175%;height:25.532%"></i></div><b class="mk d-l" style="left:5.175%;top:55.319%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>submenu-hero.html</b> · 19번째 줄 · 게시판 번호와 배너 짝짓기</div></div>
+<ol class="steps"><li><b class="num">›</b><div>게시판 번호가 다르면 이 줄 숫자를 바꿔요. 새 게시판(예: 10번)에 배너를 붙이려면 <code>'10':'notice',</code> 를 추가해요.</div></li></ol>
+<div class="pcards"><div class="pcard"><b class="num">2</b><img src="thumbs/submenu-review-puppy.jpg"><div class="pc-t"><small>게시판 4개 배너 사진</small><code class="pc-name">submenu-review-puppy.png</code><small>추천 1600 × 900</small></div></div></div>
+<div class="tip"><b>💡 꿀팁</b><div>메인 <b>포토리뷰</b>는 상품 사용후기(4번) 게시판에서 가져와요. 번호가 다르면 메인화면 파일의 <code>board_no=4</code> 를 내 번호로 바꿔요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>45 / 54</span></footer>
+</section>
+<section class="page" id="s-map" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">세일 페이지 한눈에 보기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step last">쇼핑몰 맨 위 메뉴 <b>SALE</b></span></div>
+<p class="lead">SALE 분류(번호 27)를 누르면 세일 화면이 나와요. 글자와 사진은 <b>편집창 → store-content</b>에서 바꿔요.</p>
+<div class="two" style="grid-template-columns:1fr 1fr"><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/sale-top.jpg" style="width:100.000%;left:0.000%;top:-12.500%"></div><b class="mk d-c" style="left:54.167%;top:5.000%">1</b><b class="mk d-c" style="left:20.833%;top:51.250%">2</b><b class="mk d-c" style="left:77.778%;top:52.500%">3</b></div></figure></div><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/620"><div class="shot"><img src="shots/sale-tiles.jpg" style="width:100.000%;left:0.000%;top:-45.161%"></div><b class="mk d-c" style="left:49.444%;top:6.129%">4</b><b class="mk d-c" style="left:16.667%;top:51.613%">5</b></div></figure></div></div>
+<div class="two" style="grid-template-columns:1fr 1fr"><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/sale-coupon2.jpg" style="width:100.000%;left:0.000%;top:-12.500%"></div><b class="mk d-c" style="left:49.306%;top:22.500%">6</b><b class="mk d-c" style="left:49.306%;top:75.500%">7</b></div></figure></div><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/sale-items.jpg" style="width:100.000%;left:0.000%;top:-12.500%"></div><b class="mk d-c" style="left:19.028%;top:4.500%">8</b><b class="mk d-c" style="left:13.889%;top:50.000%">9</b></div></figure></div></div>
+<table class="tbl "><thead><tr><th>번호</th><th>부분</th><th>고치는 곳</th></tr></thead><tbody><tr><td>1</td><td>이벤트 마감 타이머</td><td>store-content → sale 의 timer</td></tr><tr><td>2 · 3</td><td>큰 제목과 큰 사진</td><td>store-content 맨 아래</td></tr><tr><td>4 · 5</td><td>정보 띠 3칸 · 카테고리 3칸</td><td>store-content 맨 아래</td></tr><tr><td>6 · 7</td><td>랜덤 쿠폰 뽑기 · 남은 쿠폰</td><td>store-content → coupon + 관리자 쿠폰</td></tr><tr><td>8</td><td>세일 상품 제목</td><td>store-content 맨 아래</td></tr><tr><td>9</td><td>세일 상품</td><td>관리자 → 상품 등록에서 분류 SALE 에 넣기</td></tr></tbody></table>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>46 / 54</span></footer>
+</section>
+<section class="page" id="s-important" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">세일 페이지 고치기 전에 꼭 알 것</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<p class="lead">store-content 파일 <b>맨 아래</b>의 <code>PETPIA content edition</code> 부분 값이 <b>위쪽 값보다 이겨요.</b> 세일 페이지 큰 사진·제목·띠·카테고리는 여기서 바꿔요.</p>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/548"><div class="shot"><img src="shots/code-sale-over.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:6.842%;top:10.949%;width:46.140%;height:6.752%"></i><i class="bx" style="left:34.474%;top:23.358%;width:31.754%;height:6.752%"></i><i class="bx" style="left:6.842%;top:47.993%;width:15.175%;height:6.752%"></i><i class="bx" style="left:6.842%;top:60.219%;width:50.526%;height:6.569%"></i><i class="bx" style="left:6.842%;top:84.854%;width:38.333%;height:6.752%"></i></div><b class="mk d-l" style="left:6.842%;top:14.325%">2</b><b class="mk d-l" style="left:34.474%;top:26.734%">3</b><b class="mk d-l" style="left:6.842%;top:51.369%">4</b><b class="mk d-l" style="left:6.842%;top:63.504%">5</b><b class="mk d-l" style="left:6.842%;top:88.230%">8</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 441~451번째 줄</div></div>
+<ol class="steps"><li><b class="num">2</b><div>세일 큰 사진 <code>sale-hero.png</code></div></li><li><b class="num">3</b><div>세일 큰 제목 <code>Good finds.&lt;br&gt;Happy tails.</code> (다음 줄: 작은 설명, 세로 글자)</div></li><li><b class="num">4</b><div>정보 띠 3칸</div></li><li><b class="num">5</b><div>카테고리 3칸 이름·설명·사진</div></li><li><b class="num">8</b><div>세일 상품 제목 <code>The Sale Edit</code></div></li></ol>
+<div class="warn"><b>⚠️ 조심</b><div>위쪽 <code>sale: { hero: { … } }</code> 를 고쳤는데 안 바뀐다면 이 맨 아래 값 때문이에요. <b>화면에 보이는 글자로 [소스 찾기/바꾸기]</b>를 쓰면 어디에 있든 찾아 줘요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>47 / 54</span></footer>
+</section>
+<section class="page" id="s-top" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">타이머 · 큰 제목 · 큰 사진</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/sale-top.jpg" style="width:100.000%;left:0.000%;top:-12.500%"><i class="bx" style="left:0.000%;top:0.000%;width:98.958%;height:10.500%"></i></div><b class="mk d-l" style="left:28.472%;top:5.000%">1</b><b class="mk d-l" style="left:5.694%;top:34.500%">2</b><b class="mk d-l" style="left:5.694%;top:51.250%">3</b><b class="mk d-l" style="left:5.694%;top:69.750%">4</b><b class="mk d-l" style="left:5.694%;top:75.500%">5</b><b class="mk d-l" style="left:5.694%;top:81.750%">6</b><b class="mk d-c" style="left:77.778%;top:52.500%">7</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/113"><div class="shot"><img src="shots/code-sale-timer.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:28.319%;width:29.561%;height:31.858%"></i></div><b class="mk d-l" style="left:17.895%;top:44.248%">1</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 314번째 줄 · 1번 마감 타이머 끝나는 시간 (한국 시간)</div></div>
+<table class="tbl "><thead><tr><th>번호</th><th>찾을 내용</th></tr></thead><tbody><tr><td>1</td><td><code>endAt: '2026-10-31 23:59'</code> — 날짜·시간만 바꿔요. <code>enabled: false</code> 면 숨겨요.</td></tr><tr><td>2 · 3 · 4</td><td><code>Pet Essentials Edit</code> · <code>Good finds.&lt;br&gt;Happy tails.</code> · <code>함께하는 일상을 위한 반가운 발견</code></td></tr><tr><td>5 · 6</td><td><code>Up to 50%</code> · <code>Limited Time Only</code></td></tr></tbody></table>
+<div class="pcards"><div class="pcard"><b class="num">7</b><img src="thumbs/sale-hero.jpg"><div class="pc-t"><small>세일 큰 사진 (맨 아래 줄에서 바꿔요)</small><code class="pc-name">base+'sale-hero.png'</code><small>추천 1672 × 941</small></div></div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>48 / 54</span></footer>
+</section>
+<section class="page" id="s-tiles" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">정보 띠 · 카테고리 3칸</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/620"><div class="shot"><img src="shots/sale-tiles.jpg" style="width:100.000%;left:0.000%;top:-45.161%"></div><b class="mk d-l" style="left:5.556%;top:6.129%">4</b><b class="mk d-c" style="left:16.667%;top:48.387%">5</b><b class="mk d-l" style="left:36.250%;top:87.097%">5</b><b class="mk d-l" style="left:69.167%;top:82.258%">5</b></div></figure>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/548"><div class="shot"><img src="shots/code-sale-over.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:6.842%;top:10.949%;width:46.140%;height:6.752%"></i><i class="bx" style="left:34.474%;top:23.358%;width:31.754%;height:6.752%"></i><i class="bx" style="left:6.842%;top:47.993%;width:15.175%;height:6.752%"></i><i class="bx" style="left:6.842%;top:60.219%;width:50.526%;height:6.569%"></i><i class="bx" style="left:6.842%;top:84.854%;width:38.333%;height:6.752%"></i></div><b class="mk d-l" style="left:6.842%;top:14.325%">2</b><b class="mk d-l" style="left:34.474%;top:26.734%">3</b><b class="mk d-l" style="left:6.842%;top:51.369%">4</b><b class="mk d-l" style="left:6.842%;top:63.504%">5</b><b class="mk d-l" style="left:6.842%;top:88.230%">8</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 441~451번째 줄 · 4번 정보 띠 · 5번 카테고리 3칸</div></div>
+<ol class="steps"><li><b class="num">4</b><div>정보 띠 3칸 — <code>'PETPIA'</code>, <code>'Little things, better days'</code>, <code>'Season Sale'</code></div></li><li><b class="num">5</b><div>카테고리 — <code>Cozy Home</code> / <code>편안한 휴식의 시작</code>, <code>Play Time</code>, <code>Walk Together</code> 와 사진</div></li></ol>
+<div class="pcards"><div class="pcard"><img src="thumbs/product-bed.jpg"><div class="pc-t"><small>카테고리 1</small><code class="pc-name">product-bed.png', no: '01'</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-toy.jpg"><div class="pc-t"><small>카테고리 2</small><code class="pc-name">base+'product-toy.png'</code><small>추천 1254 × 1254</small></div></div><div class="pcard"><img src="thumbs/product-walk-kit.jpg"><div class="pc-t"><small>카테고리 3</small><code class="pc-name">base+'product-walk-kit.png'</code><small>추천 1254 × 1254</small></div></div></div>
+<div class="tip"><b>💡 꿀팁</b><div>카테고리를 누르면 아래 세일 상품으로 내려가요(<code>#stSaleItems</code>). 다른 분류로 보내려면 위쪽 <code>tiles</code> 의 <code>link</code> 를 <code>'/product/list.html?cate_no=24'</code> 처럼 바꿔요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>49 / 54</span></footer>
+</section>
+<section class="page" id="s-coupon" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">랜덤 쿠폰 뽑기 ① 글자와 카드</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="two" style="grid-template-columns:1fr 1fr"><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/420"><div class="shot"><img src="shots/sale-coupon.jpg" style="width:100.000%;left:0.000%;top:-35.714%"><i class="bx" style="left:42.500%;top:81.905%;width:14.028%;height:8.571%"></i></div><b class="mk d-l" style="left:42.500%;top:14.286%">1</b><b class="mk d-l" style="left:35.000%;top:50.000%">2</b><b class="mk d-l" style="left:42.500%;top:86.190%">3</b></div></figure></div><div><figure class="fig" style=""><div class="shotwrap" style="aspect-ratio:1440/700"><div class="shot"><img src="shots/sale-coupon2.jpg" style="width:100.000%;left:0.000%;top:-14.286%"><i class="bx" style="left:23.056%;top:80.000%;width:52.778%;height:12.857%"></i></div><b class="mk d-c" style="left:49.306%;top:25.714%">4</b><b class="mk d-l" style="left:23.056%;top:86.429%">7</b></div></figure></div></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/180"><div class="shot"><img src="shots/code-sale-coupon.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:-1.111%;width:28.421%;height:20.556%"></i><i class="bx" style="left:17.895%;top:17.778%;width:31.404%;height:20.556%"></i><i class="bx" style="left:17.895%;top:55.000%;width:28.246%;height:20.000%"></i></div><b class="mk d-l" style="left:17.895%;top:9.167%">1</b><b class="mk d-l" style="left:17.895%;top:28.056%">2</b><b class="mk d-l" style="left:17.895%;top:65.000%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 322~325번째 줄</div></div>
+<ol class="steps"><li><b class="num">1</b><div>작은 영어 글자 · [2] 큰 제목 · [3] 말풍선 (굵은 단어는 아래 줄 <code>bubbleEm</code>)</div></li><li><b class="num">4</b><div>카드 3장 그림 — 파일업로더 pet 폴더에 <b>같은 이름으로 덮어쓰면</b> 바뀌어요.</div></li><li><b class="num">7</b><div>남은 쿠폰 막대 — 다음 쪽 쿠폰 수량을 따라가요.</div></li></ol>
+<div class="pcards"><div class="pcard"><b class="num">4</b><img src="thumbs/coupon-dog.jpg"><div class="pc-t"><small>카드 1</small><code class="pc-name">coupon-dog.png</code><small>추천 1086 × 1448</small></div></div><div class="pcard"><b class="num">4</b><img src="thumbs/coupon-cat.jpg"><div class="pc-t"><small>카드 2</small><code class="pc-name">coupon-cat.png</code><small>추천 1086 × 1448</small></div></div><div class="pcard"><b class="num">4</b><img src="thumbs/coupon-gifts.jpg"><div class="pc-t"><small>카드 3</small><code class="pc-name">coupon-gifts.png</code><small>추천 1086 × 1448</small></div></div></div>
+<div class="warn"><b>⚠️ 조심</b><div>카드 그림은 메인 "누구와 함께하나요"에도 쓰여요. 덮어쓰면 두 곳이 같이 바뀌어요. 안 바뀌면 <b>사이트캐시 삭제</b>.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>50 / 54</span></footer>
+</section>
+<section class="page" id="s-coupon2" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">랜덤 쿠폰 뽑기 ② 관리자 쿠폰 연결</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">프로모션</span><i class="path-arr">›</i><span class="path-step">쿠폰 관리</span><i class="path-arr">›</i><span class="path-step">쿠폰 만들기</span><i class="path-arr">›</i><span class="path-step last">쿠폰 발급/조회에서 번호 복사</span></div>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>store-content</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/149"><div class="shot"><img src="shots/code-sale-coupons.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:24.474%;top:21.477%;width:29.561%;height:24.161%"></i><i class="bx" style="left:54.386%;top:21.477%;width:20.614%;height:24.161%"></i><i class="bx" style="left:88.509%;top:21.477%;width:10.263%;height:47.651%"></i></div><b class="mk d-l" style="left:24.474%;top:33.557%">1</b><b class="mk d-l" style="left:54.386%;top:33.557%">2</b><b class="mk d-l" style="left:88.509%;top:45.302%">3</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 332번째 줄 · 쿠폰 4줄</div></div>
+<ol class="steps"><li><b class="num">1</b><div><b>no</b> — 쿠폰 번호. 관리자 <b>쿠폰 발급/조회</b>에서 복사해 따옴표 안에 붙여요.</div></li><li><b class="num">2</b><div><b>label</b> — 뽑혔을 때 보일 이름</div></li><li><b class="num">3</b><div><b>total</b> 전체 수량 · <b>remain</b> 남은 수량. 남은 게 많을수록 잘 뽑혀요. 0 이면 안 뽑혀요.</div></li></ol>
+<div class="code"><span class="code-lab">쿠폰 한 줄</span><pre>{ no: '<mark>6086342005700000318</mark>', label: '<mark>50% 쿠폰</mark>', total: <mark>10</mark>,  remain: <mark>10</mark> },</pre></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/78"><div class="shot"><img src="shots/code-sale-notes.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:17.895%;top:-2.564%;width:10.702%;height:46.154%"></i></div><b class="mk d-l" style="left:17.895%;top:20.513%">4</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>store-content.js</b> · 345번째 줄 · 이 아래 줄들이 이벤트 유의사항</div></div>
+<ol class="steps"><li><b class="num">4</b><div><b>notes</b> — 이벤트 유의사항. 한 줄씩 따옴표 안을 바꾸거나 줄째 지워요.</div></li></ol>
+<div class="note">쿠폰 뽑기는 <b>회원만</b>, 한 사람당 한 번. 뽑힌 쿠폰은 바로 손님 마이쿠폰에 들어가요.</div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>51 / 54</span></footer>
+</section>
+<section class="page" id="s-items" style="--c:#d24a3a">
+  <div class="pg-top"><span class="chip">5장 · 세일 페이지</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">세일 상품 목록 · 맨 아래 안내</h2>
+  <div class="pg-body">
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/800"><div class="shot"><img src="shots/sale-items.jpg" style="width:100.000%;left:0.000%;top:-12.500%"><i class="bx" style="left:1.389%;top:25.625%;width:95.833%;height:50.000%"></i></div><b class="mk d-l" style="left:5.694%;top:4.500%">8</b><b class="mk d-l" style="left:1.389%;top:50.625%">9</b></div></figure>
+<ol class="steps"><li><b class="num">8</b><div>제목 <code>The Sale Edit</code> 과 설명 — store-content 맨 아래 (<a href="#s-important">앞 쪽</a> 코드 8번 줄)</div></li><li><b class="num">9</b><div>상품 = <b>관리자에서 분류 SALE 에 넣은 상품</b>. 할인율은 <b>소비자가 &gt; 판매가</b>일 때 저절로. → <a href="#p-reg">상품 등록</a></div></li></ol>
+<figure class="fig fig-center" style="max-width:130mm;"><div class="shotwrap" style="aspect-ratio:1440/400"><div class="shot"><img src="shots/sale-10.jpg" style="width:100.000%;left:0.000%;top:-32.500%"><i class="bx" style="left:2.778%;top:50.000%;width:95.833%;height:45.000%"></i></div><b class="mk d-l" style="left:3.472%;top:20.000%">6</b><b class="mk d-l" style="left:2.778%;top:72.500%">6</b></div></figure>
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">디자인 대시보드</span><i class="path-arr">›</i><span class="path-step">[디자인 편집]</span><i class="path-arr">›</i><span class="path-step">[HTML 수정]</span><i class="path-arr">›</i><span class="path-step">화면명 검색 <b>list.html</b></span><i class="path-arr">›</i><span class="path-step last">[소스 찾기/바꾸기]</span></div>
+<div class="cfig"><figure class="fig fig-center" style="max-width:150mm;"><div class="shotwrap" style="aspect-ratio:1140/113"><div class="shot"><img src="shots/code-salehelp.jpg" style="width:100.000%;left:0.000%;top:0.000%"><i class="bx" style="left:5.702%;top:27.434%;width:27.895%;height:32.743%"></i></div><b class="mk d-l" style="left:5.702%;top:43.805%">6</b></div></figure><div class="cfig-cap">📄 편집창 코드 · <b>/product/list.html</b> · 1402번째 줄 · 긴 한 줄 안에 제목과 3칸이 다 있어요</div></div>
+<ol class="steps"><li><b class="num">6</b><div>맨 아래 안내 <code>기분 좋은 쇼핑의 마무리.</code> 와 3칸 글자 — 찾아 바꾸기</div></li></ol>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>52 / 54</span></footer>
+</section>
+<section class="page" id="sizes" style="--c:#5b6573">
+  <div class="pg-top"><span class="chip">부록 · 부록</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">사진 이름 · 크기 한눈에 보기</h2>
+  <div class="pg-body">
+<div class="path"><b class="path-lab">📍 가는 길</b><span class="path-step">관리자</span><i class="path-arr">›</i><span class="path-step">디자인(PC/모바일)</span><i class="path-arr">›</i><span class="path-step">파일업로더</span><i class="path-arr">›</i><span class="path-step last"><b>pet</b> 폴더</span></div>
+<p class="lead">사진은 모두 <b>파일업로더 → pet 폴더</b>에 있어요. 추천 크기와 <b>같은 모양(비율)</b>으로 만들면 잘리지 않아요.</p>
+<table class="tbl tbl-small"><thead><tr><th>파일 이름</th><th>쓰이는 곳</th><th>추천 크기</th></tr></thead><tbody><tr><td><code>logo-petpia.webp</code></td><td>맨 위·맨 아래 로고</td><td>547 × 200</td></tr><tr><td><code>hero-petpia-start.mp4</code></td><td>첫 화면 영상</td><td>16 : 9 영상</td></tr><tr><td><code>banner-picnic.png</code></td><td>첫 화면 2장면</td><td>1672 × 941</td></tr><tr><td><code>hero-home.png</code></td><td>첫 화면 3장면 · 장면 속 상품 2 · 회원 안내 · 팝업 2</td><td>1672 × 941</td></tr><tr><td><code>coupon-dog.png</code> <code>coupon-cat.png</code></td><td>누구와 함께하나요 · 취향 찾기 · 세일 쿠폰 카드</td><td>1086 × 1448</td></tr><tr><td><code>coupon-gifts.png</code></td><td>동그라미(선물) · 세일 쿠폰 카드</td><td>1086 × 1448</td></tr><tr><td><code>products-flatlay.png</code></td><td>동그라미(사료·간식·미용)</td><td>1254 × 1254</td></tr><tr><td><code>product-toy / bed / walk-kit / bowl.png</code></td><td>동그라미 · 취향 찾기 · 세일 카테고리</td><td>1254 × 1254</td></tr><tr><td><code>story-outdoor.png</code></td><td>장면 속 그 상품 1</td><td>1672 × 941</td></tr><tr><td><code>guide-play.png</code></td><td>장면 속 그 상품 3 · 함께 지내는 법</td><td>1448 × 1086</td></tr><tr><td><code>starter-home.png</code></td><td>장면 속 그 상품 4 · 체크리스트</td><td>1122 × 1402</td></tr><tr><td><code>event-birthday.png</code></td><td>기획전 왼쪽</td><td>1536 × 1024</td></tr><tr><td><code>sale-hero.png</code></td><td>기획전 오른쪽 · 세일 큰 사진 · 팝업 1</td><td>1672 × 941</td></tr><tr><td><code>guide-walk.png</code> <code>guide-rest.png</code></td><td>함께 지내는 법</td><td>1448 × 1086</td></tr><tr><td><code>wordmark-petpia.webp</code></td><td>PETPIA 큰 글씨 그림</td><td>2146 × 724</td></tr><tr><td><code>shop-hero.png</code> <code>submenu-dog/cat/walk.png</code></td><td>상품 목록 위 배너</td><td>1600 × 900</td></tr><tr><td><code>submenu-review-puppy.png</code></td><td>게시판 위 배너</td><td>1600 × 900</td></tr></tbody></table>
+<div class="tip"><b>💡 꿀팁</b><div>사진 크기는 무료 도구(그림판 → 크기 조정, 미리캔버스, 캔바)로 맞출 수 있어요. 한 장 <b>1MB 안팎</b>이면 쇼핑몰이 빨라요.</div></div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>53 / 54</span></footer>
+</section>
+<section class="page" id="faq" style="--c:#5b6573">
+  <div class="pg-top"><span class="chip">부록 · 부록</span><a href="#toc" class="to-toc">목차로 ↑</a></div>
+  <h2 class="pg-title">자주 묻는 문제</h2>
+  <div class="pg-body">
+<table class="tbl "><thead><tr><th>이럴 때</th><th>이렇게 해요</th></tr></thead><tbody><tr><td><b>"찾을 수 없다"</b>고 해요</td><td>① 그 쪽의 <b>📍 가는 길</b>에 적힌 파일을 열었는지<br>② 두 줄 글자는 한 줄씩<br>③ 범위를 <b>열려진모든파일</b>로</td></tr><tr><td>저장했는데 <b>화면이 그대로</b>예요</td><td>Ctrl + F5 → 관리자 <b>[사이트캐시 삭제]</b> → 1~2분 뒤 다시 보기</td></tr><tr><td>고친 뒤 <b>화면이 깨졌어요</b></td><td>편집창 <b>[히스토리]</b>에서 고치기 전 날짜로. 크게 깨지면 <b>예약/백업/복구</b></td></tr><tr><td>사진이 <b>엑스(X) 표시</b>로 나와요</td><td>이름 오타 (대문자·소문자, .jpg/.png까지). 파일업로더에 사진이 올라갔는지도 확인</td></tr><tr><td>사진이 <b>이상하게 잘려요</b></td><td>부록 추천 크기와 같은 비율로 다시 만들기</td></tr><tr><td>메뉴에 <b>분류가 안 보여요</b></td><td>상품 분류 관리 → 표시상태 <b>표시함</b>, 대분류인지 (최대 6개)</td></tr><tr><td>메인에 <b>상품이 안 보여요</b></td><td>진열상태 <b>진열함</b>, 메인 진열 체크, 메인 진열 [확인] 저장</td></tr><tr><td>세일 화면이 <b>안 나와요</b></td><td>store-content 의 <code>categoryNo</code> 가 내 SALE 분류 번호와 같은지</td></tr><tr><td>쿠폰 뽑기 <b>오류</b></td><td>쿠폰 번호(no)가 관리자 쿠폰 번호와 같은지, 발급 기간이 지나지 않았는지</td></tr><tr><td>포토리뷰가 <b>안 나와요</b></td><td>상품 사용후기 게시판에 <b>사진 있는 후기</b>가 있어야 나와요.</td></tr></tbody></table>
+<div class="tip"><b>💡 꿀팁</b><div>고치기 전에 <b>메모장에 원래 글자를 복사</b>해 두면 언제든 원래대로 되돌릴 수 있어요.</div></div>
+<div class="endcard"><b>수고하셨어요! 🐾</b><br>이제 PETPIA가 사장님의 쇼핑몰이 되었어요.</div>
+</div>
+  <footer class="pg-foot"><span>PETPIA 스킨 수정 설명서</span><span>54 / 54</span></footer>
+</section></body></html>
