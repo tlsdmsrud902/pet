@@ -559,7 +559,8 @@
       var a;
       if ((a = el.getAttribute('data-cms-src')) && !done['s' + a]) {
         done['s' + a] = 1;
-        var src = el.tagName === 'VIDEO' ? '' : (el.currentSrc || el.getAttribute('src'));
+        // 영상 자리도 사진 칸을 만든다 (data-cms-poster 가 기본 사진). 영상 주소가 비면 이 사진이 나온다
+        var src = el.tagName === 'VIDEO' ? el.getAttribute('data-cms-poster') : (el.currentSrc || el.getAttribute('src'));
         if (src) media.push(sizeNote(sizeOf(el)) + '<p><img src="' + esc(absUrl(src)) + '" alt=""></p>');
       }
       if ((a = el.getAttribute('data-cms-video')) && !done['v' + a]) { done['v' + a] = 1; media.push(line(a, el.tagName === 'VIDEO' ? absUrl(el.currentSrc || el.getAttribute('src') || '') : '')); }
@@ -793,7 +794,7 @@
   }
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = '/layout/basic/js/pet-cms-editor.js?v=' + (CFG.editorVersion || '20260928f');
+    s.src = '/layout/basic/js/pet-cms-editor.js?v=' + (CFG.editorVersion || '20260928g');
     document.body.appendChild(s);
   }
 

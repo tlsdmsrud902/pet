@@ -226,6 +226,7 @@
     var model = clone(original), orig = {}, history = [clone(model)], pos = 0, native = false, syncT = null, pushT = null;
     original.forEach(function (b) { orig[b.id] = b.type === 'img' ? b.src : b.value; });
     var grow = original.some(function (b) { return b.type === 'note' && /칸을 늘리려면/.test(b.text); });
+    var notice = {}; // 사진 칸 아래에 잠깐 보여 줄 안내 (칸 id → 문구)
 
     var root = el('div', 'pcms');
     root.innerHTML = '<div class="pcms__head"><h2>「' + esc(name) + '」 편집</h2><p>아래 칸에서 글자와 사진을 바꾸고 <b>저장하기</b>를 누르세요. 저장한 뒤 메인 화면을 새로고침하면 바로 보여요.</p>'
@@ -314,6 +315,7 @@
       pick.type = 'button'; file.type = 'file'; file.accept = 'image/*'; file.hidden = true;
       btns.appendChild(pick); btns.appendChild(file); info.appendChild(btns);
       info.appendChild(el('div', 'pcms__hint', '내 컴퓨터의 사진을 고르면 카페24에 올라가고 여기 바로 바뀌어요.'));
+      if (notice[b.id]) info.appendChild(el('div', 'pcms__ok', '✓ ' + notice[b.id]));
       grid.appendChild(info); wrap.appendChild(grid);
       function check() {
         if (!im.naturalWidth) return;
@@ -329,7 +331,11 @@
         pick.disabled = true; pick.textContent = '올리는 중…';
         ed.upload(f).then(function (url) {
           if (!url) throw new Error('empty');
-          b.src = url; render(); changed(true); flush();
+          b.src = url;
+          // 같은 칸에 영상 주소가 있으면 비운다 (영상 주소가 있으면 영상이 먼저 나오므로, 사진을 올렸으면 사진이 보이게)
+          var parts = split(), grp = parts.items.filter(function (it) { return it.blocks.indexOf(b) >= 0; })[0], list = grp ? grp.blocks : parts.head;
+          list.forEach(function (x) { if (x.type === 'field' && /^영상 주소$/.test(x.label) && trim(x.value)) { x.value = ''; notice[b.id] = '영상 대신 이 사진이 나오도록 「영상 주소」 칸을 비웠어요.'; } });
+          render(); changed(true); flush();
         }).catch(function (e) {
           pick.disabled = false; pick.textContent = '사진 바꾸기';
           alert(e && e.message === 'noupload' ? '이 편집기에서는 여기서 바로 사진을 올릴 수 없어요. [고급: 원래 편집기]를 열어 사진을 눌러 바꿔 주세요.' : '사진을 올리지 못했어요. 파일 크기(10MB 이하)와 형식(jpg·png·webp)을 확인하고 다시 시도해 주세요.');
