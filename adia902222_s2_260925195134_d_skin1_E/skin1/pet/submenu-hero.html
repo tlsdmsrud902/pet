@@ -1,4 +1,4 @@
-<section class="pet-page-hero pet-menu-hero" aria-label="컬렉션 안내">
+<section class="pet-page-hero pet-menu-hero" aria-label="컬렉션 안내" data-cms="목록 위 큰 배너" data-cms-adapter="menuHero" data-cms-page="목록 공통">
  <img src="/SkinImg/pet/shop-hero.png" alt="세이지와 크림 컬러의 반려생활 용품" width="1600" height="900" fetchpriority="high">
  <div><small>THE EVERYDAY COLLECTION</small><h1>Good things.<br>For your best friend.</h1><p>함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.</p>
  <nav aria-label="컬렉션 메뉴"><a data-pet-menu="all" href="/product/list.html?cate_no=42">전체상품</a><a data-pet-menu="dog" href="/product/list.html?cate_no=24">강아지</a><a data-pet-menu="cat" href="/product/list.html?cate_no=25">고양이</a><a data-pet-menu="walk" href="/product/list.html?cate_no=26">산책/외출</a><a data-pet-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
@@ -23,7 +23,8 @@
  // 상품분류 번호 : 24 강아지 · 25 고양이 · 26 산책/외출 (관리자 대분류)
  var byCate={'42':'all','24':'dog','25':'cat','26':'walk'};
  var key=board?boardKey:list?(byCate[cate]||'all'):/산책|외출|하네스|리드줄/.test(word)?'walk':/고양이/.test(word)?'cat':/강아지/.test(word)?'dog':'all';
- var data={
+ // 배너 내용 : 게시판 화면 관리의 '목록 위 큰 배너' 글로 바꿀 수 있다 (pet-cms.js 가 window.PETPIA_MENU_HERO 를 덮어쓴다)
+ var banners=window.PETPIA_MENU_HERO=window.PETPIA_MENU_HERO||{
   all:['shop-hero.png','세이지와 크림 컬러의 반려생활 용품','THE EVERYDAY COLLECTION','Good things.<br>For your best friend.','함께 먹고, 걷고, 쉬는 하루.<br>우리 아이의 일상에 어울리는 것을 찾아보세요.'],
   dog:['submenu-dog.png','쿠션에서 쉬는 강아지와 놀이 용품','THE DOG COLLECTION','For happy dogs.<br>And their people.','신나는 놀이부터 포근한 잠자리까지.<br>강아지의 하루를 채우는 다정한 선택.'],
   cat:['submenu-cat.png','스크래처 곁에서 쉬는 고양이','THE CAT COLLECTION','Their own world.<br>A little softer.','긁고, 숨고, 느긋하게 쉬는 시간.<br>고양이만의 취향을 존중하는 일상.'],
@@ -32,10 +33,14 @@
   notice:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','NEWS & NOTICE','Little news.<br>From PETPIA.','펫피아의 새로운 소식과<br>꼭 알아 두실 안내를 전해 드려요.'],
   faq:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','GOOD TO KNOW','Questions?<br>We have answers.','주문 · 배송 · 교환 · 반품에 대해<br>자주 묻는 질문을 모았어요.'],
   qna:['submenu-review-puppy.png','보호자의 손에 턱을 기대고 쉬는 작고 복슬복슬한 아기 강아지','ASK US','Ask anything.<br>We are here to help.','상품에 대해 궁금한 점을 남겨 주세요.<br>꼼꼼히 확인하고 답변드릴게요.']
- }[key],img=hero.querySelector('img');
- hero.dataset.collection=key;img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
+ },img=hero.querySelector('img');
  function reveal(){hero.classList.add('is-ready')}
- img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src='/SkinImg/pet/'+data[0];if(img.complete&&img.naturalWidth)reveal();
+ function fill(){
+  var data=banners[key]||banners.all;
+  hero.dataset.collection=key;img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
+  img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src=/^(https?:)?\/\/|^\//.test(data[0])?data[0]:'/SkinImg/pet/'+data[0];if(img.complete&&img.naturalWidth)reveal();
+ }
+ if(window.PETPIA_CMS)window.PETPIA_CMS.ready(fill,1200);else fill();
  var cur=hero.querySelector('[data-pet-menu="'+key+'"]');if(cur)cur.setAttribute('aria-current','page');
  var form=document.querySelector('.pet-list-search');if(form&&list)form.hidden=false;
 }());
