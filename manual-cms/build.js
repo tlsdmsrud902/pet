@@ -5,6 +5,8 @@
 const fs = require('fs');
 const path = require('path');
 const SHOTS = path.join(__dirname, 'shots');
+// 사진 주소 : 깃허브에 올린 사진(고정 커밋)을 쓴다 → index.html 만 따로 열어도 사진이 보인다. 새 사진을 넣으면 푸시한 뒤 이 커밋을 바꾼다
+const IMG = process.env.IMG_BASE || 'https://cdn.jsdelivr.net/gh/tlsdmsrud902/pet@0214001/manual-cms/shots/';
 
 function jpgSize(file) {
   const b = fs.readFileSync(file); let i = 2;
@@ -27,7 +29,7 @@ function fig(name, o = {}) {
   const marks = (o.m || []).map(([n, x, y, dir = 'c']) => `<b class="mk d-${dir}" style="left:${pct(x - cx, cw)};top:${pct(y - cy, ch)}">${n}</b>`).join('');
   const boxes = (o.box || []).map(([x, y, w, h]) => `<i class="bx" style="left:${pct(x - cx, cw)};top:${pct(y - cy, ch)};width:${pct(w, cw)};height:${pct(h, ch)}"></i>`).join('');
   const maxW = o.h ? `max-width:calc(${o.h} * ${(cw / ch).toFixed(4)});` : '';
-  return `<figure class="fig fig-center" style="${maxW}"><div class="shotwrap" style="aspect-ratio:${cw}/${ch}"><div class="shot"><img src="shots/${name}.jpg" alt="" style="width:${pct(iw, cw)};left:${pct(-cx, cw)};top:${pct(-cy, ch)}">${boxes}</div>${marks}</div>${o.cap ? `<figcaption>${o.cap}</figcaption>` : ''}</figure>`;
+  return `<figure class="fig fig-center" style="${maxW}"><div class="shotwrap" style="aspect-ratio:${cw}/${ch}"><div class="shot"><img src="${IMG}${name}.jpg" alt="" style="width:${pct(iw, cw)};left:${pct(-cx, cw)};top:${pct(-cy, ch)}">${boxes}</div>${marks}</div>${o.cap ? `<figcaption>${o.cap}</figcaption>` : ''}</figure>`;
 }
 const steps = arr => `<ol class="steps">${arr.map(([n, t]) => `<li><b class="num">${n}</b><div>${t}</div></li>`).join('')}</ol>`;
 const big = (n, t) => `<div class="bigstep"><b class="num">${n}</b><div>${t}</div></div>`;
