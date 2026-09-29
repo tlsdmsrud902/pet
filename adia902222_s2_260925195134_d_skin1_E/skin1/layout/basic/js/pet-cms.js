@@ -630,6 +630,10 @@
     + '.cms-order{position:absolute;z-index:62;top:10px;right:10px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:#1f1d1a;color:#fff;font:600 13px/1 Pretendard,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25)}'
     + '.cms-order span{padding:0 6px 0 8px}.cms-order button{width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font:700 17px/1 system-ui,sans-serif;cursor:pointer}.cms-order button:disabled{opacity:.3;cursor:default}'
     + '.cms-bar .cms-order-save.is-dirty{background:#ff5a36;font-weight:700}'
+    + '.cms-order .cms-order__save{width:auto;padding:0 14px;border-radius:999px;background:#ff5a36;font:700 14px/1 Pretendard,system-ui,sans-serif}'
+    + '.cms-order-float{position:fixed;z-index:10002;left:50%;top:110px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:10px 10px 10px 20px;border-radius:999px;background:#1f1d1a;color:#fff;font:700 15px/1.3 Pretendard,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);white-space:nowrap}'
+    + '.cms-order-float button{height:44px;padding:0 22px;border:0;border-radius:999px;background:#ff5a36;color:#fff;font:800 16px/1 Pretendard,system-ui,sans-serif;cursor:pointer;animation:cmsPulse 1.6s ease-in-out infinite}'
+    + '@keyframes cmsPulse{50%{box-shadow:0 0 0 8px rgba(255,90,54,.25)}}'
     + '.cms-off-tag{position:absolute;z-index:61;top:58px;right:10px;padding:8px 14px;border-radius:999px;background:#1f1d1a;color:#fff;font:700 14px/1.2 Pretendard,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}'
     + '.cms-btn{position:absolute;z-index:60;top:10px;left:10px;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:0;border-radius:999px;background:#ff5a36;color:#fff;font:700 14px/1.2 Pretendard,system-ui,sans-serif;font-style:normal;letter-spacing:0;text-transform:none;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer}'
     // 버튼이 놓인 영역의 글꼴 규칙(예: 배너의 small 기울임체)이 스며들지 않게
@@ -670,7 +674,7 @@
     // d.use : 저장된 글보다 이 초안을 먼저 쓴다 (섹션 순서처럼 편집 모드에서 바꾼 내용을 넘길 때)
     function openPost(name, d) {
       var post = state.map && state.map[name], cms = '&cms=' + encodeURIComponent(name), all = lsGet(DRAFT_KEY) || {};
-      all[name] = { subject: d.subject, html: d.html, t: Date.now(), use: !!d.use };
+      all[name] = { subject: d.subject, html: d.html, t: Date.now(), use: !!d.use, autosave: !!d.autosave };
       lsSet(DRAFT_KEY, all);
       if (post) window.open('/board/free/modify.html?board_act=edit&no=' + post.no + '&board_no=' + BOARD + cms, '_blank');
       else window.open('/board/free/write.html?board_no=' + BOARD + cms, '_blank');
@@ -679,10 +683,10 @@
     function orderDraft() {
       var name = orderName(), page = pageLabel(sortBox());
       return {
-        use: true,
+        use: true, autosave: true, // 편집 창이 열리면 바로 저장한다 (한 번 누르면 끝)
         subject: '[' + page + '] ' + name,
         html: '<p>※ ' + esc(page) + ' 섹션이 위에서부터 이 순서로 나와요. 한 줄에 영역 이름 하나예요. 이름은 그대로 두고 줄 순서만 바꾸세요.</p>'
-          + '<p>※ 편집 모드(?edit=1)에서 섹션마다 있는 ↑ ↓ 로 옮긴 뒤 [섹션 순서 저장]을 눌러도 돼요.</p>'
+          + '<p>※ 편집 모드에서 섹션마다 있는 ↑ ↓ 로 옮긴 뒤 [순서 저장하기]를 눌러도 돼요.</p>'
           + '<p>순서:<br>' + units().map(function (u) { return esc(unitName(u)); }).join('<br>') + '</p>'
       };
     }
@@ -692,18 +696,19 @@
         var box = u.__cmsOrder;
         if (!box) {
           box = u.__cmsOrder = document.createElement('div'); box.className = 'cms-order';
-          box.innerHTML = '<span>순서</span><button type="button" data-dir="-1" aria-label="위로 옮기기">↑</button><button type="button" data-dir="1" aria-label="아래로 옮기기">↓</button>';
+          box.innerHTML = '<span>순서</span><button type="button" data-dir="-1" aria-label="위로 옮기기">↑</button><button type="button" data-dir="1" aria-label="아래로 옮기기">↓</button><button type="button" class="cms-order__save" data-save hidden>저장</button>';
           box.addEventListener('click', function (e) {
             var b = e.target.closest('button'); if (!b) return;
             e.preventDefault(); e.stopPropagation();
+            if (b.hasAttribute('data-save')) { saveOrder(); return; }
             var cur = units(), k = cur.indexOf(u), j = k + Number(b.getAttribute('data-dir'));
             if (j < 0 || j >= cur.length) return;
             cur[k] = cur[j]; cur[j] = u;
             state.orderMoved = true;
             placeUnits(cur); orderControls();
             u.scrollIntoView({ block: 'start', behavior: 'smooth' });
-            saveBtn.classList.add('is-dirty'); saveBtn.textContent = '↕ 섹션 순서 저장 (바뀜)';
-            toast('「' + unitName(u) + '」 을(를) ' + (j < k ? '위로' : '아래로') + ' 옮겼어요. 다 옮긴 뒤 아래 [섹션 순서 저장]을 눌러 주세요.');
+            orderDirty();
+            toast('「' + unitName(u) + '」 을(를) ' + (j < k ? '위로' : '아래로') + ' 옮겼어요. 다 옮기면 위의 [순서 저장하기]를 눌러 주세요.');
           });
         }
         if (box.parentNode !== u) u.appendChild(box);
@@ -711,9 +716,25 @@
         box.querySelector('[data-dir="1"]').disabled = i === list.length - 1;
       });
     }
+    // 순서를 옮기면 저장 버튼이 눈앞에 나온다 : 화면 위 가운데 떠 있는 버튼 + 각 섹션의 [순서] 옆 [저장] + 아래 막대
+    function saveOrder() {
+      openPost(orderName(), orderDraft());
+      toast('새 창에서 순서를 저장하고 있어요. 저장이 끝나면 이 화면을 새로고침하세요.');
+    }
     var saveBtn = document.createElement('button'); saveBtn.type = 'button'; saveBtn.className = 'cms-order-save'; saveBtn.textContent = '↕ 섹션 순서 저장';
-    saveBtn.addEventListener('click', function () { openPost(orderName(), orderDraft()); });
+    saveBtn.addEventListener('click', saveOrder);
     if (orderName()) bar.lastChild.insertBefore(saveBtn, bar.lastChild.firstChild);
+    var floatBox = null;
+    function orderDirty() {
+      saveBtn.classList.add('is-dirty'); saveBtn.textContent = '↕ 순서 저장하기 (바뀜)';
+      units().forEach(function (u) { var s = u.__cmsOrder && u.__cmsOrder.querySelector('[data-save]'); if (s) s.hidden = false; });
+      if (!floatBox) {
+        floatBox = document.createElement('div'); floatBox.className = 'cms-order-float';
+        floatBox.innerHTML = '<span>섹션 순서가 바뀌었어요</span><button type="button">순서 저장하기</button>';
+        floatBox.querySelector('button').addEventListener('click', saveOrder);
+        document.body.appendChild(floatBox);
+      }
+    }
     function label(sec) { return '✏️ ' + sec.getAttribute('data-cms') + ' 고치기 <small>' + (sec.classList.contains('cms-has-post') ? '· 게시판 글 수정' : '· 새 글') + '</small>'; }
     function paint() {
       if (state.blocked) {
@@ -794,7 +815,7 @@
   }
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = '/layout/basic/js/pet-cms-editor.js?v=' + (CFG.editorVersion || '20260928g');
+    s.src = '/layout/basic/js/pet-cms-editor.js?v=' + (CFG.editorVersion || '20260929a');
     document.body.appendChild(s);
   }
 

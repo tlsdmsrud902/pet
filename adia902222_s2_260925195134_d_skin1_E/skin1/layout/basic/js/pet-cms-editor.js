@@ -320,6 +320,8 @@
       function check() {
         if (!im.naturalWidth) return;
         var w = C.sizeWarn(im.naturalWidth, im.naturalHeight, b.size);
+        // 처음부터 있던 사진(디자인 기본 사진)은 빨간 경고 대신 회색 안내 — 아무것도 안 했는데 오류처럼 보이지 않게
+        if (w && b.id in orig && orig[b.id] === b.src) { warn.className = 'pcms__hint'; warn.textContent = '지금 사진 ' + im.naturalWidth + '×' + im.naturalHeight + ' · 새 사진은 권장 크기로 올리면 잘리지 않아요.'; return; }
         warn.className = w ? 'pcms__warn' : 'pcms__ok';
         warn.textContent = w ? '⚠ ' + w : (b.size ? '✓ 크기가 잘 맞아요 (' + im.naturalWidth + '×' + im.naturalHeight + ')' : '올린 사진 ' + im.naturalWidth + '×' + im.naturalHeight);
       }
@@ -552,6 +554,14 @@
       else if (now !== want && stick === 0) ed.set(want);
       if (++stick < 12) setTimeout(keep, 500);
     }());
+    // 섹션 순서처럼 메인 화면에서 [저장하기]를 이미 누르고 온 경우 : 여기서 한 번 더 누르지 않게 바로 저장한다 (2분 안, 한 번만)
+    if (d && d.autosave && Date.now() - d.t < 120000) {
+      var drafts = C.lsGet(C.draftKey) || {};
+      if (drafts[name]) { delete drafts[name].autosave; C.lsSet(C.draftKey, drafts); }
+      var wait = el('div', 'pcms__adv', '⏳ 바뀐 순서를 저장하고 있어요. 잠시만 기다려 주세요…');
+      root.insertBefore(wait, body);
+      setTimeout(function () { $('[data-a=save]', root).click(); }, 1800);
+    }
   }
   // 이 브라우저에 최근 저장본 5개를 남긴다 (같은 내용은 한 번만)
   function backup(name, content) {
