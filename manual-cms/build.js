@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const SHOTS = path.join(__dirname, 'shots');
 // 사진 주소 : 깃허브에 올린 사진(고정 커밋)을 쓴다 → index.html 만 따로 열어도 사진이 보인다. 새 사진을 넣으면 푸시한 뒤 이 커밋을 바꾼다
-const IMG = process.env.IMG_BASE || 'https://cdn.jsdelivr.net/gh/tlsdmsrud902/pet@0214001/manual-cms/shots/';
+const IMG = process.env.IMG_BASE || 'https://cdn.jsdelivr.net/gh/tlsdmsrud902/pet@946b7ac/manual-cms/shots/';
 
 function jpgSize(file) {
   const b = fs.readFileSync(file); let i = 2;
