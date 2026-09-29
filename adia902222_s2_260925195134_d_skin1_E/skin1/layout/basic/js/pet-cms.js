@@ -630,6 +630,7 @@
     + '.cms-order{position:absolute;z-index:62;top:10px;right:10px;display:flex;align-items:center;gap:4px;padding:4px;border-radius:999px;background:#1f1d1a;color:#fff;font:600 13px/1 Pretendard,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25)}'
     + '.cms-order span{padding:0 6px 0 8px}.cms-order button{width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font:700 17px/1 system-ui,sans-serif;cursor:pointer}.cms-order button:disabled{opacity:.3;cursor:default}'
     + '.cms-bar .cms-order-save.is-dirty{background:#ff5a36;font-weight:700}'
+    + '.cms-bar__go{margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.15);font-size:13px;color:#e9e2dc}.cms-bar__go a{background:rgba(255,90,54,.28)!important}'
     + '.cms-order .cms-order__save{width:auto;padding:0 14px;border-radius:999px;background:#ff5a36;font:700 14px/1 Pretendard,system-ui,sans-serif}'
     + '.cms-order-float{position:fixed;z-index:10002;left:50%;top:110px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;padding:10px 10px 10px 20px;border-radius:999px;background:#1f1d1a;color:#fff;font:700 15px/1.3 Pretendard,system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);white-space:nowrap}'
     + '.cms-order-float button{height:44px;padding:0 22px;border:0;border-radius:999px;background:#ff5a36;color:#fff;font:800 16px/1 Pretendard,system-ui,sans-serif;cursor:pointer;animation:cmsPulse 1.6s ease-in-out infinite}'
@@ -659,7 +660,18 @@
     var bar = document.createElement('div'); bar.className = 'cms-bar';
     bar.innerHTML = '<div><button type="button" class="cms-bar__min">접기</button><b>화면 편집 모드</b> · 바꾸고 싶은 영역의 주황 버튼을 누르면 편집 창이 열려요. 저장한 뒤 이 화면을 <b>새로고침</b>하면 바로 보여요.</div>'
       + '<div class="cms-bar__sub">화면에 바로 안 보이는 영역 <span class="cms-bar__hidden"></span></div><div class="cms-bar__warnbox"></div>'
-      + '<div><a href="/board/free/list.html?board_no=' + BOARD + '" target="_blank" rel="noopener">화면 관리 게시판 열기</a><a href="' + location.pathname + '">편집 모드 끄기</a></div>';
+      + '<div class="cms-bar__go">다른 페이지 고치기 <a href="/?edit=1">메인</a><a href="/product/list.html?cate_no=' + ((SC.sale || {}).categoryNo || 27) + '&edit=1">세일 페이지</a><a href="/product/list.html?cate_no=42&edit=1">상품 목록</a><a href="/board/product/list.html?board_no=4&edit=1">게시판</a><a href="/pet/guide.html?edit=1">가이드</a></div>'
+      + '<div><a href="/board/free/list.html?board_no=' + BOARD + '" target="_blank" rel="noopener">화면 관리 게시판 열기</a><a data-cms-exit href="' + esc(location.pathname + location.search.replace(/([?&])edit=1(&|$)/, function (m, a, b) { return b ? a : ''; }) + location.hash) + '">편집 모드 끄기</a></div>';
+    // 편집 모드에서 쇼핑몰 안 링크(메뉴 등)를 누르면 다음 페이지도 편집 모드로 연다
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href]'), h = a && a.getAttribute('href');
+      if (!a || a.hasAttribute('data-cms-exit') || a.target === '_blank' || !h || /^(#|javascript:|mailto:|tel:)/i.test(h)) return;
+      var u; try { u = new URL(h, location.href); } catch (er) { return; }
+      if (u.origin !== location.origin || /[?&]edit=1(&|$)/.test(u.search) || /\/(write|modify)\.html$/.test(u.pathname)) return;
+      if (u.pathname === location.pathname && u.search === location.search && u.hash) return; // 같은 페이지 안 이동
+      u.searchParams.set('edit', '1');
+      a.setAttribute('href', u.pathname + u.search + u.hash);
+    }, true);
     // 페이지마다 게시판 글로 못 바꾸는 부분은 어디서 바꾸는지 알려 준다
     var tip = /^\/board\//.test(location.pathname)
       ? '💡 게시판 위 이동 탭(공지사항·자주묻는질문·상품문의)의 이름·순서는 <b>store-content.js 의 community.items</b>에서, 게시판 글은 <b>관리자 › 게시판 › 게시물 관리</b>에서 바꿔요.'
@@ -815,7 +827,7 @@
   }
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = '/layout/basic/js/pet-cms-editor.js?v=' + (CFG.editorVersion || '20260929a');
+    s.src = '/layout/basic/js/pet-cms-editor.js?v=' + (CFG.editorVersion || '20260929b');
     document.body.appendChild(s);
   }
 
